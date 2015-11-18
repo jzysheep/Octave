@@ -7,9 +7,6 @@ handlers:
 - url: /bootstrap
   static_dir: bootstrap
 
-- url: /bootstrap
-  static_dir: bootstrap
-
 #- url: /task
 #  script: main.app
 #  login: admin
