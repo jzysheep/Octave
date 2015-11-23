@@ -4,8 +4,11 @@ api_version: 1
 threadsafe: true
 
 handlers:
-- url: /bootstrap
-  static_dir: bootstrap
+- url: /bootstrap33
+  static_dir: bootstrap33
+
+- url: /jquery
+  static_dir: jquery
 
 #- url: /task
 #  script: main.app

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+{% extends "index.html" %}
+
+
+{% block main_content %}
+
+
+
+<div class="container">
+	 <form enctype="multipart/form-data" method="post">
+         <textarea style="position: relative;width: 400px;height: 150px;" placeholder="Enter Your Post" name="post_text"></textarea>
+         <br><br>
+         <div><input type="file" class="btn btn-primary" name="music"/></div>
+         <br><br>
+         <div><input type="submit" class="btn btn-large btn-primary" value="Submit Post"></div>
+     </form>
+</div>
+
+<div class="container">
+
+
+    for (nbr of post) {{i}}
+<form id="{{i}}" method="post" action="/music?post[i].key">
+    <button type="button" id="myBtn">Reply</button>
+    <input type="submit" class="btn btn-large btn-primary" value="Submit Reply">
+
+    <br>
+</form>
+</div>
+
+
+<form method="post">
+
+    <div class="container"><input type="submit" class="btn btn-large btn-primary" value="Go To Octave Music"></div>
+
+</form>
+
+
+<script type='text/javascript' src="/jquery/jquery-2.1.4.js"></script>
+<script>
+
+    $(document).ready(function()
+{
+
+    function append_reply () {
+        $('#myForm').append("<input type=text name=reply_text </input><hr>");
+    }
+
+     $('#myBtn').click(function(){
+
+         append_reply();
+
+     });
+
+});
+
+
+
+</script>
+{% endblock %}

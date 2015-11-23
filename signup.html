@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+{% extends "index.html" %}
+
+
+{% block main_content %}
+
+
+
+
+<div class="container">
+	 <form enctype="multipart/form-data" method="post">
+             <hr>
+             <textarea style="position: relative; width: 180px; height: 30px;" placeholder="Enter Your Name" name="name"></textarea>
+             <br><br>
+             <textarea style="position: relative; width: 180px; height: 30px;" placeholder="Enter Your City" name="city"></textarea>
+             <br><br>
+             <textarea style="position: relative; width: 180px; height: 30px;" placeholder="Enter Your Role" name="role"></textarea>
+             <hr>
+
+             <h3>Upload Your Pic</h3>
+
+             <br>
+             <div><input type="file" class="btn btn-primary" name="photo"></div>
+             <br>
+
+             <div><input type="submit" class="btn btn-large btn-primary" value="SignUp"></div>
+
+     </form>
+</div>
+
+
+{% endblock %}
