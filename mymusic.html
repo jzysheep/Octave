@@ -5,7 +5,28 @@
 
 {% block main_content %}
 
+<div class="container">
+{% for i in range(posts|length) %}
 
+    <p> POST: {{posts[i].text}}</p>
+
+<form id="form_{{i}}" method="post" action="/reply?post_nbr={{i}}">
+    <button type="button" id="{{i}}">Reply</button>
+    <input type="submit" class="btn btn-large btn-primary" value="Submit Reply">
+
+    <br>
+</form>
+
+
+    {% for j in range(replies[i]|length) %}
+
+        <p> REPLY: {{replies[i][j].reply}}</p>
+
+    {%endfor%}
+
+{%endfor%}
+
+</div>
 
 <div class="container">
 	 <form enctype="multipart/form-data" method="post">
@@ -17,17 +38,7 @@
      </form>
 </div>
 
-<div class="container">
 
-
-    for (nbr of post) {{i}}
-<form id="{{i}}" method="post" action="/music?post[i].key">
-    <button type="button" id="myBtn">Reply</button>
-    <input type="submit" class="btn btn-large btn-primary" value="Submit Reply">
-
-    <br>
-</form>
-</div>
 
 
 <form method="post">
@@ -43,13 +54,17 @@
     $(document).ready(function()
 {
 
-    function append_reply () {
-        $('#myForm').append("<input type=text name=reply_text </input><hr>");
+    function append_reply (count) {
+        var form_count='form_' + count;
+
+        $('form[id=' + form_count + ']').append("<input type=text name=reply_text_" + count + " </input><hr>");
     }
 
-     $('#myBtn').click(function(){
 
-         append_reply();
+
+     $('button').click(function(){
+
+         append_reply(this.id);
 
      });
 
