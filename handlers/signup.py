@@ -1,6 +1,6 @@
 import webapp2
 
-from domain.models import *
+from domain import *
 from google.appengine.api import users
 
 

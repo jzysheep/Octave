@@ -1,4 +1,4 @@
-from domain.models import *
+from domain import *
 from time import strftime
 from google.appengine.api import users
 import webapp2

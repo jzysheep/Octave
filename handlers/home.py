@@ -1,3 +1,4 @@
+from domain import *
 from google.appengine.api import users
 import webapp2
 
