@@ -10,6 +10,9 @@ handlers:
 - url: /jquery
   static_dir: jquery
 
+- url: /assets
+  static_dir: assets
+
 #- url: /task
 #  script: main.app
 #  login: admin

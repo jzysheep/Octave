@@ -1,7 +1,5 @@
-import MainPage
-from MainPage import *
-
-
+from google.appengine.api import users
+import webapp2
 
 class Music(webapp2.RequestHandler):
     def get(self):

@@ -1,8 +1,9 @@
-import MainPage
-from MainPage import *
-from domain.models import *
+import webapp2
 
-from google.appengine.ext import ndb
+from domain.models import *
+from google.appengine.api import users
+
+
 
 class SignUp(webapp2.RequestHandler):
     def get(self):
@@ -10,7 +11,6 @@ class SignUp(webapp2.RequestHandler):
         if user:
             url = users.create_logout_url('/')
             url_linktext = 'Logout'
-            
 
 
             values={

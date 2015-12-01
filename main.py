@@ -1,14 +1,8 @@
-import MainPage
-from MainPage import * 
-import domain.models
-from domain.models import *
-from home import *
-from mymusic import *
-from signup import *
+from handlers import *
+import webapp2
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/music', Music),
     ('/MyMusic', MyMusic),
     ('/signup',SignUp),
     ('/reply', Reply_Handler)

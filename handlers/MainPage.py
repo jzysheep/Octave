@@ -1,15 +1,7 @@
 from domain.models import *
-import os
 from google.appengine.api import users
-from google.appengine.ext import ndb
 import webapp2
-import jinja2
-from google.appengine.ext.db import GqlQuery
 
-JINJA_ENVIRONMENT = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
-    extensions=['jinja2.ext.autoescape'],
-    autoescape=True)
 
 
 
