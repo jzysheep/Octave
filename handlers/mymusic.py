@@ -3,7 +3,6 @@ from time import strftime
 from google.appengine.api import users
 import webapp2
 
-
 class MyMusic(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
@@ -19,7 +18,7 @@ class MyMusic(webapp2.RequestHandler):
             if user_fetch:
                 posts = Post.query(ancestor=user_fetch.key).order(-Post.date).fetch()
                 for count in range(0 , posts.__len__()):
-                    temp = Reply.query(ancestor=posts[count].key).order(-Reply.date).fetch()
+                    temp = Reply.query(ancestor=posts[count].key).order(Reply.date).fetch()
                     #if temp == []:
                         #replies.insert(count,None)
                     #else:

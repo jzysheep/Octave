@@ -1,76 +1,386 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
+<html class="skin-dark">
+   <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+      <title>mymusic</title>
+      <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
+      <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
+      <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-poster-comment-150512101535.css?max_age=31536000" rel="stylesheet"/>
+      <style id="mainJSBg" type="text/css">
+         .background-container {
+             background-repeat: no-repeat;
+             background-position: center top;
+             background-attachment: scroll;
+             background-image: url(/assets/images/curry.png);
+         }
+         .bg-body {
+             background-image: url();
+             background-repeat: repeat;
+         }
+      </style>
+      <style id="mainJSTitleBar" type="text/css">
+         .layout-head-inner {height:220px;}
+      </style>
 
-{% extends "index.html" %}
+   </head>
+
+   <body class="bg-body">
+      <!-- nav bar -->
+      <div class="top-fix-bar">
+         <div class="top-fix-inner" >
+            <div class="top-fix-container" id="QZ_Toolbar_Container">
+               <div class="top-fix-wrap">
+                  <ul class="top-nav">
+                     <li class="nav-list" id="tb_ic_li">
+                        <div class="nav-list-inner">
+                           <a href="" class="" x><i class="ui-icon icon-icenter"></i><span>Playlist</span></a>
+                        </div>
+                     </li>
+                     <li class="nav-list" id="tb_index_li">
+                        <div class="nav-list-inner">
+                           <a href="" class="homepage-link a-link "><i class="ui-icon icon-homepage"></i><span>MyMusic</span></a>
+                        </div>
+                     </li>
+                     <li class="nav-list" id="tb_friend_li">
+                        <div class="nav-list-inner">
+                           <a href="" class="friends-link a-link"><i class="ui-icon icon-friend"></i><span>Home Music</span></a>
+                        </div>
+                     </li>
+                     <li class="nav-list" id="tb_app_li">
+                        <div class="nav-list-inner">
+                           <a href="" class="application-link a-link"><i class="ui-icon icon-application"></i><span>Famous Music</span></a>
+                        </div>
+                     </li>
+                     <li class="nav-list" id="tb_dress_li">
+                        <div class="nav-list-inner">
+                           <a href="" class="dress-up-link a-link" ><i class="ui-icon icon-dress-up"></i><span>Artist</span></a>
+                        </div>
+                     </li>
+                  </ul>
+                  <!-- Search Box -->
+                  <div class="top-search">
+                     <div class="search-box">
+                        <input class="search-input" type="text" placeholder="">
+                        <a href="" class="search-button"><i class="ui-icon icon-search"></i></a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- background -->
+      <div class="background-container">
+         <div class="layout-head ">
+            <div class="layout-head-inner" id="headContainer">
+               <div class="head-info">
+                  <h1 class="head-title" id="top_head_title"><span class="title-text ui-mr5">Octave</span>
+                  </h1>
+                  <div class="head-description">
+                     <span class="description-text" id="QZ_Space_Desc">Hi! I am a Lakers Fan!</span>
+                  </div>
+               </div>
+               <div class="head-detail">
+                  <div class="head-detail-name">
+                     <span class="user-name textoverflow">Kobe Bryant</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="layout-nav">
+            <div class="layout-nav-inner">
+               <div class="head-avatar">
+                  <a href="javascript:;">
+                     <div class="head-dress"></div>
+                     <img src="/assets/images/kobe.png" class="user-avatar"  />
+                  </a>
+               </div>
+            </div>
+         </div>
+         <div class="layout-background">
+            <div class="layout-body">
+               <div id="pageContent" class="layout-page clearfix">
+                  <div id="main_feed_container" class="col-main ">
+                     <div class="col-main-feed">
+
+                         <form enctype="multipart/form-data" method="post">
+
+                            <div id="QM_Mood_Poster_Container">
+                               <div id="QM_Mood_Poster_Inner" class="qz-poster bg b-test">
+                                  <div class="qz-inputer bor2">
+                                     <textarea id="qz_poster_editor_v4_container" placeholder="Enter Your Post" name="post_text" class="textarea c_tx2" contenteditable="true">
+
+                                     </textarea>
+                                  </div>
+                                  <!-- attach -->
+                                  <div class="qz-poster-attach-side">
+
+                                     <div class="attach">
+                                         <!-- attach -->
+                                        <div class="item bor3 bg4 item-other">
+                                            <input type="file" id="fileInput" name="fileInput" style="display: none;"/>
+
+                                           <a onclick="chooseFile();" class="other">
+                                           <i class="icon icon-other"></i>
+                                           </a>
 
 
-{% block main_content %}
+                                        </div>
+                                        <!-- submit post -->
+                                         <div class="item bor3 bg4 item-ohter">
+                                            <input type="submit" id="submitPost" name="submitPost" style="display: none;"/>
 
-<div class="container">
-{% for i in range(posts|length) %}
-
-    <p> POST: {{posts[i].text}}</p>
-
-<form id="form_{{i}}" method="post" action="/reply?post_nbr={{i}}">
-    <button type="button" id="{{i}}">Reply</button>
-    <input type="submit" class="btn btn-large btn-primary" value="Submit Reply">
-
-    <br>
-</form>
+                                           <a onclick="submit();" class="other">
+                                           <i class="icon icon-pic"></i>
+                                           </a>
 
 
-    {% for j in range(replies[i]|length) %}
+                                        </div>
+                                     </div>
+                                  </div>
+                               </div>
+                            </div>
 
-        <p> REPLY: {{replies[i][j].reply}}</p>
+                         </form>
 
-    {%endfor%}
+                        <div id="feed_friend" >
+                           <div class="fn-feed-container">
+                              <div class="feed">
+                                 <div class="feed_inner">
+                                    <ul id="feed_friend_list">
 
-{%endfor%}
+                                        {% for i in range(posts|length) %}
 
-</div>
-
-<div class="container">
-	 <form enctype="multipart/form-data" method="post">
-         <textarea style="position: relative;width: 400px;height: 150px;" placeholder="Enter Your Post" name="post_text"></textarea>
-         <br><br>
-         <div><input type="file" class="btn btn-primary" name="music"/></div>
-         <br><br>
-         <div><input type="submit" class="btn btn-large btn-primary" value="Submit Post"></div>
-     </form>
-</div>
-
-
-
-
-<form method="post">
-
-    <div class="container"><input type="submit" class="btn btn-large btn-primary" value="Go To Octave Music"></div>
-
-</form>
-
-
-<script type='text/javascript' src="/jquery/jquery-2.1.4.js"></script>
-<script>
-
-    $(document).ready(function()
-{
-
-    function append_reply (count) {
-        var form_count='form_' + count;
-
-        $('form[id=' + form_count + ']').append("<input type=text name=reply_text_" + count + " </input><hr>");
-    }
-
-
-
-     $('button').click(function(){
-
-         append_reply(this.id);
-
-     });
-
-});
+                                       <li class="f-single f-s-s">
+                                          <div class="f-aside">
+                                             <div class="f-user-pto">
+                                                <a href="javascript:" class="f-user-avatar q_namecard f-s-a" style="background-image: url(/assets/images/kobe.png);">
+                                                </a>
+                                             </div>
+                                             <div class="f-user-info">
+                                                <div class="f-nick">
+                                                   <a class="f-name q_namecard ">Kobe</a>
+                                                   <a href="javascript:"class="f-sign-show state">Signature</a>
+                                                </div>
+                                                <div class="info-detail">
+                                                   <span  class=" ui-mr8 state" > 06:10</span>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="f-wrap">
+                                             <div class="f-item f-s-i">
+                                                <div class="f-info">{{posts[i].text}} (Dec.4) </div>
+                                                <div class="qz_summary wupfeed">
+                                                   <div class="f-ct f-ct-b-bg" >
+                                                      <div class="f-ct-txtimg">
+                                                         <div class="img-box img-box-row">
+                                                            <a href="javascript:;">
+                                                            <img src="/assets/images/curry.png">
+                                                            </a>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                   <div class="f-op-wrap">
+                                                      <p class="f-detail">&nbsp;
+                                                         <a href="javascript:;" class=" qz_btn_reply item "><i class="ui-icon icon-comment"></i>comment</a>&nbsp;
+                                                         <span class="item-line"></span>
+                                                         <a class="item qz_retweet_btn " href="javascript:;"><i class="ui-icon icon-forward"></i>share</a>
+                                                         <span class="item-line"></span>
+                                                         <a class="item qz_like_btn_v3" href="javascript:;"><i class="ui-icon icon-praise"></i>like</a>
+                                                         <span class="item-line"></span>
+                                                      </p>
+                                                      <div class="mod-comments">
+                                                            <div class="comments-list ">
+                                                            <ul>
 
 
+                                                               <li class="comments-item bor3">
+                                                                   {% for j in range(replies[i]|length) %}
 
-</script>
-{% endblock %}
+
+                                                                  <div class="comments-item-bd">
+                                                                     <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/assets/images/kobe.png" /></a></div>
+                                                                     <div class="comments-content">
+                                                                        &nbsp;<a class="c_tx q_namecard" href="javascript:;">Kobe</a>&nbsp;: {{replies[i][j].reply}}
+                                                                        <div class="comments-op">
+                                                                            <span  class=" ui-mr10 state" >23:52</span>
+                                                                            <a class="act-reply" href="javascript:;">
+                                                                                <b class="hide-clip">Reply</b>
+                                                                            </a>
+                                                                        </div>
+                                                                     </div>
+                                                                     <div class="comments-list mod-comments-sub">
+                                                                        <ul>
+                                                                           <li class="comments-item bor3">
+                                                                              <div class="comments-item-bd">
+                                                                                 <div class="ui-avatar">
+                                                                                     <a href="javascript:;">
+                                                                                        <img class="q_namecard" src="/assets/images/curry.png" />
+                                                                                     </a>
+                                                                                 </div>
+                                                                                 <div class="comments-content">
+                                                                                    &nbsp;
+                                                                                     <a class="c_tx q_namecard"href="javascript:;">Curry</a>&nbsp; @ &nbsp;<a class="c_tx q_namecard" href="javascript:;">Kobe</a>&nbsp;: Yes, I agree!
+                                                                                    <div class="comments-op">
+                                                                                        <span class=" ui-mr10 state" >23:53</span>
+                                                                                        <a class="act-reply" href="javascript:;"><b class="hide-clip">Reply</b></a></div>
+                                                                                 </div>
+                                                                              </div>
+                                                                           </li>
+                                                                        </ul>
+                                                                     </div>
+                                                                  </div>
+
+                                                                    {%endfor%}
+
+                                                                   <!-- comment box wrap -->
+                                                                   <form id="form_{{i}}" method="post" action="/reply?post_nbr={{i}}">
+
+                                                                   <div class="comment-box-wrap">
+                                                                       <div class="qz-poster bg qz-poster-show-setter qz-poster-active">
+                                                                          <div class="qz-poster-inner ">
+
+                                                                              <!-- textarea -->
+                                                                             <div class="qz-poster-bd">
+                                                                                <div class="qz-poster-editor-cont">
+                                                                                   <div class="qz-inputer bor2" style="padding-right: 0px;">
+                                                                                         <div class="textinput textarea c_tx2" contenteditable="true">
+                                                                                             <textarea name="reply_text_{{i}}"></textarea>
+                                                                                         </div>
+                                                                                   </div>
+                                                                                </div>
+                                                                             </div>
+
+
+                                                                              <!-- pulish button -->
+                                                                             <div class="qz-poster-ft">
+                                                                                <div class="op">
+                                                                                   <input type="submit" id="replyPost_{{i}}" name="replyPost" style="display: none;"/>
+                                                                                    <a class="btn-post gb_bt  evt_click" onclick="reply({{i}});">
+                                                                                        <span class="txt">Reply</span>
+                                                                                    </a>
+                                                                                </div>
+                                                                             </div>
+                                                                          </div>
+                                                                       </div>
+                                                                    </div>
+
+                                                                    </form>
+                                                               </li>
+                                                            </ul>
+                                                         </div>
+
+                                                         <div class="mod-commnets-poster feedClickCmd comment_default_inputentry" style="display: block">
+                                                            <div class="comments-poster-bd comments-poster-default">
+                                                               <div class="comments-box">
+                                                                      <div class="textinput textinput-default bor2" placeholder="comment">
+                                                                     <a class="c_tx3" href="javascript:void(0);">
+                                                                     </a>
+                                                                  </div>
+
+                                                               </div>
+                                                            </div>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </li>
+
+                                        {%endfor%}
+                                    </ul>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- right hand side bar -->
+                     <div class="col-main-sidebar">
+                        <div id="QM_Container_31">
+                           <div class="hd none"></div>
+                           <div class="bd">
+                              <div class="fn-checkin-btn">
+                              </div>
+                           </div>
+                           <div class="ft none"></div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- left menu -->
+                  <div id="leftMenu" class="col-menu">
+                     <div class="mod-side-nav mod-side-nav-message">
+                        <div class="inner">
+                           <div class="bd">
+                              <ul id="tab_menu_list" class="sn-list">
+                                 <li type="friend">
+                                    <a id="tab_menu_friend" href="javascript:;" class="qz-grid">
+                                       <div class="qz-left"><i class="ui-icon sp-friend-feed"></i></div>
+                                       <div class="qz-right"><span class="sn-count none" id="tab_menu_friend_cnt">0</span></div>
+                                       <div class="qz-main"><span class="sn-title">dummy</span></div>
+                                    </a>
+                                 </li>
+                                 <li type="care">
+                                    <a id="tab_menu_care" href="javascript:;" class="qz-grid" accesskey="t">
+                                       <div class="qz-left"><i class="ui-icon sp-close-feed"></i></div>
+                                       <div class="qz-right"><span class="sn-count none" id="tab_menu_care_cnt">0</span></div>
+                                       <div class="qz-main"><span class="sn-title">dummy</span></div>
+                                    </a>
+                                 </li>
+                                 <li type="me">
+                                    <a id="tab_menu_me" href="javascript:;" class="qz-grid" accesskey="y">
+                                       <div class="qz-left"><i class="ui-icon sp-at"></i></div>
+                                       <div class="qz-right"><span class="sn-count none" id="tab_menu_me_cnt">0</span></div>
+                                       <div class="qz-main"><span class="sn-title">dummy</span></div>
+                                    </a>
+                                 </li>
+                                 <li type="sdc">
+                                    <a id="tab_menu_sdc" href="javascript:;" class="qz-grid">
+                                       <div class="qz-left"><i class="ui-icon sp-past-years"></i></div>
+                                       <div class="qz-main"><span class="sn-title">dummy</span></div>
+                                    </a>
+                                 </li>
+                                 <li type="app">
+                                    <a id="tab_menu_app" href="javascript:;" class="qz-grid">
+                                       <div class="qz-left"><i class="ui-icon sp-app-center"></i></div>
+                                       <div class="qz-right"><span class="sn-count none" id="tab_menu_app_cnt">0</span></div>
+                                       <div class="qz-main"><span class="sn-title">dummy</span></div>
+                                    </a>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="layout-copyright">
+               <p>Copyright &copy; Ziyang Jiang, Ahmad Ei Youssef</p>
+            </div>
+         </div>
+      </div>
+
+      <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/ac/qzone/qzfl/qzfl_v8_2.1.45.js" ></script>
+      <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/ac/lib/seajs/sea-2.1.1.js" ></script>
+      <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/c/=/qzone/v8/core/seajs_config.js,/qzone/v8/engine/plugin-combo.js,/qzone/v8/core/ic.js?max_age=31536001&amp;d=50108" ></script>
+        <script type='text/javascript' src="/assets/js/jquery-2.1.4.js"></script>
+
+
+      <script type="text/javascript">
+           function chooseFile() {
+              document.getElementById("fileInput").click();
+           }
+      </script>
+      <script type="text/javascript">
+              function submit() {
+                  document.getElementById("submitPost").click();
+               }
+       </script>
+      <script type="text/javascript">
+              function reply(i) {
+                  document.getElementById("replyPost_" + i).click();
+               }
+       </script>
+   </body>
+</html>

@@ -7,7 +7,7 @@ import webapp2
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
-        user=users.get_current_user()
+        user = users.get_current_user()
 
         if user is not None:
             user_query = User.gql("WHERE email =:1 ",user.email())
@@ -27,5 +27,5 @@ class MainPage(webapp2.RequestHandler):
                'url':url,
                }
 
-            template = JINJA_ENVIRONMENT.get_template('index.html')
+            template = JINJA_ENVIRONMENT.get_template('login.html')
             self.response.write(template.render(values))

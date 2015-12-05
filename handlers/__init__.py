@@ -1,4 +1,4 @@
-from .Home import Music
-from .MainPage import MainPage
-from .MyMusic import MyMusic, Reply_Handler
-from .SignUp import SignUp
+from .home import Music
+from .mainpage import MainPage
+from .mymusic import MyMusic, Reply_Handler
+from .signup import SignUp
