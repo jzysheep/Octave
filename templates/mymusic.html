@@ -12,7 +12,7 @@
              background-repeat: no-repeat;
              background-position: center top;
              background-attachment: scroll;
-             background-image: url(/assets/images/curry.png);
+             background-image: url();
          }
          .bg-body {
              background-image: url();
@@ -104,14 +104,17 @@
                   <div id="main_feed_container" class="col-main ">
                      <div class="col-main-feed">
 
-                         <form enctype="multipart/form-data" method="post">
+                         <form enctype="multipart/form-data" method="post" action="/MyMusic">
 
                             <div id="QM_Mood_Poster_Container">
                                <div id="QM_Mood_Poster_Inner" class="qz-poster bg b-test">
                                   <div class="qz-inputer bor2">
-                                     <textarea id="qz_poster_editor_v4_container" placeholder="Enter Your Post" name="post_text" class="textarea c_tx2" contenteditable="true">
 
-                                     </textarea>
+                                     <div id="qz_poster_editor_v4_container" class="textarea c_tx2" contenteditable="true">
+
+                                     </div>
+                                     <input type="hidden" name="post_text" id="post_data_field"/>
+
                                   </div>
                                   <!-- attach -->
                                   <div class="qz-poster-attach-side">
@@ -210,32 +213,12 @@
                                                                             </a>
                                                                         </div>
                                                                      </div>
-                                                                     <div class="comments-list mod-comments-sub">
-                                                                        <ul>
-                                                                           <li class="comments-item bor3">
-                                                                              <div class="comments-item-bd">
-                                                                                 <div class="ui-avatar">
-                                                                                     <a href="javascript:;">
-                                                                                        <img class="q_namecard" src="/assets/images/curry.png" />
-                                                                                     </a>
-                                                                                 </div>
-                                                                                 <div class="comments-content">
-                                                                                    &nbsp;
-                                                                                     <a class="c_tx q_namecard"href="javascript:;">Curry</a>&nbsp; @ &nbsp;<a class="c_tx q_namecard" href="javascript:;">Kobe</a>&nbsp;: Yes, I agree!
-                                                                                    <div class="comments-op">
-                                                                                        <span class=" ui-mr10 state" >23:53</span>
-                                                                                        <a class="act-reply" href="javascript:;"><b class="hide-clip">Reply</b></a></div>
-                                                                                 </div>
-                                                                              </div>
-                                                                           </li>
-                                                                        </ul>
-                                                                     </div>
                                                                   </div>
 
                                                                     {%endfor%}
 
                                                                    <!-- comment box wrap -->
-                                                                   <form id="form_{{i}}" method="post" action="/reply?post_nbr={{i}}">
+                                                                   <form id="form_{{i}}" method="post" action="/ajax_reply">
 
                                                                    <div class="comment-box-wrap">
                                                                        <div class="qz-poster bg qz-poster-show-setter qz-poster-active">
@@ -244,16 +227,16 @@
                                                                               <!-- textarea -->
                                                                              <div class="qz-poster-bd">
                                                                                 <div class="qz-poster-editor-cont">
-                                                                                   <div class="qz-inputer bor2" style="padding-right: 0px;">
-                                                                                         <div class="textinput textarea c_tx2" contenteditable="true">
-                                                                                             <textarea name="reply_text_{{i}}"></textarea>
-                                                                                         </div>
+                                                                                   <div class="qz-inputer bor2" style="padding-right: 0px;" class="textinput textarea c_tx2">
+                                                                                             <div id="qz_reply_editor_v4_container{{i}}" name="reply_text_{{i}}" class="textinput textarea c_tx2" contenteditable="true"></div>
+                                                                                            <input type="hidden" name="reply_text_{{i}}" id="reply_data_field_{{i}}"/>
+
                                                                                    </div>
                                                                                 </div>
                                                                              </div>
 
 
-                                                                              <!-- pulish button -->
+                                                                              <!-- Reply button -->
                                                                              <div class="qz-poster-ft">
                                                                                 <div class="op">
                                                                                    <input type="submit" id="replyPost_{{i}}" name="replyPost" style="display: none;"/>
@@ -374,11 +357,62 @@
       </script>
       <script type="text/javascript">
               function submit() {
+                  var data = document.getElementById("qz_poster_editor_v4_container").textContent;
+                  document.getElementById("post_data_field").value = data;
                   document.getElementById("submitPost").click();
                }
        </script>
+
+      <script>
+        // Attach a submit handler to the form
+        $( "[id^='replyPost_']" ).click(function( event ) {
+
+          // Stop form from submitting normally
+          event.preventDefault();
+
+          var count = this.id.slice(-1);
+
+          // Get some values from elements on the page:
+
+            var term = $("#reply_data_field_" + count).val();
+            var url = $("#form_" + count).attr( "action" );
+            var reply_text  = "reply_text_" + count
+            var toBackEnd = {};
+            toBackEnd["post_nbr"] = count;
+            toBackEnd["reply_text_" + count] = term;
+
+          // Send the data using post
+
+          var posting = $.post(url, toBackEnd);
+          posting.done(function( data ) {
+
+            var post_nbr = data["post_nbr"];
+            var reply_text = data["reply_text"];
+            var date_reply = data["date_reply"];
+
+            var new_comment = '<div class="comments-item-bd"> \
+             <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/assets/images/kobe.png" /></a></div> \
+             <div class="comments-content"> \
+             &nbsp;<a class="c_tx q_namecard" href="javascript:;">Kobe</a>&nbsp;: ' + reply_text + ' \
+             <div class="comments-op"> \
+             <span  class=" ui-mr10 state" >' + date_reply + '</span> \
+             <a class="act-reply" href="javascript:;"> \
+             <b class="hide-clip">Reply</b> \
+             </div></a> \
+              </div> \
+              </div> \
+            '
+
+               $( "#form_" + post_nbr).before(new_comment);
+               $("#qz_reply_editor_v4_container" + post_nbr).empty();
+
+          });
+        });
+        </script>
       <script type="text/javascript">
               function reply(i) {
+                  var data = document.getElementById("qz_reply_editor_v4_container" + i).textContent;
+                  document.getElementById("reply_data_field_" + i).value = data;
                   document.getElementById("replyPost_" + i).click();
                }
        </script>
