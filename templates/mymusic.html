@@ -8,12 +8,8 @@
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-poster-comment-150512101535.css?max_age=31536000" rel="stylesheet"/>
 
-      <link type="text/css" rel="stylesheet" href="/bootstrap33/dist/css/bootstrap.css" >
 
        <link  href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css" rel="stylesheet"/> >
-       <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
-       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
-       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-poster-comment-150512101535.css?max_age=31536000" rel="stylesheet"/>
 
        <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -46,8 +42,8 @@
       <!-- nav bar -->
       <div class="top-fix-bar">
          <div class="top-fix-inner" >
-            <div class="top-fix-container" id="QZ_Toolbar_Container">
-               <div class="top-fix-wrap">
+            <div class="" id="QZ_Toolbar_Container">
+               <div class="">
                   <ul class="top-nav">
                      <li class="nav-list" id="tb_ic_li">
                         <div class="nav-list-inner">
@@ -74,7 +70,14 @@
                            <a href="" class="dress-up-link a-link" ><i class="ui-icon icon-dress-up"></i><span>Artist</span></a>
                         </div>
                      </li>
+                    <li class="nav-list" id="tb_logout_li">
+                        <div class="nav-list-inner">
+                           <a href="{{url}}" class="logout-link a-link" ><i class="ui-icon icon-logout"></i><span>{{url_log}}</span></a>
+                        </div>
+                     </li>
+
                   </ul>
+
                   <!-- Search Box -->
                   <div class="top-search">
                      <div class="search-box">
@@ -103,6 +106,7 @@
                      <span class="user-name textoverflow">Kobe Bryant</span>
                   </div>
                </div>
+
             </div>
          </div>
          <div class="layout-nav">
@@ -147,19 +151,20 @@
                                </div>
                          </form>
 
-                     <div id="actions" class="row">
+                                        <div id="actions" class="row">
 
-                                          <div class="col-lg-7">
+                                          <div class="qz-poster">
                                             <!-- The fileinput-button span is used to style the file input field as button -->
-                                            <span class="btn btn-success fileinput-button">
+
+                                            <button class="poster-skin-box fileinput-button">
                                                 <i class="glyphicon glyphicon-plus"></i>
                                                 <span>Add files...</span>
-                                            </span>
-                                            <button type="submit" class="btn btn-primary start">
+                                            </button>
+                                            <button type="submit" class="poster-skin-box start">
                                                 <i class="glyphicon glyphicon-upload"></i>
                                                 <span>Start upload</span>
                                             </button>
-                                            <button type="reset" class="btn btn-warning cancel">
+                                            <button type="reset" class="poster-skin-box cancel">
                                                 <i class="glyphicon glyphicon-ban-circle"></i>
                                                 <span>Cancel upload</span>
                                             </button>
@@ -322,17 +327,7 @@
                                                             </ul>
                                                          </div>
 
-                                                         <div class="mod-commnets-poster feedClickCmd comment_default_inputentry" style="display: block">
-                                                            <div class="comments-poster-bd comments-poster-default">
-                                                               <div class="comments-box">
-                                                                      <div class="textinput textinput-default bor2" placeholder="comment">
-                                                                     <a class="c_tx3" href="javascript:void(0);">
-                                                                     </a>
-                                                                  </div>
 
-                                                               </div>
-                                                            </div>
-                                                         </div>
                                                       </div>
                                                    </div>
                                                 </div>

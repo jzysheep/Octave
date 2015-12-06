@@ -5036,7 +5036,7 @@ only screen and (min-resolution: 1.25dppx) {
         background-size: 512px 374px;
         background-position: -388px -125px
     }
-    .top-fix-bar .top-nav .nav-list-inner a.current i.icon-homepage {
+    .top-fix-bar .top-nav .nav-list-inner a.current i.homepage {
         background-image: url(sprite/102.32-man150806163025@2x.png);
         background-size: 512px 374px;
         background-position: -388px -150px
