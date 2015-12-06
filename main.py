@@ -5,6 +5,8 @@ app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/MyMusic', MyMusic),
     ('/signup',SignUp),
-    ('/reply', Reply_Handler)
+    ('/reply', Reply_Handler),
+    ('/_ah/upload', MediaUploadHandler),
+    ('/media_url', MediaUploadFormHandler)
     ], debug=True)
 

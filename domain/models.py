@@ -11,7 +11,9 @@ class Media(ndb.Model):
     views = ndb.IntegerProperty()
     link = ndb.StringProperty()
     blob_key_media = ndb.BlobKeyProperty()
-    media_type = ndb.StringProperty()                      
+    media_type = ndb.StringProperty()
+    date_created = ndb.StringProperty()
+
 
 class Tag(ndb.Model):
     name = ndb.StringProperty()
