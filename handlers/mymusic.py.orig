@@ -2,12 +2,15 @@ from domain import *
 from time import strftime
 from google.appengine.api import users
 import webapp2
-import json
-from datetime import datetime, tzinfo,timedelta
+<<<<<<< HEAD
 from google.appengine.ext.webapp import blobstore_handlers
 import time
 from google.appengine.ext import blobstore
-from google.appengine.ext.db import GqlQuery
+||||||| merged common ancestors
+=======
+import json
+from datetime import datetime, tzinfo,timedelta
+>>>>>>> 2dfac20ffbba93761ce8888e1c7f2e8ed556dc13
 
 class MyMusic(webapp2.RequestHandler):
     def get(self):
@@ -20,11 +23,7 @@ class MyMusic(webapp2.RequestHandler):
             user_fetch = user_query.get()
             replies = []
             posts = []
-            media=Media.query().fetch()
 
-            media_key=""
-            if media:
-                media_key=media[0].blob_key_media
             if user_fetch:
                 posts = Post.query(ancestor=user_fetch.key).order(-Post.date).fetch()
                 for count in range(0 , posts.__len__()):
@@ -39,9 +38,7 @@ class MyMusic(webapp2.RequestHandler):
                'url_log': url_linktext,
                'url': url,
                'posts': posts,
-               'replies': replies,
-               'media_key':media_key,
-
+               'replies': replies
                 }
 
             template = JINJA_ENVIRONMENT.get_template('mymusic.html')
@@ -106,6 +103,50 @@ class Reply_Handler(webapp2.RequestHandler):
         reply.put()
         self.redirect('/MyMusic')
 
+<<<<<<< HEAD
+
+
+class MediaUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
+    def post(self):
+        s_time = time.strftime("%Y/%m/%d")
+        now_string = s_time.replace('/','-')
+
+        upload = self.get_uploads()[0]
+        user_media = Media(views=0, blob_key_media=upload.key(), date_created=now_string)
+        user_media.put()
+
+
+
+
+
+
+        #self.redirect('/view_photo/%s' %upload.key())
+        #self.redirect('/stream?stream_id='+ stream_id)
+
+        #except:
+         #   self.error(500)
+
+# class ViewMediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
+#     def get(self, photo_key):
+#         if not blobstore.get(photo_key):
+#             self.error(404)
+#
+#         else:
+#             img = images.Image(blob_key=photo_key)
+#             img.resize(512, 512)
+#             img.im_feeling_lucky()
+#             thumbnail = img.execute_transforms(output_encoding=images.JPEG)
+#
+#             self.response.headers['Content-Type'] = 'image/jpeg'
+#             self.response.out.write(thumbnail)
+#             #self.send_blob(photo_key)
+#
+#             return
+#
+#         # Either "blob_key" wasn't provided, or there was no value with that ID
+#         # in the Blobstore.
+||||||| merged common ancestors
+=======
 
 class ReplyHandlerAjax(webapp2.RequestHandler):
     def post(self):
@@ -114,8 +155,8 @@ class ReplyHandlerAjax(webapp2.RequestHandler):
 
         print "NBR= " + post_nbr
         date_reply = strftime("%Y-%m-%d %H:%M:%S")
-    #   date_reply = datetime.now()
-    #  date_reply = date_reply.replace(tzinfo=UTC())
+    #    date_reply = datetime.now()
+     #   date_reply = date_reply.replace(tzinfo=UTC())
 
 
 
@@ -139,6 +180,7 @@ class ReplyHandlerAjax(webapp2.RequestHandler):
         )
 
         reply.put()
+
         resp = {}
 
         resp['reply_text'] = reply_text
@@ -150,17 +192,4 @@ class ReplyHandlerAjax(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(resp))
 
-class MediaUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
-    def post(self):
-        s_time = time.strftime("%Y/%m/%d")
-        now_string = s_time.replace('/','-')
-        upload = self.get_uploads()[0]
-        user_media = Media(views=0, blob_key_media=upload.key(), date_created=now_string)
-        user_media.put()
-
-class ViewMediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
-    def get(self, media_key):
-        if not blobstore.get(media_key):
-            self.error(404)
-        else:
-            self.send_blob(media_key)
+>>>>>>> 2dfac20ffbba93761ce8888e1c7f2e8ed556dc13
