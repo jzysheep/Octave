@@ -5,6 +5,7 @@ app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/MyMusic', MyMusic),
     ('/signup',SignUp),
-    ('/reply', Reply_Handler)
+    ('/reply', Reply_Handler),
+    ('/ajax_reply', ReplyHandlerAjax)
     ], debug=True)
 

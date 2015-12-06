@@ -2,6 +2,8 @@ from domain import *
 from time import strftime
 from google.appengine.api import users
 import webapp2
+import json
+from datetime import datetime, tzinfo,timedelta
 
 class MyMusic(webapp2.RequestHandler):
     def get(self):
@@ -96,4 +98,49 @@ class Reply_Handler(webapp2.RequestHandler):
 
         reply.put()
         self.redirect('/MyMusic')
+
+
+class ReplyHandlerAjax(webapp2.RequestHandler):
+    def post(self):
+
+        post_nbr = self.request.get('post_nbr')
+
+        print "NBR= " + post_nbr
+        date_reply = strftime("%Y-%m-%d %H:%M:%S")
+    #    date_reply = datetime.now()
+     #   date_reply = date_reply.replace(tzinfo=UTC())
+
+
+
+        user = users.get_current_user()
+        user_query = User.gql("WHERE email =:1 ", user.email())
+        user_fetch = user_query.get()
+
+        posts = Post.query(ancestor=user_fetch.key).order(-Post.date).fetch()
+        print "post_nbr: " + post_nbr
+        post_key=posts[int(post_nbr)].key
+
+        reply_text = self.request.get("reply_text_" + post_nbr)
+
+        reply = Reply(parent=post_key)
+
+        reply.populate(
+        user_key=user_fetch.key,
+        reply=reply_text,
+        date_reply = date_reply,
+        post_key = post_key
+        )
+
+        reply.put()
+
+        resp = {}
+
+        resp['reply_text'] = reply_text
+        resp['date_reply'] = date_reply
+        resp['post_nbr'] = post_nbr
+
+        print "resp=" + resp['reply_text']
+
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(resp))
 
