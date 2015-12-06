@@ -2,7 +2,7 @@ import webapp2
 
 from domain import *
 from google.appengine.api import users
-
+import time
 
 
 class SignUp(webapp2.RequestHandler):
@@ -31,5 +31,6 @@ class SignUp(webapp2.RequestHandler):
         user=User()
         user.populate(email=user_curr.email(),city=city,name=name,role=role)
         user.put()
+        time.sleep(0.1)
         self.redirect('/MyMusic')
     

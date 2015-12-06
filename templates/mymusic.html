@@ -103,7 +103,7 @@
                </div>
                <div class="head-detail">
                   <div class="head-detail-name">
-                     <span class="user-name textoverflow">Kobe Bryant</span>
+                     <span class="user-name textoverflow">{{user_name}}</span>
                   </div>
                </div>
 
@@ -236,17 +236,17 @@
                                              </div>
                                              <div class="f-user-info">
                                                 <div class="f-nick">
-                                                   <a class="f-name q_namecard ">Kobe</a>
-                                                   <a href="javascript:"class="f-sign-show state">Signature</a>
+                                                   <a class="f-name q_namecard ">{{user_name}}</a>
+                                                   <a href="javascript:"class="f-sign-show state">{{role}}</a>
                                                 </div>
                                                 <div class="info-detail">
-                                                   <span  class=" ui-mr8 state" > 06:10</span>
+                                                   <span  class=" ui-mr8 state" >{{posts[i].date}}</span>
                                                 </div>
                                              </div>
                                           </div>
                                           <div class="f-wrap">
                                              <div class="f-item f-s-i">
-                                                <div class="f-info">{{posts[i].text}} (Dec.4) </div>
+                                                <div class="f-info">{{posts[i].text}}</div>
                                                 <div class="qz_summary wupfeed">
                                                    <div class="f-ct f-ct-b-bg" >
                                                       <div class="f-ct-txtimg">
@@ -278,9 +278,9 @@
                                                                   <div class="comments-item-bd">
                                                                      <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/assets/images/kobe.png" /></a></div>
                                                                      <div class="comments-content">
-                                                                        &nbsp;<a class="c_tx q_namecard" href="javascript:;">Kobe</a>&nbsp;: {{replies[i][j].reply}}
+                                                                        &nbsp;<a class="c_tx q_namecard" href="javascript:;">{{user_name}}</a>&nbsp;: {{replies[i][j].reply}}
                                                                         <div class="comments-op">
-                                                                            <span  class=" ui-mr10 state" >23:52</span>
+                                                                            <span  class=" ui-mr10 state" >{{replies[i][j].date}}</span>
                                                                             <a class="act-reply" href="javascript:;">
                                                                                 <b class="hide-clip">Reply</b>
                                                                             </a>
@@ -452,11 +452,12 @@
             var post_nbr = data["post_nbr"];
             var reply_text = data["reply_text"];
             var date_reply = data["date_reply"];
+            var user_name = data["user_name"];
 
             var new_comment = '<div class="comments-item-bd"> \
              <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/assets/images/kobe.png" /></a></div> \
              <div class="comments-content"> \
-             &nbsp;<a class="c_tx q_namecard" href="javascript:;">Kobe</a>&nbsp;: ' + reply_text + ' \
+             &nbsp;<a class="c_tx q_namecard" href="javascript:;">' + user_name + '</a>&nbsp;: ' + reply_text + ' \
              <div class="comments-op"> \
              <span  class=" ui-mr10 state" >' + date_reply + '</span> \
              <a class="act-reply" href="javascript:;"> \

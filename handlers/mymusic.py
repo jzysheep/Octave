@@ -34,15 +34,15 @@ class MyMusic(webapp2.RequestHandler):
                     #else:
                     replies.insert(count,temp)
 
-
             values = {
-               'url_log': url_linktext,
-               'url': url,
-               'posts': posts,
-               'replies': replies,
-               'media_key':media_key,
-
-                }
+                'url_log': url_linktext,
+                'url': url,
+                'posts': posts,
+                'replies': replies,
+                'media_key': media_key,
+                'user_name': user_fetch.name,
+                'role': user_fetch.role
+            }
 
             template = JINJA_ENVIRONMENT.get_template('mymusic.html')
             self.response.write(template.render(values))
@@ -144,6 +144,7 @@ class ReplyHandlerAjax(webapp2.RequestHandler):
         resp['reply_text'] = reply_text
         resp['date_reply'] = date_reply
         resp['post_nbr'] = post_nbr
+        resp['user_name'] = user_fetch.name
 
         print "resp=" + resp['reply_text']
 
