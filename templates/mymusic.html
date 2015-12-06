@@ -7,6 +7,23 @@
       <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-poster-comment-150512101535.css?max_age=31536000" rel="stylesheet"/>
+
+      <link type="text/css" rel="stylesheet" href="/bootstrap33/dist/css/bootstrap.css" >
+
+       <link  href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css" rel="stylesheet"/> >
+       <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
+       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
+       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-poster-comment-150512101535.css?max_age=31536000" rel="stylesheet"/>
+
+       <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+       <script type="text/javascript" src="/assets/js/jquery-dropzone.js"></script>
+       <script src="http://www.dropzonejs.com/js/build/build.js?v=6"></script>
+       <script>
+            var Dropzone = require("enyo-dropzone");
+            Dropzone.autoDiscover = false;
+        </script>
+
       <style id="mainJSBg" type="text/css">
          .background-container {
              background-repeat: no-repeat;
@@ -118,8 +135,19 @@
                                   </div>
                                   <!-- attach -->
                                   <div class="qz-poster-attach-side">
+                                         <!-- submit post -->
+                                         <div class="item bor3 bg4 item-other">
+                                             <input type="submit" id="submitPost" name="submitPost" style="display: none;"/>
+                                                <a onclick="submit();" class="other">
+                                                     <i class="icon"></i>
+                                                </a>
+                                         </div>
+                                     </div>
+                                  </div>
+                               </div>
+                         </form>
 
-                                      <div id="actions" class="row">
+                     <div id="actions" class="row">
 
                                           <div class="col-lg-7">
                                             <!-- The fileinput-button span is used to style the file input field as button -->
@@ -186,22 +214,6 @@
                                       </div>
 
                                     </div>
-
-                                        <!-- submit post -->
-                                         <div class="item bor3 bg4 item-ohter">
-                                            <input type="submit" id="submitPost" name="submitPost" style="display: none;"/>
-
-                                           <a onclick="submit();" class="other">
-                                           <i class="icon icon-pic"></i>
-                                           </a>
-
-
-                                        </div>
-                                     </div>
-                                  </div>
-                               </div>
-
-                         </form>
 
                         <div id="feed_friend" >
                            <div class="fn-feed-container">
@@ -472,5 +484,97 @@
                   document.getElementById("replyPost_" + i).click();
                }
        </script>
+
+
+
+    <script>
+      // Get the template HTML and remove it from the doument
+      var previewNode = document.querySelector("#template");
+      previewNode.id = "";
+      var previewTemplate = previewNode.parentNode.innerHTML;
+      previewNode.parentNode.removeChild(previewNode);
+      var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+        url: '/', // Set the url
+        acceptedFiles: 'audio/*, video/*',
+        maxFilesize: 100,
+        maxFiles: 100,
+        parallelUploads: 100,
+        previewTemplate: previewTemplate,
+        autoQueue: false, // Make sure the files aren't queued until manually added
+        previewsContainer: "#previews", // Define the container to display the previews
+        clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+      });
+      myDropzone.on("addedfile", function(file) {
+        // Hookup the start button
+          console.log("adding file")
+          file.previewElement.querySelector(".start").onclick = function() {
+              $.ajax({
+                  type: 'POST',                            // http method
+                  url: '/media_url',               // target URL
+                  success: function (serverResp) {          // on ajax success
+                      if (serverResp.code == '200') {
+                          console.log('image added successfully!');
+                          myDropzone.options.url = serverResp.response;
+                          console.log(myDropzone.options.url);
+                          myDropzone.enqueueFile(file);
+                      }
+                      else {
+                          console.log('detective already exists!');
+                      }
+                  },
+                  error: function (serverResp) {            // on ajax failure
+                      console.log('5xx http status code or unexpected response content');
+                  }
+              });
+                console.log("ENQUE file");
+  };
+      });
+      // Update the total progress bar
+      myDropzone.on("totaluploadprogress", function(progress) {
+        document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+      });
+      myDropzone.on("sending", function(file) {
+        // Show the total progress bar when upload starts
+        document.querySelector("#total-progress").style.opacity = "1";
+        // And disable the start button
+        file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+      });
+      // Hide the total progress bar when nothing's uploading anymore
+      myDropzone.on("queuecomplete", function(progress) {
+        document.querySelector("#total-progress").style.opacity = "0";
+      });
+      // Setup the buttons for all transfers
+      // The "add files" button doesn't need to be setup because the config
+      // `clickable` has already been specified.
+      document.querySelector("#actions .start").onclick = function() {
+//          myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+          var i;
+          for (i=0;i<myDropzone.getFilesWithStatus(Dropzone.ADDED).length;i++) {
+              $.ajax({
+                  type: 'POST',                            // http method
+                  url: '/media_url',               // target URL
+                  success: function (serverResp) {          // on ajax success
+                      if (serverResp.code == '200') {
+                          console.log('image added successfully!');
+                          myDropzone.options.url = serverResp.response;
+                          console.log(myDropzone.options.url);
+                          myDropzone.enqueueFile(myDropzone.getFilesWithStatus(Dropzone.ADDED)[0]);
+                          console.log("ENQUE file");
+                      }
+                      else {
+                          console.log('detective already exists!');
+                      }
+                  },
+                  error: function (serverResp) {            // on ajax failure
+                      console.log('5xx http status code or unexpected response content');
+                  }
+              });
+          }
+      };
+          document.querySelector("#actions .cancel").onclick = function () {
+              myDropzone.removeAllFiles(true);
+          };
+    </script>
+
    </body>
 </html>
