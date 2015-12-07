@@ -183,7 +183,7 @@
                                         </div>
 
 
-                                    <div class="table table-striped" class="files" id="previews">
+                                    <div class="table table-striped" class="files" id="previews" style="display: none;">
 
                                       <div id="template" class="file-row">
                                         <!-- This is used as the file preview template -->
@@ -215,8 +215,6 @@
                                           </button>
                                         </div>
 
-
-
                                       </div>
 
                                     </div>
@@ -229,9 +227,9 @@
 
                                         {% for i in range(posts|length) %}
 
-                                       <li class="f-single f-s-s">
-                                          <div class="f-aside">
-                                             <div class="f-user-pto">
+                                            <li class="f-single f-s-s">
+                                             <div class="f-aside">
+                                               <div class="f-user-pto">
                                                 <a href="javascript:" class="f-user-avatar q_namecard f-s-a" style="background-image: url(/assets/images/kobe.png);">
                                                 </a>
                                              </div>
@@ -251,10 +249,22 @@
                                                 <div class="qz_summary wupfeed">
                                                    <div class="f-ct f-ct-b-bg" >
                                                       <div class="f-ct-txtimg">
+
+                                                          {% if posts[i].blob_key_media != None %}
+                                                          <audio controls>
+
+                                                       <source src="/view_media/{{posts[i].blob_key_media}}" type="audio/mp3">
+ >
+
+                                                          </audio>
+                                                        {% endif %}
                                                          <div class="img-box img-box-row">
-                                                            <a href="javascript:;">
-                                                            <img src="/assets/images/curry.png">
-                                                            </a>
+
+
+{#                                                         Music Cover Image    #}
+{#                                                            <a href="javascript:;">#}
+{#                                                            <img src="/assets/images/curry.png">#}
+{#                                                            </a>#}
                                                          </div>
                                                       </div>
                                                    </div>
@@ -420,11 +430,13 @@
            }
       </script>
       <script type="text/javascript">
-              function submit() {
-                  var data = document.getElementById("qz_poster_editor_v4_container").textContent;
-                  document.getElementById("post_data_field").value = data;
-                  document.getElementById("submitPost").click();
-               }
+
+          function submit() {
+              var data = document.getElementById("qz_poster_editor_v4_container").textContent;
+              document.getElementById("post_data_field").value = data;
+              document.getElementById("submitPost").click();
+
+           }
        </script>
 
       <script>
@@ -440,7 +452,7 @@
 
             var term = $("#reply_data_field_" + count).val();
             var url = $("#form_" + count).attr( "action" );
-            var reply_text  = "reply_text_" + count
+            var reply_text  = "reply_text_" + count;
             var toBackEnd = {};
             toBackEnd["post_nbr"] = count;
             toBackEnd["reply_text_" + count] = term;
@@ -470,7 +482,6 @@
 
                $( "#form_" + post_nbr).before(new_comment);
                $("#qz_reply_editor_v4_container" + post_nbr).empty();
-
           });
         });
         </script>

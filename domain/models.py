@@ -10,9 +10,11 @@ JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.jo
 class Media(ndb.Model):
     views = ndb.IntegerProperty()
     link = ndb.StringProperty()
-    blob_key_media = ndb.BlobKeyProperty()
     media_type = ndb.StringProperty()
     date_created = ndb.StringProperty()
+    media_nbr = ndb.IntegerProperty()
+    upload_check=ndb.BooleanProperty()
+    key_media = ndb.BlobKeyProperty()
 
 
 class Tag(ndb.Model):
@@ -33,7 +35,7 @@ class Post(ndb.Model):
     date_created = ndb.StringProperty()
     text = ndb.StringProperty()
     tags = ndb.StringProperty(repeated=True) # construct entities from the strings
-    media_names = ndb.StringProperty(repeated=True) #construct entities by fetching the media based on the list of names
+    blob_key_media = ndb.BlobKeyProperty()
     user_key = ndb.KeyProperty(kind=User)
 
 class Reply(ndb.Model):
@@ -46,7 +48,7 @@ class Reply(ndb.Model):
 class Playlist(ndb.Model):
     name = ndb.StringProperty()
     user_key = ndb.KeyProperty()
-    media = ndb.StructuredProperty(Media, repeated=True)
+    media = ndb.BlobKeyProperty(repeated=True)
     privacy = ndb.StringProperty()
 
 class Artist(ndb.Model):

@@ -20,9 +20,3 @@ indexes:
   ancestor: yes
   properties:
   - name: date
-
-- kind: Reply
-  ancestor: yes
-  properties:
-  - name: date
-    direction: desc

@@ -15,23 +15,18 @@ class MyMusic(webapp2.RequestHandler):
         if user is not None:
             url = users.create_logout_url('/')
             url_linktext = 'Logout'
-            
+            global upload_key
+            upload_key=""
+
             user_query = User.gql("WHERE email =:1", user.email())
             user_fetch = user_query.get()
             replies = []
             posts = []
-            media=Media.query().fetch()
 
-            media_key=""
-            if media:
-                media_key=media[0].blob_key_media
             if user_fetch:
                 posts = Post.query(ancestor=user_fetch.key).order(-Post.date).fetch()
                 for count in range(0 , posts.__len__()):
                     temp = Reply.query(ancestor=posts[count].key).order(Reply.date).fetch()
-                    #if temp == []:
-                        #replies.insert(count,None)
-                    #else:
                     replies.insert(count,temp)
 
                 if not user_fetch.signature:
@@ -39,12 +34,14 @@ class MyMusic(webapp2.RequestHandler):
                 else:
                     user_signature = user_fetch.signature
 
+            for post in posts:
+                print "BLOB_KEY_MEDIA: " + str(post.blob_key_media)
+
             values = {
                 'url_log': url_linktext,
                 'url': url,
                 'posts': posts,
                 'replies': replies,
-                'media_key': media_key,
                 'user_name': user_fetch.name,
                 'user_role': user_fetch.role,
                 'user_signature': user_signature
@@ -62,13 +59,27 @@ class MyMusic(webapp2.RequestHandler):
         user_query = User.gql("WHERE email =:1 ", user.email())
         user_fetch = user_query.get()
 
+        media_query = Media.gql("WHERE upload_check = :1", True)
+
         post = Post(parent=user_fetch.key)
 
-        post.populate(
-        date_created=date_created,
-        text=post_text,
-        user_key=user_fetch.key
-        )
+        media_fetch=media_query.get()
+        if media_fetch!=None:
+            post.populate(
+            date_created=date_created,
+            text=post_text,
+            user_key=user_fetch.key,
+            blob_key_media=media_fetch.key_media
+            )
+            media_fetch.upload_check=False;
+            media_fetch.put()
+        else:
+            post.populate(
+            date_created=date_created,
+            text=post_text,
+            user_key=user_fetch.key
+            )
+
 
         post.put()
         self.redirect('/MyMusic')
@@ -85,7 +96,6 @@ class MyMusic(webapp2.RequestHandler):
 class Reply_Handler(webapp2.RequestHandler):
     def post(self):
         print "ENTERED"
-
         post_nbr=self.request.get('post_nbr')
 
         print "NBR= " + post_nbr
@@ -162,8 +172,9 @@ class MediaUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         s_time = time.strftime("%Y/%m/%d")
         now_string = s_time.replace('/','-')
         upload = self.get_uploads()[0]
-        user_media = Media(views=0, blob_key_media=upload.key(), date_created=now_string)
+        user_media = Media(key_media=upload.key(),upload_check=True,views=0, date_created=now_string)
         user_media.put()
+
 
 class ViewMediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
     def get(self, media_key):
