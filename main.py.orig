@@ -1,0 +1,19 @@
+from handlers import *
+import webapp2
+
+app = webapp2.WSGIApplication([
+    ('/', MainPage),
+    ('/MyMusic', MyMusic),
+    ('/signup',SignUp),
+<<<<<<< HEAD
+    ('/reply', Reply_Handler),
+    ('/_ah/upload', MediaUploadHandler),
+    ('/media_url', MediaUploadFormHandler)
+||||||| merged common ancestors
+    ('/reply', Reply_Handler)
+=======
+    ('/reply', Reply_Handler),
+    ('/ajax_reply', ReplyHandlerAjax)
+>>>>>>> 2dfac20ffbba93761ce8888e1c7f2e8ed556dc13
+    ], debug=True)
+
