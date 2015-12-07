@@ -23,6 +23,7 @@ class User(ndb.Model):
     email = ndb.StringProperty()
     city = ndb.StringProperty()
     name = ndb.StringProperty()
+    signature = ndb.StringProperty()
     role = ndb.StringProperty()
     blob_key_photo=ndb.BlobKeyProperty()
     followers = ndb.StringProperty(repeated=True) #Their emails

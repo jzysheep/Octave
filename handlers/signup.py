@@ -26,10 +26,11 @@ class SignUp(webapp2.RequestHandler):
         name=self.request.get('name')
         city=self.request.get('city')
         role=self.request.get('role')
+        signature=self.request.get('signature')
 
 
         user=User()
-        user.populate(email=user_curr.email(),city=city,name=name,role=role)
+        user.populate(email=user_curr.email(),city=city,name=name,role=role,signature=signature)
         user.put()
         time.sleep(0.1)
         self.redirect('/MyMusic')

@@ -34,6 +34,11 @@ class MyMusic(webapp2.RequestHandler):
                     #else:
                     replies.insert(count,temp)
 
+                if not user_fetch.signature:
+                    user_signature = ""
+                else:
+                    user_signature = user_fetch.signature
+
             values = {
                 'url_log': url_linktext,
                 'url': url,
@@ -41,7 +46,8 @@ class MyMusic(webapp2.RequestHandler):
                 'replies': replies,
                 'media_key': media_key,
                 'user_name': user_fetch.name,
-                'role': user_fetch.role
+                'user_role': user_fetch.role,
+                'user_signature': user_signature
             }
 
             template = JINJA_ENVIRONMENT.get_template('mymusic.html')
