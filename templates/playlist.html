@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE HTML>
+<html class="skin-dark">
+   <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+      <title>mymusic</title>
+      <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
+      <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
+      <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-poster-comment-150512101535.css?max_age=31536000" rel="stylesheet"/>
+      <link type="text/css" rel="stylesheet" href="/assets/css/icons.css" >
+      <link href="http://imgcache.qq.com/mediastyle/musicbox/css/friend_music.css?max_age=2592000&amp;ver=20121231.css" rel="stylesheet">
+      <style id="mainJSBg" type="text/css">
+         .background-container {
+         background-repeat: no-repeat;
+         background-position: center top;
+         background-attachment: scroll;
+         background-image: url();
+         }
+         .bg-body {
+         background-image: url();
+         background-repeat: repeat;
+         }
+      </style>
+      <style id="mainJSTitleBar" type="text/css">
+         .layout-head-inner {height:220px;}
+      </style>
+   </head>
+   <body class="bg-body">
+      <!-- nav bar -->
+      <div class="top-fix-bar">
+         <div class="top-fix-inner" >
+            <div class="" id="QZ_Toolbar_Container">
+               <div class="">
+                  <ul class="top-nav">
+                     <li class="nav-list" id="tb_ic_li">
+                        <div class="nav-list-inner">
+                           <a href="/templates/playlist.html" class="" x><i class="ui-icon icon-icenter"></i><span>Playlist</span></a>
+                        </div>
+                     </li>
+                     <li class="nav-list" id="tb_index_li">
+                        <div class="nav-list-inner">
+                           <a href="" class="homepage-link a-link "><i class="ui-icon icon-homepage"></i><span>MyMusic</span></a>
+                        </div>
+                     </li>
+                     <li class="nav-list" id="tb_friend_li">
+                        <div class="nav-list-inner">
+                           <a href="" class="friends-link a-link"><i class="ui-icon icon-friend"></i><span>Home Music</span></a>
+                        </div>
+                     </li>
+                     <li class="nav-list" id="tb_app_li">
+                        <div class="nav-list-inner">
+                           <a href="" class="application-link a-link"><i class="ui-icon icon-application"></i><span>Famous Music</span></a>
+                        </div>
+                     </li>
+                     <li class="nav-list" id="tb_dress_li">
+                        <div class="nav-list-inner">
+                           <a href="" class="dress-up-link a-link" ><i class="ui-icon icon-dress-up"></i><span>Artist</span></a>
+                        </div>
+                     </li>
+                     <li class="nav-list" id="tb_logout_li">
+                        <div class="nav-list-inner">
+                           <a href="{{url}}" class="logout-link a-link" ><i class="ui-icon icon-logout"></i><span>{{url_log}}</span></a>
+                        </div>
+                     </li>
+                  </ul>
+                  <!-- Search Box -->
+                  <div class="top-search">
+                     <div class="search-box">
+                        <input class="search-input" type="text" placeholder="">
+                        <a href="" class="search-button"><i class="ui-icon icon-search"></i></a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- background -->
+      <div class="background-container">
+         <div class="layout-head ">
+            <div class="layout-head-inner" id="headContainer">
+               <div class="head-info">
+                  <h1 class="head-title" id="top_head_title"><span class="title-text ui-mr5">Octave</span>
+                  </h1>
+                  <div class="head-description">
+                     <span class="description-text" id="QZ_Space_Desc">{{user_signature}}</span>
+                  </div>
+               </div>
+               <div class="head-detail">
+                  <div class="head-detail-name">
+                     <span class="user-name textoverflow">{{user_name}}</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="layout-nav">
+            <div class="layout-nav-inner">
+               <div class="head-avatar">
+                  <a href="javascript:;">
+                     <div class="head-dress"></div>
+                     <img src="/assets/images/kobe.png" class="user-avatar"  />
+                  </a>
+               </div>
+            </div>
+         </div>
+         <div class="layout-background">
+            <div class="layout-body">
+               <div class="qz-grid none" id="pageContent">
+               </div>
+               <div class="layout-app mod_wrap layout-base-app" id="pageApp">
+                  <div class="mod_wrap_inner">
+                     <div class="mod_wrap_bd">
+                        <div style="min-height:435px;" id="app_container" class="mod_wrap_iframe">
+                           <div id="app_mod" class="sns_music wide_mode">
+                              <!-- Main Content-->
+                              <div class="grid_main bg4">
+                                 <div class="grid_wrap bg rbor2">
+                                    <div class="grid_cont">
+                                       <div id="ColumnContainer" class="mod_feed">
+
+                                          <div class="mod_column ks-col">
+                                             <div class="mod_feed_list bg3 bor2 ks-waterfall" style="display: block;">
+
+                                                <div class="feed_user_info bg3">
+
+                                                   <ul>
+                                                      <li>
+                                                          <span class="name c_tx">
+                                                            Name of Artist
+                                                          </span>
+                                                          <span class="share c_tx3">Additional information</span>
+                                                      </li>
+                                                   </ul>
+                                                </div>
+
+                                                <!-- Cover -->
+                                                <div class="feed_cover bor2">
+                                                   <div class="photo single can_play ks-single">
+                                                          <img class="ks-albumpic" style="width:188px;height:188px;" src="http://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/110.png&w=350&h=254">
+
+                                                      <div class="music_title">
+                                                          Music Name
+                                                      </div>
+                                                   </div>
+                                                  <audio style="width: 100%;margin-top:10px;"controls>
+                                                      <source src="" type="audio/mp3">
+                                                  </audio>
+                                                </div>
+                                             </div>
+                                          </div>
+
+                                          <div class="mod_column ks-col">
+                                             <div class="mod_feed_list bg3 bor2 ks-waterfall" style="display: block;">
+
+                                                <div class="feed_user_info bg3">
+
+                                                   <ul>
+                                                      <li>
+                                                          <span class="name c_tx">
+                                                            Name of Artist
+                                                          </span>
+                                                          <span class="share c_tx3">Additional information</span>
+                                                      </li>
+                                                   </ul>
+                                                </div>
+
+                                                <!-- Cover -->
+                                                <div class="feed_cover bor2">
+                                                   <div class="photo single can_play ks-single">
+                                                          <img class="ks-albumpic" style="width:188px;height:188px;" src="http://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/110.png&w=350&h=254">
+
+                                                      <div class="music_title">
+                                                          Music Name
+                                                      </div>
+                                                   </div>
+                                                  <audio style="width: 100%;margin-top:10px;"controls>
+                                                      <source src="" type="audio/mp3">
+                                                  </audio>
+                                                </div>
+                                             </div>
+                                          </div>
+
+                                           <div class="mod_column ks-col">
+                                             <div class="mod_feed_list bg3 bor2 ks-waterfall" style="display: block;">
+
+                                                <div class="feed_user_info bg3">
+
+                                                   <ul>
+                                                      <li>
+                                                          <span class="name c_tx">
+                                                            Name of Artist
+                                                          </span>
+                                                          <span class="share c_tx3">Additional information</span>
+                                                      </li>
+                                                   </ul>
+                                                </div>
+
+                                                <!-- Cover -->
+                                                <div class="feed_cover bor2">
+                                                   <div class="photo single can_play ks-single">
+                                                          <img class="ks-albumpic" style="width:188px;height:188px;" src="http://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/110.png&w=350&h=254">
+
+                                                      <div class="music_title">
+                                                          Music Name
+                                                      </div>
+                                                   </div>
+                                                  <audio style="width: 100%;margin-top:10px;"controls>
+                                                      <source src="" type="audio/mp3">
+                                                  </audio>
+                                                </div>
+                                             </div>
+                                          </div>
+
+                                           <div class="mod_column ks-col">
+                                             <div class="mod_feed_list bg3 bor2 ks-waterfall" style="display: block;">
+
+                                                <div class="feed_user_info bg3">
+
+                                                   <ul>
+                                                      <li>
+                                                          <span class="name c_tx">
+                                                            Name of Artist
+                                                          </span>
+                                                          <span class="share c_tx3">Additional information</span>
+                                                      </li>
+                                                   </ul>
+                                                </div>
+
+                                                <!-- Cover -->
+                                                <div class="feed_cover bor2">
+                                                   <div class="photo single can_play ks-single">
+                                                          <img class="ks-albumpic" style="width:188px;height:188px;" src="http://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/110.png&w=350&h=254">
+
+                                                      <div class="music_title">
+                                                          Music Name
+                                                      </div>
+                                                   </div>
+                                                  <audio style="width: 100%;margin-top:10px;"controls>
+                                                      <source src="" type="audio/mp3">
+                                                  </audio>
+                                                </div>
+                                             </div>
+                                          </div>
+
+
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div style="min-height:750px;" class="layout-app none" id="page3rdApp"></div>
+            </div>
+            <div class="layout-copyright">
+               <p>Copyright &copy; Ziyang Jiang, Ahmad Ei Youssef</p>
+            </div>
+         </div>
+
+      </div>
+      <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/ac/qzone/qzfl/qzfl_v8_2.1.45.js" ></script>
+      <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/ac/lib/seajs/sea-2.1.1.js" ></script>
+      <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/c/=/qzone/v8/core/seajs_config.js,/qzone/v8/engine/plugin-combo.js,/qzone/v8/core/ic.js?max_age=31536001&amp;d=50108" ></script>
+      <script type='text/javascript' src="/assets/js/jquery-2.1.4.js"></script>
+   </body>
+</html>
+
