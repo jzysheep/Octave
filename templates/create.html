@@ -29,7 +29,17 @@
          .layout-head-inner {height:220px;}
       </style>
 
+       <style id="dynamic-form-fields" type="text/css">
+           .entry:not(:first-of-type)
+            {
+                margin-top: 10px;
+            }
 
+            .glyphicon
+            {
+                font-size: 12px;
+            }
+       </style>
 
    </head>
    <body class="bg-body">
@@ -84,48 +94,96 @@
 
 
 <form action="/create" method="post">
-<div class="container">
-    <h3>Create New Playlist</h3>
-    <div class="row">
-        <div class="col-sm-6">
+    <div class="container">
+        <h3>Create New Playlist</h3>
+        <div class="row">
+            <div class="col-sm-8">
 
-            <div class="form-group">
-                <label>Name your playlist</label>
-                <div><input class="form-control" name="stream_name" size="20"></div>
-            </div>
-
-           <div class="form-group">
-                <label>URL to cover image (can be empty)</label>
-                <div><textarea class="form-control" name="image_url" rows="1" cols="45"></textarea></div>
-            </div>
-
-           <div class="form-group">
-                <label>Choose music from posts</label>
-                <div class="checkbox">
-                  <label><input type="checkbox" value="">Option 1</label>
+                <div class="form-group">
+                    <label>Name your playlist</label>
+                    <div><input class="form-control" name="stream_name" size="20"></div>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" value="">Option 2</label>
+
+               <div class="form-group">
+                    <label>URL to cover image (can be empty)</label>
+                    <div><textarea class="form-control" name="image_url" rows="1" cols="45"></textarea></div>
                 </div>
-                <div class="checkbox disabled">
-                  <label><input type="checkbox" value="" disabled>Option 3</label>
+
+                <div class="form-group">
+                  <label>Privacy</label>
+                  <select name="privacy" class="form-control">
+                    <option>Private</option>
+                    <option>Public</option>
+                  </select>
                 </div>
+
+                <div class="form-group">
+                    <div class="control-group">
+                        <label class="control-label">Music links from Youtube or SoundCloud</label>
+                        <div class="controls">
+                                <div class="entry input-group col-sm-12">
+                                    <input class="form-control" name="music_links" type="text" placeholder="Link to Music" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-success btn-add" type="button">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+                        <!-- drop zone -->
+                <div class="form-group">
+
+                    <span class="btn btn-success fileinput-button">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span>Add files...</span>
+                    </span>
+                    <button type="submit" class="btn btn-primary start">
+                        <i class="glyphicon glyphicon-upload"></i>
+                        <span>Start upload</span>
+                    </button>
+                    <button type="reset" class="btn btn-warning cancel">
+                        <i class="glyphicon glyphicon-ban-circle"></i>
+                        <span>Cancel upload</span>
+                    </button>
+
+                </div>
+                <div class="form-group">
+                    <div><input type="submit"  class="btn btn-info" value="Create Playlist"></div>
+                </div>
+        </div>
+
             </div>
-
-            <div class="form-group">
-                <div><input type="submit"  class="btn btn-info" value="Create Stream"></div>
-            </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-6">
-
-
-
-    </div>
-</div>
+        </div>
 </form>
 
+      <script type='text/javascript' src="../assets/js/jquery-2.1.4.js"></script>
+      <script type="text/javascript">
+        $(function()
+        {
+            $(document).on('click', '.btn-add', function(e)
+            {
+                e.preventDefault();
+
+                var controlDiv = $('.controls'),
+                    currentEntry = $(this).parents('.entry:first'),
+                    newEntry = $(currentEntry.clone()).appendTo(controlDiv);
+                newEntry.find('input').val('');
+                controlDiv.find('.entry:not(:last) .btn-add')
+                    .removeClass('btn-add').addClass('btn-remove')
+                    .removeClass('btn-success').addClass('btn-danger')
+                    .html('<span class="glyphicon glyphicon-minus"></span>');
+            }).on('click', '.btn-remove', function(e)
+            {
+                $(this).parents('.entry:first').remove();
+
+                e.preventDefault();
+                return false;
+            });
+        });
+       </script>
    </body>
 </html>
 
