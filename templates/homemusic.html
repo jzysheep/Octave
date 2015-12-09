@@ -3,7 +3,7 @@
    <head>
       <meta charset="UTF-8" />
       <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-      <title>mymusic</title>
+      <title>homemusic</title>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-poster-comment-150512101535.css?max_age=31536000" rel="stylesheet"/>
@@ -12,20 +12,13 @@
        <link  href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css" rel="stylesheet"/> >
       <link type="text/css" rel="stylesheet" href="/bootstrap33/dist/css/bootstrap.css" >
 
-      <link type="text/css" rel="stylesheet" href="/assets/css/icons.css" >
+      <link type="text/css" rel="stylesheet" href="../assets/css/icons.css" >
 
-       <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
-       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-       <script type="text/javascript" src="/assets/js/jquery-dropzone.js"></script>
-       <script src="http://www.dropzonejs.com/js/build/build.js?v=6"></script>
-       <script>
-            var Dropzone = require("enyo-dropzone");
-            Dropzone.autoDiscover = false;
-        </script>
+
 
       <style id="mainJSBg" type="text/css">
          .background-container {
-             background-repeat: repeat;
+             background-repeat: no-repeat;
              background-position: center top;
              background-attachment: scroll;
              background-image: url();
@@ -121,104 +114,12 @@
                </div>
             </div>
          </div>
+
          <div class="layout-background">
             <div class="layout-body">
                <div id="pageContent" class="layout-page clearfix">
                   <div id="main_feed_container" class="col-main ">
                      <div class="col-main-feed">
-
-                         <form enctype="multipart/form-data" method="post" action="/MyMusic">
-
-                            <div id="QM_Mood_Poster_Container">
-                               <div id="QM_Mood_Poster_Inner" class="qz-poster bg b-test">
-                                  <div class="qz-inputer bor2">
-
-                                     <div id="qz_poster_editor_v4_container" class="textarea c_tx2" contenteditable="true">
-
-                                     </div>
-                                     <input type="hidden" name="post_text" id="post_data_field"/>
-
-                                  </div>
-                                  <!-- attach -->
-                                  <div class="qz-poster-attach-side">
-                                         <!-- submit post -->
-                                         <div class="item bor3 bg4 item-other">
-                                             <input type="submit" id="submitPost" name="submitPost" style="display: none;"/>
-                                                <a style="height:60px;" onclick="submit();" class="">
-                                                     <i class="icon icon-music"></i>
-                                                </a>
-                                             </div>
-                                     </div>
-                                  </div>
-                               </div>
-                         </form>
-
-                                        <div id="actions" class="row">
-
-                                          <div class="container qz-poster">
-                                            <!-- The fileinput-button span is used to style the file input field as button -->
-
-                                            <button class="poster-skin-box fileinput-button">
-                                                <i class="glyphicon glyphicon-plus"></i>
-                                                <span>Add</span>
-                                            </button>
-                                            <button type="submit" class="poster-skin-box start">
-                                                <i class="glyphicon glyphicon-upload"></i>
-                                                <span>upload</span>
-                                            </button>
-                                            <button type="reset" class="poster-skin-box cancel">
-                                                <i class="glyphicon glyphicon-ban-circle"></i>
-                                                <span>Cancel</span>
-                                            </button>
-                                          </div>
-
-                                          <div class="col-lg-5">
-                                            <!-- The global file processing state -->
-                                            <span class="fileupload-process">
-                                              <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                                                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-                                              </div>
-                                            </span>
-                                          </div>
-
-                                        </div>
-
-
-                                    <div class="table table-striped" class="files" id="previews" style="display: none;">
-
-                                      <div id="template" class="file-row">
-                                        <!-- This is used as the file preview template -->
-                                        <div>
-                                            <span class="preview"><img data-dz-thumbnail /></span>
-                                        </div>
-                                        <div>
-                                            <p class="name" data-dz-name></p>
-                                            <strong class="error text-danger" data-dz-errormessage></strong>
-                                        </div>
-                                        <div>
-                                            <p class="size" data-dz-size></p>
-                                            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                                              <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                          <button class="poster-skin-box start">
-                                              <i class="glyphicon glyphicon-upload"></i>
-                                              <span>Start</span>
-                                          </button>
-                                          <button data-dz-remove class="poster-skin-box cancel">
-                                              <i class="glyphicon glyphicon-ban-circle"></i>
-                                              <span>Cancel</span>
-                                          </button>
-                                          <button data-dz-remove class="poster-skin-box delete">
-                                            <i class="glyphicon glyphicon-trash"></i>
-                                            <span>Delete</span>
-                                          </button>
-                                        </div>
-
-                                      </div>
-
-                                    </div>
 
                         <div id="feed_friend" >
                            <div class="fn-feed-container">
@@ -271,7 +172,6 @@
                                                    </div>
                                                    <div class="f-op-wrap">
                                                       <p class="f-detail">&nbsp;
-
                                                          <a href="javascript:;" style="height:30px;" class=" item  "><i class="ui-icon icon-forward"></i>share</a>
                                                          <span class="item-line"></span>
                                                         <a href="javascript:;" style="height:30px;" class=" item  "><i class="ui-icon icon-praise"></i>like</a>
@@ -354,6 +254,7 @@
                         </div>
                      </div>
                      <!-- right hand side bar -->
+
                   </div>
                   <!-- left menu -->
                </div>
@@ -367,7 +268,7 @@
       <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/ac/qzone/qzfl/qzfl_v8_2.1.45.js" ></script>
       <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/ac/lib/seajs/sea-2.1.1.js" ></script>
       <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/c/=/qzone/v8/core/seajs_config.js,/qzone/v8/engine/plugin-combo.js,/qzone/v8/core/ic.js?max_age=31536001&amp;d=50108" ></script>
-        <script type='text/javascript' src="/assets/js/jquery-2.1.4.js"></script>
+        <script type='text/javascript' src="../assets/js/jquery-2.1.4.js"></script>
 
 
       <script type="text/javascript">
@@ -440,96 +341,6 @@
                }
        </script>
 
-
-
-    <script>
-      // Get the template HTML and remove it from the doument
-      var previewNode = document.querySelector("#template");
-      previewNode.id = "";
-      var previewTemplate = previewNode.parentNode.innerHTML;
-      previewNode.parentNode.removeChild(previewNode);
-      var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-        url: '/', // Set the url
-        acceptedFiles: 'audio/*, video/*',
-        maxFilesize: 100,
-        maxFiles: 100,
-        parallelUploads: 100,
-        previewTemplate: previewTemplate,
-        autoQueue: false, // Make sure the files aren't queued until manually added
-        previewsContainer: "#previews", // Define the container to display the previews
-        clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
-      });
-      myDropzone.on("addedfile", function(file) {
-        // Hookup the start button
-          console.log("adding file")
-          file.previewElement.querySelector(".start").onclick = function() {
-              $.ajax({
-                  type: 'POST',                            // http method
-                  url: '/media_url',               // target URL
-                  success: function (serverResp) {          // on ajax success
-                      if (serverResp.code == '200') {
-                          console.log('image added successfully!');
-                          myDropzone.options.url = serverResp.response;
-                          console.log(myDropzone.options.url);
-                          myDropzone.enqueueFile(file);
-                      }
-                      else {
-                          console.log('detective already exists!');
-                      }
-                  },
-                  error: function (serverResp) {            // on ajax failure
-                      console.log('5xx http status code or unexpected response content');
-                  }
-              });
-                console.log("ENQUE file");
-  };
-      });
-      // Update the total progress bar
-      myDropzone.on("totaluploadprogress", function(progress) {
-        document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
-      });
-      myDropzone.on("sending", function(file) {
-        // Show the total progress bar when upload starts
-        document.querySelector("#total-progress").style.opacity = "1";
-        // And disable the start button
-        file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
-      });
-      // Hide the total progress bar when nothing's uploading anymore
-      myDropzone.on("queuecomplete", function(progress) {
-        document.querySelector("#total-progress").style.opacity = "0";
-      });
-      // Setup the buttons for all transfers
-      // The "add files" button doesn't need to be setup because the config
-      // `clickable` has already been specified.
-      document.querySelector("#actions .start").onclick = function() {
-//          myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
-          var i;
-          for (i=0;i<myDropzone.getFilesWithStatus(Dropzone.ADDED).length;i++) {
-              $.ajax({
-                  type: 'POST',                            // http method
-                  url: '/media_url',               // target URL
-                  success: function (serverResp) {          // on ajax success
-                      if (serverResp.code == '200') {
-                          console.log('image added successfully!');
-                          myDropzone.options.url = serverResp.response;
-                          console.log(myDropzone.options.url);
-                          myDropzone.enqueueFile(myDropzone.getFilesWithStatus(Dropzone.ADDED)[0]);
-                          console.log("ENQUE file");
-                      }
-                      else {
-                          console.log('detective already exists!');
-                      }
-                  },
-                  error: function (serverResp) {            // on ajax failure
-                      console.log('5xx http status code or unexpected response content');
-                  }
-              });
-          }
-      };
-          document.querySelector("#actions .cancel").onclick = function () {
-              myDropzone.removeAllFiles(true);
-          };
-    </script>
 
    </body>
 </html>
