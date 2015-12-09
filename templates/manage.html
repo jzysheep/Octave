@@ -1,0 +1,126 @@
+
+
+<!DOCTYPE HTML>
+<html class="skin-dark">
+   <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+      <title>mymusic</title>
+      <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
+      <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
+      <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-poster-comment-150512101535.css?max_age=31536000" rel="stylesheet"/>
+      <link type="text/css" rel="stylesheet" href="/assets/css/icons.css" >
+
+     <link type="text/css" rel="stylesheet" href="../bootstrap33/dist/css/bootstrap.css" >
+
+      <style id="mainJSBg" type="text/css">
+         .background-container {
+         background-repeat: no-repeat;
+         background-position: center top;
+         background-attachment: scroll;
+         background-image: url();
+         }
+         .bg-body {
+         background-image: url();
+         background-repeat: repeat;
+         }
+      </style>
+      <style id="mainJSTitleBar" type="text/css">
+         .layout-head-inner {height:220px;}
+      </style>
+
+
+
+   </head>
+   <body class="bg-body">
+      <!-- nav bar -->
+      <div class="top-fix-bar">
+         <div class="top-fix-inner" >
+            <div class="" id="QZ_Toolbar_Container">
+               <div class="">
+                  <ul class="top-nav">
+                     <li class="nav-list" id="tb_ic_li">
+                        <div class="nav-list-inner">
+                           <a href="/templates/playlist.html" class="" x><i class="ui-icon icon-icenter"></i><span>Playlist</span></a>
+                        </div>
+                     </li>
+                     <li class="nav-list" id="tb_index_li">
+                        <div class="nav-list-inner">
+                           <a href="" class="homepage-link a-link "><i class="ui-icon icon-homepage"></i><span>MyMusic</span></a>
+                        </div>
+                     </li>
+                     <li class="nav-list" id="tb_friend_li">
+                        <div class="nav-list-inner">
+                           <a href="" class="friends-link a-link"><i class="ui-icon icon-friend"></i><span>Home Music</span></a>
+                        </div>
+                     </li>
+                     <li class="nav-list" id="tb_app_li">
+                        <div class="nav-list-inner">
+                           <a href="" class="application-link a-link"><i class="ui-icon icon-application"></i><span>Famous Music</span></a>
+                        </div>
+                     </li>
+                     <li class="nav-list" id="tb_dress_li">
+                        <div class="nav-list-inner">
+                           <a href="" class="dress-up-link a-link" ><i class="ui-icon icon-dress-up"></i><span>Artist</span></a>
+                        </div>
+                     </li>
+                     <li class="nav-list" id="tb_logout_li">
+                        <div class="nav-list-inner">
+                           <a href="{{url}}" class="logout-link a-link" ><i class="ui-icon icon-logout"></i><span>{{url_log}}</span></a>
+                        </div>
+                     </li>
+                  </ul>
+                  <!-- Search Box -->
+                  <div class="top-search">
+                     <div class="search-box">
+                        <input class="search-input" type="text" placeholder="">
+                        <a href="" class="search-button"><i class="ui-icon icon-search"></i></a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- background -->
+    <div class="container">
+        <form action="{{ delete_music_handler_url }}" method="post" style="display: inline;">
+            <h3>Music in Playlist: {{Playlist Name}}</h3>
+            <table class = "table table-striped">
+                <tr>
+                    <th>Music name</th>
+                    <th>Music artist</th>
+                    <th>Date created</th>
+                    <th>Delete</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input type="checkbox" name="delete_owned" value="{{ s['key'].urlsafe() }}"></td>
+                </tr>
+            </table>
+            <br>
+            <input type="submit" class="btn btn-info" value="Delete Checked">
+
+        </form>
+
+        <!-- drop zone -->
+
+        <span class="btn btn-success fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>Add files...</span>
+        </span>
+        <button type="submit" class="btn btn-primary start">
+            <i class="glyphicon glyphicon-upload"></i>
+            <span>Start upload</span>
+        </button>
+        <button type="reset" class="btn btn-warning cancel">
+            <i class="glyphicon glyphicon-ban-circle"></i>
+            <span>Cancel upload</span>
+        </button>
+    </div>
+
+
+   </body>
+</html>
+

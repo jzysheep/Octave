@@ -26,6 +26,14 @@
       <style id="mainJSTitleBar" type="text/css">
          .layout-head-inner {height:220px;}
       </style>
+
+
+
+      <!-- audio play -->
+          <script src="../audioplayerengine/jquery.js"></script>
+    <script src="../audioplayerengine/amazingaudioplayer.js"></script>
+    <link rel="stylesheet" type="text/css" href="../audioplayerengine/initaudioplayer-1.css">
+    <script src="../audioplayerengine/initaudioplayer-1.js"></script>
    </head>
    <body class="bg-body">
       <!-- nav bar -->
@@ -62,6 +70,11 @@
                      <li class="nav-list" id="tb_logout_li">
                         <div class="nav-list-inner">
                            <a href="{{url}}" class="logout-link a-link" ><i class="ui-icon icon-logout"></i><span>{{url_log}}</span></a>
+                        </div>
+                     </li>
+                   <li class="nav-list" id="tb_create_li">
+                        <div class="nav-list-inner">
+                           <a href="" class="create-link a-link" ><i class="ui-icon icon-create"></i><span>Create Playlist</span></a>
                         </div>
                      </li>
                   </ul>
@@ -108,6 +121,7 @@
             <div class="layout-body">
                <div class="qz-grid none" id="pageContent">
                </div>
+
                <div class="layout-app mod_wrap layout-base-app" id="pageApp">
                   <div class="mod_wrap_inner">
                      <div class="mod_wrap_bd">
@@ -120,128 +134,70 @@
                                        <div id="ColumnContainer" class="mod_feed">
 
                                           <div class="mod_column ks-col">
-                                             <div class="mod_feed_list bg3 bor2 ks-waterfall" style="display: block;">
+                                                <div class="amazingaudioplayer" style="display:block;position:relative;width:100%;height:auto;margin:0px auto 0px;">
 
-                                                <div class="feed_user_info bg3">
+                                                    <ul class="amazingaudioplayer-audios" style="display:none;">
+                                                        <li data-artist="Somewhere off Jazz Street" data-title="Collateral Damage" data-album="Road to Somewhere" data-info="" data-image="../assets/images/curry.png" data-duration="505">
+                                                            <div class="amazingaudioplayer-source" data-src="../audios/Somewhere off Jazz Street - Collateral Damage.mp3" data-type="audio/mpeg" />
+                                                        </li>
+                                                        <li data-artist="Somewhere off Jazz Street" data-title="Collateral Damage" data-album="Road to Somewhere" data-info="" data-image="" data-duration="505">
+                                                            <div class="amazingaudioplayer-source" data-src="../audios/Somewhere off Jazz Street - Collateral Damage.mp3" data-type="audio/mpeg" />
+                                                        </li>
+                                                    </ul>
 
-                                                   <ul>
-                                                      <li>
-                                                          <span class="name c_tx">
-                                                            Name of Artist
-                                                          </span>
-                                                          <span class="share c_tx3">Additional information</span>
-                                                      </li>
-                                                   </ul>
+                                                    <div class="amazingaudioplayer-engine"><a href="http://amazingaudioplayer.com" title="jquery music player">html5 audio player</a></div>
+                                                    <button class="">
+                                                        <span>Manage</span>
+                                                    </button>
+
                                                 </div>
 
-                                                <!-- Cover -->
-                                                <div class="feed_cover bor2">
-                                                   <div class="photo single can_play ks-single">
-                                                          <img class="ks-albumpic" style="width:188px;height:188px;" src="http://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/110.png&w=350&h=254">
-
-                                                      <div class="music_title">
-                                                          Music Name
-                                                      </div>
-                                                   </div>
-                                                  <audio style="width: 100%;margin-top:10px;"controls>
-                                                      <source src="" type="audio/mp3">
-                                                  </audio>
-                                                </div>
-                                             </div>
                                           </div>
+                                         <div class="mod_column ks-col">
+                                                <div class="amazingaudioplayer" style="display:block;position:relative;width:100%;height:auto;margin:0px auto 0px;">
 
-                                          <div class="mod_column ks-col">
-                                             <div class="mod_feed_list bg3 bor2 ks-waterfall" style="display: block;">
+                                                    <ul class="amazingaudioplayer-audios" style="display:none;">
+                                                        <li data-artist="Somewhere off Jazz Street" data-title="Collateral Damage" data-album="Road to Somewhere" data-info="" data-image="../assets/images/curry.png" data-duration="505">
+                                                            <div class="amazingaudioplayer-source" data-src="../audios/Somewhere off Jazz Street - Collateral Damage.mp3" data-type="audio/mpeg" />
+                                                        </li>
+                                                        <li data-artist="Somewhere off Jazz Street" data-title="Collateral Damage" data-album="Road to Somewhere" data-info="" data-image="" data-duration="505">
+                                                            <div class="amazingaudioplayer-source" data-src="../audios/Somewhere off Jazz Street - Collateral Damage.mp3" data-type="audio/mpeg" />
+                                                        </li>
+                                                    </ul>
 
-                                                <div class="feed_user_info bg3">
+                                                    <div class="amazingaudioplayer-engine"><a href="http://amazingaudioplayer.com" title="jquery music player">html5 audio player</a></div>
+                                                    <button class="">
+                                                        <span>Manage</span>
+                                                    </button>
 
-                                                   <ul>
-                                                      <li>
-                                                          <span class="name c_tx">
-                                                            Name of Artist
-                                                          </span>
-                                                          <span class="share c_tx3">Additional information</span>
-                                                      </li>
-                                                   </ul>
                                                 </div>
 
-                                                <!-- Cover -->
-                                                <div class="feed_cover bor2">
-                                                   <div class="photo single can_play ks-single">
-                                                          <img class="ks-albumpic" style="width:188px;height:188px;" src="http://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/110.png&w=350&h=254">
-
-                                                      <div class="music_title">
-                                                          Music Name
-                                                      </div>
-                                                   </div>
-                                                  <audio style="width: 100%;margin-top:10px;"controls>
-                                                      <source src="" type="audio/mp3">
-                                                  </audio>
-                                                </div>
-                                             </div>
-                                          </div>
-
+                                  </div>
                                            <div class="mod_column ks-col">
-                                             <div class="mod_feed_list bg3 bor2 ks-waterfall" style="display: block;">
+                                                <div class="amazingaudioplayer" style="display:block;position:relative;width:100%;height:auto;margin:0px auto 0px;">
 
-                                                <div class="feed_user_info bg3">
+                                                    <ul class="amazingaudioplayer-audios" style="display:none;">
+                                                        <li data-artist="Somewhere off Jazz Street" data-title="Collateral Damage" data-album="Road to Somewhere" data-info="" data-image="../assets/images/curry.png" data-duration="505">
+                                                            <div class="amazingaudioplayer-source" data-src="../audios/Somewhere off Jazz Street - Collateral Damage.mp3" data-type="audio/mpeg" />
+                                                        </li>
+                                                        <li data-artist="Somewhere off Jazz Street" data-title="Collateral Damage" data-album="Road to Somewhere" data-info="" data-image="" data-duration="505">
+                                                            <div class="amazingaudioplayer-source" data-src="../audios/Somewhere off Jazz Street - Collateral Damage.mp3" data-type="audio/mpeg" />
+                                                        </li>
+                                                    </ul>
 
-                                                   <ul>
-                                                      <li>
-                                                          <span class="name c_tx">
-                                                            Name of Artist
-                                                          </span>
-                                                          <span class="share c_tx3">Additional information</span>
-                                                      </li>
-                                                   </ul>
+                                                    <div class="amazingaudioplayer-engine"><a href="http://amazingaudioplayer.com" title="jquery music player">html5 audio player</a></div>
+                                                    <button class="">
+                                                        <span>Manage</span>
+                                                    </button>
+
                                                 </div>
 
-                                                <!-- Cover -->
-                                                <div class="feed_cover bor2">
-                                                   <div class="photo single can_play ks-single">
-                                                          <img class="ks-albumpic" style="width:188px;height:188px;" src="http://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/110.png&w=350&h=254">
+                                  </div>
 
-                                                      <div class="music_title">
-                                                          Music Name
-                                                      </div>
-                                                   </div>
-                                                  <audio style="width: 100%;margin-top:10px;"controls>
-                                                      <source src="" type="audio/mp3">
-                                                  </audio>
-                                                </div>
-                                             </div>
-                                          </div>
 
-                                           <div class="mod_column ks-col">
-                                             <div class="mod_feed_list bg3 bor2 ks-waterfall" style="display: block;">
 
-                                                <div class="feed_user_info bg3">
 
-                                                   <ul>
-                                                      <li>
-                                                          <span class="name c_tx">
-                                                            Name of Artist
-                                                          </span>
-                                                          <span class="share c_tx3">Additional information</span>
-                                                      </li>
-                                                   </ul>
-                                                </div>
 
-                                                <!-- Cover -->
-                                                <div class="feed_cover bor2">
-                                                   <div class="photo single can_play ks-single">
-                                                          <img class="ks-albumpic" style="width:188px;height:188px;" src="http://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/110.png&w=350&h=254">
-
-                                                      <div class="music_title">
-                                                          Music Name
-                                                      </div>
-                                                   </div>
-                                                  <audio style="width: 100%;margin-top:10px;"controls>
-                                                      <source src="" type="audio/mp3">
-                                                  </audio>
-                                                </div>
-                                             </div>
-                                          </div>
 
 
                                     </div>
@@ -254,12 +210,16 @@
                </div>
                <div style="min-height:750px;" class="layout-app none" id="page3rdApp"></div>
             </div>
+
             <div class="layout-copyright">
                <p>Copyright &copy; Ziyang Jiang, Ahmad Ei Youssef</p>
             </div>
          </div>
+            </div>
 
       </div>
+
+
       <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/ac/qzone/qzfl/qzfl_v8_2.1.45.js" ></script>
       <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/ac/lib/seajs/sea-2.1.1.js" ></script>
       <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/c/=/qzone/v8/core/seajs_config.js,/qzone/v8/engine/plugin-combo.js,/qzone/v8/core/ic.js?max_age=31536001&amp;d=50108" ></script>
