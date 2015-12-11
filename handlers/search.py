@@ -1,7 +1,9 @@
 import webapp2
+import re
+import json
 
 from domain import *
-from google.appengine.api import users
+from google.appengine.api import users, search
 
 class SearchUser(webapp2.RequestHandler):
     def get(self):
@@ -55,9 +57,16 @@ class SearchUser(webapp2.RequestHandler):
             else:
                 self.redirect('/MyMusic')
 
+class SearchAutoComplete(webapp2.RequestHandler):
+    def get(self):
+        search_str = self.request.get("term")
+        print search_str
+        resp = dict()
+        resp['user_names'] = []
 
+        user_list = User.query()
+        for user in user_list:
+            if user.name.startswith(search_str):
+                resp['user_names'].append(user.name)
 
-
-
-
-
+        self.response.out.write(json.dumps(resp))

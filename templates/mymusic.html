@@ -429,6 +429,7 @@
            }
        </script>
 
+      <!-- follow -->
       <script type="text/javascript">
        // Attach a submit handler to the form
         $( "[id^='follow_button']" ).click(function( event ) {
@@ -453,6 +454,8 @@
           });
         });
       </script>
+
+
 
       <script>
         // Attach a submit handler to the form
@@ -509,11 +512,41 @@
                }
        </script>
 
+      <!-- search -->
       <script type="text/javascript">
               function search_user() {
                   document.getElementById("search_button").click();
                }
        </script>
+
+      <!-- autocomplete -->
+      <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+      <script type="text/javascript">
+
+
+            $(document).ready(function() {
+                var cache = {};
+                $(document).tooltip();
+                $("#search_str").autocomplete({
+                    minLength: 1,
+                    autoFocus: true,
+                    source: function(request, response) {
+
+                        var term = request.term;
+                        if (term.trim() == '')
+                            return;
+                        if (term in cache) {
+                            response(cache[term]);
+                            return;
+                        }
+                        $.getJSON("autocomplete", request, function(data, status, xhr) {
+                            cache[term] = data.user_names;
+                            response(data.user_names);
+                        });
+                    }
+                });
+            });
+      </script>
 
     <script>
       // Get the template HTML and remove it from the doument

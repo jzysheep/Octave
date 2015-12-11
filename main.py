@@ -15,6 +15,7 @@ app = webapp2.WSGIApplication([
     ('/follow', FollowUser),
     ('/profile_img',Image),
     ('/playlist', Playlist),
-    ('/manage',Manage)
+    ('/manage', Manage),
+    ('/autocomplete', SearchAutoComplete)
     ], debug=True)
 
