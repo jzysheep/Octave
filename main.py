@@ -10,6 +10,8 @@ app = webapp2.WSGIApplication([
     ('/media_url', MediaUploadFormHandler),
     ('/reply', Reply_Handler),
     ('/ajax_reply', ReplyHandlerAjax),
-    ('/view_media/([^/]+)?', ViewMediaHandler)
+    ('/view_media/([^/]+)?', ViewMediaHandler),
+    ('/search', SearchUser),
+    ('/follow', FollowUser)
     ], debug=True)
 

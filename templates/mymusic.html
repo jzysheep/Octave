@@ -80,15 +80,21 @@
                            <a href="{{url}}" class="logout-link a-link" ><i class="ui-icon icon-logout"></i><span>{{url_log}}</span></a>
                         </div>
                      </li>
+
                   </ul>
 
                   <!-- Search Box -->
-                  <div class="top-search">
-                     <div class="search-box">
-                        <input class="search-input" type="text" placeholder="">
-                        <a href="" class="search-button"><i class="ui-icon icon-search"></i></a>
-                     </div>
-                  </div>
+                   <form action="/search" method="get">
+                      <div class="top-search">
+                         <div class="search-box">
+                            <input class="search-input" id="search_str" name="search_str" type="text" placeholder="" />
+                            <input type="submit" id="search_button" name="search_button" style="display: none;"/>
+                            <a onclick="search_user();" class="search-button">
+                                <i class="ui-icon icon-search"></i>
+                            </a>
+                         </div>
+                      </div>
+                    </form>
                </div>
             </div>
          </div>
@@ -109,6 +115,14 @@
                   <div class="head-detail-name">
                      <span class="user-name textoverflow">{{user_name}}</span>
                   </div>
+                   {% if not is_self %}
+                   <form method="post" id="form_follow" action="/follow">
+                       <button id="follow_button" class="poster-skin-box">
+                            {{follow_button}}
+                        </button>
+                       <div style="display:None" id="user_key">{{user_key.urlsafe()}}</div>
+                   </form>
+                   {% endif %}
                </div>
 
             </div>
@@ -358,6 +372,33 @@
                      <!-- right hand side bar -->
                   </div>
                   <!-- left menu -->
+                   <div id="leftMenu" class="col-menu">
+                     <div class="mod-side-nav mod-side-nav-message">
+                        <div class="inner">
+                           <div class="bd">
+                              <ul id="tab_menu_list" class="sn-list">
+                                 <li type="friend">
+                                    <a href="javascript:;" class="qz-grid">
+                                       <div class="qz-main"><span class="sn-title">You might like:</span></div>
+                                    </a>
+                                 </li>
+                               <li type="friend">
+                                    <a href="javascript:;" class="qz-grid">
+                                       <div class="qz-left"><i class="ui-icon sp-friend-feed"></i></div>
+                                       <div class="qz-main"><span class="sn-title">Nima</span></div>
+                                    </a>
+                                 </li>
+                                 <li type="friend">
+                                    <a href="javascript:;" class="qz-grid">
+                                       <div class="qz-left"><i class="ui-icon sp-friend-feed"></i></div>
+                                       <div class="qz-main"><span class="sn-title">Kevin</span></div>
+                                    </a>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
                </div>
             </div>
             <div class="layout-copyright">
@@ -377,6 +418,7 @@
               document.getElementById("fileInput").click();
            }
       </script>
+
       <script type="text/javascript">
 
           function submit() {
@@ -386,6 +428,31 @@
 
            }
        </script>
+
+      <script type="text/javascript">
+       // Attach a submit handler to the form
+        $( "[id^='follow_button']" ).click(function( event ) {
+
+          // Stop form from submitting normally
+          event.preventDefault();
+
+          // Get some values from elements on the page:
+
+            var user_key = $("#user_key").html();
+            var url = $("#form_follow").attr( "action" );
+            var toBackEnd = {};
+
+            toBackEnd["user_key"] = user_key;
+
+          // Send the data using post
+
+          var posting = $.post(url, toBackEnd);
+          posting.done(function( data ) {
+            var follow_button = data["follow_button"];
+            $("#follow_button").html(follow_button);
+          });
+        });
+      </script>
 
       <script>
         // Attach a submit handler to the form
@@ -442,7 +509,11 @@
                }
        </script>
 
-
+      <script type="text/javascript">
+              function search_user() {
+                  document.getElementById("search_button").click();
+               }
+       </script>
 
     <script>
       // Get the template HTML and remove it from the doument
@@ -532,6 +603,9 @@
               myDropzone.removeAllFiles(true);
           };
     </script>
+
+
+
 
    </body>
 </html>
