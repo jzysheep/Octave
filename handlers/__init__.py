@@ -2,8 +2,8 @@ from .home import Music
 from .mainpage import MainPage
 from .mymusic import MyMusic, Reply_Handler, MediaUploadHandler,ReplyHandlerAjax,ViewMediaHandler, Image
 from .signup import SignUp
-from .bloburl import MediaUploadFormHandler
-from .playlist import Playlist
-from .manage import Manage
+from .bloburl import MediaUploadFormHandler,PlaylistUploadFormHandler
+from .playlist import Playlist,Create
+from .manage import Manage,PlaylistUploadHandler
 from .search import SearchUser
 from .follow import FollowUser

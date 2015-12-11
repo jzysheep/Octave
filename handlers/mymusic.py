@@ -184,7 +184,6 @@ class ViewMediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
         else:
             self.send_blob(media_key)
 
-
 class Image(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
