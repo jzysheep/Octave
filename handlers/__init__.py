@@ -3,4 +3,5 @@ from .mainpage import MainPage
 from .mymusic import MyMusic, Reply_Handler, MediaUploadHandler,ReplyHandlerAjax,ViewMediaHandler, Image
 from .signup import SignUp
 from .bloburl import MediaUploadFormHandler
-
+from .playlist import Playlist
+from .manage import Manage
