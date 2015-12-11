@@ -27,7 +27,9 @@ class User(ndb.Model):
     name = ndb.StringProperty()
     signature = ndb.StringProperty()
     role = ndb.StringProperty()
-    blob_key_photo=ndb.BlobKeyProperty()
+    #blob_key_photo=ndb.BlobKeyProperty()
+    profile_image= ndb.BlobProperty()
+
     followers = ndb.StringProperty(repeated=True) #Their emails
 
 class Post(ndb.Model):

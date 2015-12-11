@@ -182,3 +182,18 @@ class ViewMediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
             self.error(404)
         else:
             self.send_blob(media_key)
+
+
+class Image(webapp2.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+        if user is not None:
+            user_query = User.gql("WHERE email =:1", user.email())
+            user_fetch = user_query.get()
+
+
+        if(user_fetch.profile_image):
+            self.response.headers['Content-Type'] = 'image/png'
+            self.response.out.write(user_fetch.profile_image)
+        else:
+            self.response.out.write('No image')
