@@ -1,9 +1,9 @@
 import webapp2
-
-from domain import *
-from google.appengine.api import users
 import time
-
+from domain import *
+from google.appengine.ext import blobstore
+from google.appengine.api import users
+from google.appengine.api import images
 
 class SignUp(webapp2.RequestHandler):
     def get(self):
@@ -28,10 +28,17 @@ class SignUp(webapp2.RequestHandler):
         role=self.request.get('role')
         signature=self.request.get('signature')
 
+        upload_url = blobstore.create_upload_url('/_ah/upload')
 
         user=User()
         user.populate(email=user_curr.email(),city=city,name=name,role=role,signature=signature)
+        if self.request.get('photo'):
+            image= self.request.get('photo')
+            image = images.resize(image, 256, 256)
+            user.profile_image=image
+
         user.put()
         time.sleep(0.1)
+
         self.redirect('/MyMusic')
-    
+

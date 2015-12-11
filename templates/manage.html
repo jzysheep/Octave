@@ -41,12 +41,12 @@
                   <ul class="top-nav">
                      <li class="nav-list" id="tb_ic_li">
                         <div class="nav-list-inner">
-                           <a href="/templates/playlist.html" class="" x><i class="ui-icon icon-icenter"></i><span>Playlist</span></a>
+                           <a href="/playlist" class="" x><i class="ui-icon icon-icenter"></i><span>Playlist</span></a>
                         </div>
                      </li>
                      <li class="nav-list" id="tb_index_li">
                         <div class="nav-list-inner">
-                           <a href="" class="homepage-link a-link "><i class="ui-icon icon-homepage"></i><span>MyMusic</span></a>
+                           <a href="/MyMusic" class="homepage-link a-link "><i class="ui-icon icon-homepage"></i><span>MyMusic</span></a>
                         </div>
                      </li>
                      <li class="nav-list" id="tb_friend_li">
@@ -84,7 +84,9 @@
       <!-- background -->
     <div class="container">
         <form action="{{ delete_music_handler_url }}" method="post" style="display: inline;">
-            <h3>Music in Playlist: {{Playlist Name}}</h3>
+{#            <h3>Music in Playlist: {{Playlist Name}}</h3>#}
+            <h3>Music in Playlist: "AHMAD_PLAYLIST"</h3>
+
             <table class = "table table-striped">
                 <tr>
                     <th>Music name</th>
@@ -96,7 +98,10 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><input type="checkbox" name="delete_owned" value="{{ s['key'].urlsafe() }}"></td>
+{#                    <td><input type="checkbox" name="delete_owned" value="{{ s['key'].urlsafe() }}"></td>#}
+
+                    <td><input type="checkbox" name="delete_owned"></td>
+
                 </tr>
             </table>
             <br>

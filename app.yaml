@@ -16,6 +16,11 @@ handlers:
 - url: /assets
   static_dir: assets
 
+- url: /audioplayerengine
+  static_dir: audioplayerengine
+
+
+
 #- url: /task
 #  script: main.app
 #  login: admin
