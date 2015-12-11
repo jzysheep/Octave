@@ -10,8 +10,18 @@
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-poster-comment-150512101535.css?max_age=31536000" rel="stylesheet"/>
       <link type="text/css" rel="stylesheet" href="/assets/css/icons.css" >
+      <link  type="text/css" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css" rel="stylesheet"/>
 
      <link type="text/css" rel="stylesheet" href="../bootstrap33/dist/css/bootstrap.css" />
+       <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+       <script type="text/javascript" src="/assets/js/jquery-dropzone.js"></script>
+       <script src="http://www.dropzonejs.com/js/build/build.js?v=6"></script>
+
+       <script>
+            var Dropzone = require("enyo-dropzone");
+            Dropzone.autoDiscover = false;
+        </script>
 
       <style id="mainJSBg" type="text/css">
          .background-container {
@@ -82,7 +92,9 @@
          </div>
       </div>
       <!-- background -->
-    <div class="container">
+    <div class="container" id="actions" class="row">
+              <div class="col-lg-7">
+
         <form action="{{ delete_music_handler_url }}" method="post" style="display: inline;">
 {#            <h3>Music in Playlist: {{Playlist Name}}</h3>#}
             <h3>Music in Playlist: "AHMAD_PLAYLIST"</h3>
@@ -105,25 +117,201 @@
                 </tr>
             </table>
             <br>
-            <input type="submit" class="btn btn-info" value="Delete Checked">
+            <input style="margin-bottom:20px;" type="submit" class="btn btn-info" value="Delete Checked">
 
         </form>
 
         <!-- drop zone -->
 
-        <span class="btn btn-success fileinput-button">
-            <i class="glyphicon glyphicon-plus"></i>
+
+
+
+
+{#<div class="container">#}
+
+
+        <!-- The fileinput-button span is used to style the file input field as button -->
+        <span class="btn btn-success fileinput-button" style="margin-bottom:20px;">
+            <i class="glyphicon glyphicon-plus" ></i>
             <span>Add files...</span>
         </span>
-        <button type="submit" class="btn btn-primary start">
+        <button type="submit" class="btn btn-primary start" style="margin-bottom:20px;">
             <i class="glyphicon glyphicon-upload"></i>
             <span>Start upload</span>
         </button>
-        <button type="reset" class="btn btn-warning cancel">
+        <button type="reset" class="btn btn-warning cancel" style="margin-bottom:20px;">
             <i class="glyphicon glyphicon-ban-circle"></i>
             <span>Cancel upload</span>
         </button>
+      </div>
+
+        <!-- The global file processing state -->
+        <div class="container">
+        <span class="fileupload-process">
+          <div id="total-progress" class=" progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:44%;">
+            <div class="progress-bar progress-bar-success" style="width:0%" data-dz-uploadprogress></div>
+          </div>
+        </span>
+        </div>
     </div>
+
+
+<div class="container table table-striped" class="files" id="previews">
+
+  <div id="template" class="file-row">
+    <!-- This is used as the file preview template -->
+    <div>
+        <span class="preview" style="margin-left: 150px; "><img data-dz-thumbnail /></span>
+    </div>
+    <div>
+        <p class="name" data-dz-name  style="margin-left: 150px; margin-bottom:20px;"></p>
+        <strong class="error text-danger" data-dz-errormessage></strong>
+    </div>
+    <div>
+        <p class="size" data-dz-size style="margin-left: 150px; margin-bottom:20px;"></p>
+        <div class="container progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="margin-left:150px;width:30%;">
+          <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+        </div>
+    </div>
+    <div>
+      <button class="btn btn-primary start" style="margin-left: 150px; margin-bottom:20px;">
+          <i class="glyphicon glyphicon-upload"></i>
+          <span>Start</span>
+      </button>
+      <button data-dz-remove class="btn btn-warning cancel" style="margin-bottom:20px;" >
+          <i class="glyphicon glyphicon-ban-circle"></i>
+          <span>Cancel</span>
+      </button>
+      <button data-dz-remove class="btn btn-danger delete" style="margin-bottom:20px;">
+        <i class="glyphicon glyphicon-trash"></i>
+        <span>Delete</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+
+       <script>
+      // Get the template HTML and remove it from the doument
+      var previewNode = document.querySelector("#template");
+      previewNode.id = "";
+      var previewTemplate = previewNode.parentNode.innerHTML;
+      previewNode.parentNode.removeChild(previewNode);
+
+      var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+        url: '/', // Set the url
+        acceptedFiles: 'audio/*',
+        maxFilesize: 20,
+        maxFiles: 100,
+        parallelUploads: 100,
+        previewTemplate: previewTemplate,
+        autoQueue: false, // Make sure the files aren't queued until manually added
+        previewsContainer: "#previews", // Define the container to display the previews
+        clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+      });
+
+
+      myDropzone.on("addedfile", function(file) {
+        // Hookup the start button
+
+          console.log("adding file")
+          file.previewElement.querySelector(".start").onclick = function() {
+
+              $.ajax({
+                  type: 'POST',                            // http method
+                  url: '/generate_url',               // target URL
+                  success: function (serverResp) {          // on ajax success
+                      if (serverResp.code == '200') {
+                          console.log('image added successfully!');
+                          myDropzone.options.url = serverResp.response;
+                          console.log(myDropzone.options.url);
+                          myDropzone.enqueueFile(file);
+
+                      }
+                      else {
+                          console.log('detective already exists!');
+                      }
+                  },
+                  error: function (serverResp) {            // on ajax failure
+                      console.log('5xx http status code or unexpected response content');
+                  }
+              });
+                console.log("ENQUE file");
+
+
+  };
+      });
+
+      // Update the total progress bar
+      myDropzone.on("totaluploadprogress", function(progress) {
+        document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+      });
+
+      myDropzone.on("sending", function(file) {
+
+
+        // Show the total progress bar when upload starts
+        document.querySelector("#total-progress").style.opacity = "1";
+        // And disable the start button
+        file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+
+      });
+
+      // Hide the total progress bar when nothing's uploading anymore
+      myDropzone.on("queuecomplete", function(progress) {
+        document.querySelector("#total-progress").style.opacity = "0";
+
+
+      });
+
+      // Setup the buttons for all transfers
+      // The "add files" button doesn't need to be setup because the config
+      // `clickable` has already been specified.
+      document.querySelector("#actions .start").onclick = function() {
+
+//          myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+
+          var i;
+
+          for (i=0;i<myDropzone.getFilesWithStatus(Dropzone.ADDED).length;i++) {
+              $.ajax({
+                  type: 'POST',                            // http method
+                  url: '/generate_url',               // target URL
+                  success: function (serverResp) {          // on ajax success
+                      if (serverResp.code == '200') {
+                          console.log('image added successfully!');
+                          myDropzone.options.url = serverResp.response;
+                          console.log(myDropzone.options.url);
+                          myDropzone.enqueueFile(myDropzone.getFilesWithStatus(Dropzone.ADDED)[0]);
+
+                          console.log("ENQUE file");
+                      }
+                      else {
+                          console.log('detective already exists!');
+                      }
+                  },
+                  error: function (serverResp) {            // on ajax failure
+                      console.log('5xx http status code or unexpected response content');
+                  }
+              });
+
+
+          }
+
+
+      };
+          document.querySelector("#actions .cancel").onclick = function () {
+              myDropzone.removeAllFiles(true);
+          };
+
+
+
+
+
+    </script>
 
 
    </body>
