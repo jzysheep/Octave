@@ -5,3 +5,5 @@ from .signup import SignUp
 from .bloburl import MediaUploadFormHandler
 from .playlist import Playlist
 from .manage import Manage
+from .search import SearchUser
+from .follow import FollowUser

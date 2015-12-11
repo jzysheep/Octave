@@ -44,7 +44,8 @@ class MyMusic(webapp2.RequestHandler):
                 'replies': replies,
                 'user_name': user_fetch.name,
                 'user_role': user_fetch.role,
-                'user_signature': user_signature
+                'user_signature': user_signature,
+                'is_self': True
             }
 
             template = JINJA_ENVIRONMENT.get_template('mymusic.html')
