@@ -16,8 +16,8 @@ class SearchUser(webapp2.RequestHandler):
             search_str = self.request.get("search_str").strip()
             user_query = User.query(User.name == search_str)
             user_fetch = user_query.get()
-            replies = []
             posts = []
+            replies = []
 
             if user_fetch:
                 if user.email() == user_fetch.email:

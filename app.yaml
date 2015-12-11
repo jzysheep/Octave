@@ -19,7 +19,8 @@ handlers:
 - url: /audioplayerengine
   static_dir: audioplayerengine
 
-
+- url: /audios
+  static_dir: audios
 
 #- url: /task
 #  script: main.app

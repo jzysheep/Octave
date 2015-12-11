@@ -7,3 +7,4 @@ from .playlist import Playlist,Create
 from .manage import Manage,PlaylistUploadHandler
 from .search import SearchUser, SearchAutoComplete
 from .follow import FollowUser
+from .buddymusic import BuddyMusic
