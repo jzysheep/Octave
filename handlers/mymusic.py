@@ -83,7 +83,6 @@ class MyMusic(webapp2.RequestHandler):
             likes=0
             )
 
-
         post.put()
         time.sleep(0.1)
         self.redirect('/MyMusic')
@@ -155,11 +154,11 @@ class ViewMediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
         else:
             self.send_blob(media_key)
 
+
 class Image(webapp2.RequestHandler):
     def get(self):
         user_query = User.gql("WHERE email =:1", self.request.get('email'))
         user_fetch = user_query.get()
-
 
         if(user_fetch.profile_image):
             self.response.headers['Content-Type'] = 'image/png'

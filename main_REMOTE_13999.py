@@ -14,22 +14,8 @@ app = webapp2.WSGIApplication([
     ('/search', SearchUser),
     ('/follow', FollowUser),
     ('/profile_img',Image),
-<<<<<<< HEAD
-    ('/playlist', MyPlaylist),
-    ('/manage',Manage),
-    ('/playlist_url',PlaylistUploadFormHandler),
-    ('/PlaylistUpload',PlaylistUploadHandler),
-    ('/create_playlist',Create)
-    ], debug=True)
-||||||| merged common ancestors
-    ('/playlist', Playlist),
-    ('/manage',Manage)
-    ], debug=True)
-
-=======
     ('/playlist', Playlist),
     ('/manage', Manage),
     ('/autocomplete', SearchAutoComplete)
     ], debug=True)
 
->>>>>>> a627ecebeaf05efeaa3769b3844d596f305a7832

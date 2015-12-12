@@ -12,6 +12,16 @@
       <link type="text/css" rel="stylesheet" href="../assets/css/icons.css" >
 
      <link type="text/css" rel="stylesheet" href="../bootstrap33/dist/css/bootstrap.css" />
+     <link type="text/css" rel="stylesheet" href="../bootstrap33/dist/css/bootstrap.css" />
+       <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+       <script type="text/javascript" src="/assets/js/jquery-dropzone.js"></script>
+       <script src="http://www.dropzonejs.com/js/build/build.js?v=6"></script>
+
+       <script>
+            var Dropzone = require("enyo-dropzone");
+            Dropzone.autoDiscover = false;
+        </script>
 
       <style id="mainJSBg" type="text/css">
          .background-container {
@@ -51,12 +61,12 @@
                   <ul class="top-nav">
                      <li class="nav-list" id="tb_ic_li">
                         <div class="nav-list-inner">
-                           <a href="/templates/playlist.html" class="" x><i class="ui-icon icon-icenter"></i><span>Playlist</span></a>
+                           <a href="/playlist" class="" x><i class="ui-icon icon-icenter"></i><span>Playlist</span></a>
                         </div>
                      </li>
                      <li class="nav-list" id="tb_index_li">
                         <div class="nav-list-inner">
-                           <a href="" class="homepage-link a-link "><i class="ui-icon icon-homepage"></i><span>My Music</span></a>
+                           <a href="/MyMusic" class="homepage-link a-link "><i class="ui-icon icon-homepage"></i><span>My Music</span></a>
                         </div>
                      </li>
                      <li class="nav-list" id="tb_friend_li">
@@ -92,9 +102,10 @@
          </div>
       </div>
 
-
-<form action="/create" method="post">
     <div class="container">
+
+        <form enctype="multipart/form-data" method="post" action="/create_playlist">
+
         <h3>Create New Playlist</h3>
         <div class="row">
             <div class="col-lg-8">
@@ -133,33 +144,86 @@
                     </div>
                 </div>
 
-                        <!-- drop zone -->
-                <div class="form-group">
+                <!-- drop zone -->
 
-                    <span class="btn btn-success fileinput-button">
-                        <i class="glyphicon glyphicon-plus"></i>
-                        <span>Add files...</span>
-                    </span>
-                    <button type="submit" class="btn btn-primary start">
-                        <i class="glyphicon glyphicon-upload"></i>
-                        <span>Start upload</span>
-                    </button>
-                    <button type="reset" class="btn btn-warning cancel">
-                        <i class="glyphicon glyphicon-ban-circle"></i>
-                        <span>Cancel upload</span>
-                    </button>
-
-                </div>
                 <div class="form-group">
                     <div><input type="submit"  class="btn btn-info" value="Create Playlist"></div>
                 </div>
+                </div>
+            </div>
+
+      </form>
+
+
+    <div id="actions" class="row">
+
+      <div class="col-lg-7">
+
+        <span class="btn btn-success fileinput-button" style="margin-bottom:20px;">
+            <i class="glyphicon glyphicon-plus" ></i>
+            <span>Add files...</span>
+        </span>
+        <button type="submit" class="btn btn-primary start" style="margin-bottom:20px;">
+            <i class="glyphicon glyphicon-upload"></i>
+            <span>Start upload</span>
+        </button>
+        <button type="reset" class="btn btn-warning cancel" style="margin-bottom:20px;">
+            <i class="glyphicon glyphicon-ban-circle"></i>
+            <span>Cancel upload</span>
+        </button>
+      </div>
+
+        <!-- The global file processing state -->
+        <span class="fileupload-process">
+          <div id="total-progress" class=" progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="margin-left:14px;width:45%;">
+            <div class="progress-bar progress-bar-success" style="width:0%" data-dz-uploadprogress></div>
+          </div>
+        </span>
         </div>
 
-            </div>
+
+
+<div class=" table table-striped" class="files" id="previews">
+
+  <div id="template" class="file-row">
+    <!-- This is used as the file preview template -->
+    <div>
+        <span class="preview" ><img data-dz-thumbnail /></span>
+    </div>
+    <div>
+        <p class="name" data-dz-name  style="margin-bottom:20px;"></p>
+        <strong class="error text-danger" data-dz-errormessage></strong>
+    </div>
+    <div>
+        <p class="size" data-dz-size style="margin-bottom:20px;"></p>
+        <div class=" progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:30%;">
+          <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
         </div>
-</form>
+    </div>
+    <div>
+      <button class="btn btn-primary start" style="margin-bottom:20px;">
+          <i class="glyphicon glyphicon-upload"></i>
+          <span>Start</span>
+      </button>
+      <button data-dz-remove class="btn btn-warning cancel" style="margin-bottom:20px;" >
+          <i class="glyphicon glyphicon-ban-circle"></i>
+          <span>Cancel</span>
+      </button>
+      <button data-dz-remove class="btn btn-danger delete" style="margin-bottom:20px;">
+        <i class="glyphicon glyphicon-trash"></i>
+        <span>Delete</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+</div>
+        </div>
+        </div>
+
 
       <script type='text/javascript' src="../assets/js/jquery-2.1.4.js"></script>
+
       <script type="text/javascript">
         $(function()
         {
@@ -184,6 +248,126 @@
             });
         });
        </script>
+
+      <script>
+      // Get the template HTML and remove it from the doument
+      var previewNode = document.querySelector("#template");
+      previewNode.id = "";
+      var previewTemplate = previewNode.parentNode.innerHTML;
+      previewNode.parentNode.removeChild(previewNode);
+
+      var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+        url: '/', // Set the url
+        acceptedFiles: 'audio/*',
+        maxFilesize: 20,
+        maxFiles: 100,
+        parallelUploads: 100,
+        previewTemplate: previewTemplate,
+        autoQueue: false, // Make sure the files aren't queued until manually added
+        previewsContainer: "#previews", // Define the container to display the previews
+        clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+      });
+
+
+      myDropzone.on("addedfile", function(file) {
+        // Hookup the start button
+
+          console.log("adding file")
+          file.previewElement.querySelector(".start").onclick = function() {
+
+              $.ajax({
+                  type: 'POST',                            // http method
+                  url: '/playlist_url',               // target URL
+                  success: function (serverResp) {          // on ajax success
+                      if (serverResp.code == '200') {
+                          console.log('image added successfully!');
+                          myDropzone.options.url = serverResp.response;
+                          console.log(myDropzone.options.url);
+                          myDropzone.enqueueFile(file);
+
+                      }
+                      else {
+                          console.log('detective already exists!');
+                      }
+                  },
+                  error: function (serverResp) {            // on ajax failure
+                      console.log('5xx http status code or unexpected response content');
+                  }
+              });
+                console.log("ENQUE file");
+
+
+  };
+      });
+
+      // Update the total progress bar
+      myDropzone.on("totaluploadprogress", function(progress) {
+        document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+      });
+
+      myDropzone.on("sending", function(file) {
+
+
+        // Show the total progress bar when upload starts
+        document.querySelector("#total-progress").style.opacity = "1";
+        // And disable the start button
+        file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+
+      });
+
+      // Hide the total progress bar when nothing's uploading anymore
+      myDropzone.on("queuecomplete", function(progress) {
+        document.querySelector("#total-progress").style.opacity = "0";
+
+
+      });
+
+      // Setup the buttons for all transfers
+      // The "add files" button doesn't need to be setup because the config
+      // `clickable` has already been specified.
+      document.querySelector("#actions .start").onclick = function() {
+
+//          myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+
+          var i;
+
+          for (i=0;i<myDropzone.getFilesWithStatus(Dropzone.ADDED).length;i++) {
+              $.ajax({
+                  type: 'POST',                            // http method
+                  url: '/playlist_url',               // target URL
+                  success: function (serverResp) {          // on ajax success
+                      if (serverResp.code == '200') {
+                          console.log('image added successfully!');
+                          myDropzone.options.url = serverResp.response;
+                          console.log(myDropzone.options.url);
+                          myDropzone.enqueueFile(myDropzone.getFilesWithStatus(Dropzone.ADDED)[0]);
+
+                          console.log("ENQUE file");
+                      }
+                      else {
+                          console.log('detective already exists!');
+                      }
+                  },
+                  error: function (serverResp) {            // on ajax failure
+                      console.log('5xx http status code or unexpected response content');
+                  }
+              });
+
+
+          }
+
+
+      };
+          document.querySelector("#actions .cancel").onclick = function () {
+              myDropzone.removeAllFiles(true);
+          };
+
+
+
+
+
+    </script>
+
+
    </body>
 </html>
-

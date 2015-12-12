@@ -34,10 +34,10 @@ class SearchUser(webapp2.RequestHandler):
                         # print "user" + reply.user_key.get().name
                     post_user_reply.append((post, post_user, post_replies, user_reply))
 
-                # for i in range(len(post_user_reply)):
-                #     for j in range(len(post_user_reply[i][2])):
-                #         print "reply " + post_user_reply[i][2][j].reply
-                #         print "user " + post_user_reply[i][3][j].name
+                for i in range(len(post_user_reply)):
+                    for j in range(len(post_user_reply[i][2])):
+                        print "reply " + post_user_reply[i][2][j].reply
+                        print "user " + post_user_reply[i][3][j].name
                 if not searched_user.signature:
                     user_signature = ""
                 else:

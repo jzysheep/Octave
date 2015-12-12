@@ -24,13 +24,5 @@ class Manage(webapp2.RequestHandler):
 
 
 
-class PlaylistUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
-    def post(self):
-        s_time = time.strftime("%Y/%m/%d")
-        now_string = s_time.replace('/','-')
-        upload = self.get_uploads()[0]
-        playlist = Playlist( date_created=now_string)
-        playlist.key_media.append(upload.key())
-        playlist.put()
 
 
