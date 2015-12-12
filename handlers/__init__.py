@@ -6,4 +6,5 @@ from .bloburl import MediaUploadFormHandler,PlaylistUploadFormHandler
 from .playlist import MyPlaylist,Create,PlaylistUploadHandler
 from .manage import Manage
 from .search import SearchUser
+from .search import SearchUser, SearchAutoComplete
 from .follow import FollowUser

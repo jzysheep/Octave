@@ -18,5 +18,8 @@ app = webapp2.WSGIApplication([
     ('/manage',Manage),
     ('/playlist_url',PlaylistUploadFormHandler),
     ('/PlaylistUpload',PlaylistUploadHandler),
-    ('/create_playlist',Create)
+    ('/create_playlist',Create),
+    ('/autocomplete', SearchAutoComplete)
+
     ], debug=True)
+
