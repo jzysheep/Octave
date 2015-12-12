@@ -7,6 +7,9 @@ handlers:
 - url: /bootstrap33
   static_dir: bootstrap33
 
+- url: /playlist
+  static_dir: playlist
+
 - url: /startbootstrap-grayscale-1.0.5
   static_dir: startbootstrap-grayscale-1.0.5
 

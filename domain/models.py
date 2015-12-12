@@ -15,6 +15,7 @@ class Media(ndb.Model):
     media_nbr = ndb.IntegerProperty()
     upload_check=ndb.BooleanProperty()
     key_media = ndb.BlobKeyProperty()
+    name=ndb.StringProperty()
 
 
 class Tag(ndb.Model):

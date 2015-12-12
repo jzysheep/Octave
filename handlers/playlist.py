@@ -87,7 +87,7 @@ class Create(webapp2.RequestHandler):
                 )
 
         playlist.put()
-        self.redirect('/create_playlist')
+        self.redirect('/playlist')
 
 
 class PlaylistUploadHandler(blobstore_handlers.BlobstoreUploadHandler):

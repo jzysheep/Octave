@@ -252,6 +252,7 @@
       <script>
       // Get the template HTML and remove it from the doument
       var previewNode = document.querySelector("#template");
+      var filename;
       previewNode.id = "";
       var previewTemplate = previewNode.parentNode.innerHTML;
       previewNode.parentNode.removeChild(previewNode);
@@ -271,13 +272,15 @@
 
       myDropzone.on("addedfile", function(file) {
         // Hookup the start button
+          filename = file.name.substring(0,file.name.lastIndexOf('.'));
+          console.log(filename);
 
           console.log("adding file")
           file.previewElement.querySelector(".start").onclick = function() {
 
               $.ajax({
                   type: 'POST',                            // http method
-                  url: '/playlist_url',               // target URL
+                  url: '/playlist_url?media_name=' + filename,               // target URL
                   success: function (serverResp) {          // on ajax success
                       if (serverResp.code == '200') {
                           console.log('image added successfully!');
@@ -334,7 +337,7 @@
           for (i=0;i<myDropzone.getFilesWithStatus(Dropzone.ADDED).length;i++) {
               $.ajax({
                   type: 'POST',                            // http method
-                  url: '/playlist_url',               // target URL
+                  url: '/playlist_url?media_name=' + filename,               // target URL
                   success: function (serverResp) {          // on ajax success
                       if (serverResp.code == '200') {
                           console.log('image added successfully!');

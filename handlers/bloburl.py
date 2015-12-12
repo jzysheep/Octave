@@ -26,10 +26,11 @@ class PlaylistUploadFormHandler(webapp2.RequestHandler):
     def post(self):
         user=users.get_current_user()
         if user:
+            media_name=self.request.get('media_name')
+
             upload_url = blobstore.create_upload_url('/PlaylistUpload')
             print upload_url
             time.sleep(0.1)
-
             self.response.headers["Content-Type"] = "application/json"
 
             res = {

@@ -1,22 +1,33 @@
-
-
 <!DOCTYPE HTML>
 <html class="skin-dark">
    <head>
       <meta charset="UTF-8" />
       <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-      <title>mymusic</title>
-      <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
-      <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
-      <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-poster-comment-150512101535.css?max_age=31536000" rel="stylesheet"/>
-      <link type="text/css" rel="stylesheet" href="/assets/css/icons.css" >
-      <link  type="text/css" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css" rel="stylesheet"/>
+        <meta name="author" content="Script Tutorials" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 
-     <link type="text/css" rel="stylesheet" href="../bootstrap33/dist/css/bootstrap.css" />
+    <!-- add styles and scripts -->
+
+       <link href="/playlist/css/styles.css" rel="stylesheet" type="text/css" />
+
+
+
+       <title>mymusic</title>
+       <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
+       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
+       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-poster-comment-150512101535.css?max_age=31536000" rel="stylesheet"/>
+       <link type="text/css" rel="stylesheet" href="/assets/css/icons.css" >
+       <link  type="text/css" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css" rel="stylesheet"/>
+
+
+
+       <link type="text/css" rel="stylesheet" href="../bootstrap33/dist/css/bootstrap.css" />
        <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
-       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
        <script type="text/javascript" src="/assets/js/jquery-dropzone.js"></script>
        <script src="http://www.dropzonejs.com/js/build/build.js?v=6"></script>
+
+
+
 
        <script>
             var Dropzone = require("enyo-dropzone");
@@ -96,38 +107,61 @@
               <div class="col-lg-7">
 
         <form action="{{ delete_music_handler_url }}" method="post" style="display: inline;">
-{#            <h3>Music in Playlist: {{Playlist Name}}</h3>#}
-            <h3>Music in Playlist: "AHMAD_PLAYLIST"</h3>
-
-            <table class = "table table-striped">
-                <tr>
-                    <th>Music name</th>
-                    <th>Music artist</th>
-                    <th>Date created</th>
-                    <th>Delete</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+            <h3>Music in Playlist: {{playlist_name}}</h3>
+{#            <h3>Music in Playlist: "AHMAD_PLAYLIST"</h3>#}
+{##}
+{#            <table class = "table table-striped">#}
+{#                <tr>#}
+{#                    <th>Music name</th>#}
+{#                    <th>Music artist</th>#}
+{#                    <th>Date created</th>#}
+{#                    <th>Delete</th>#}
+{#                </tr>#}
+{#                <tr>#}
+{#                    <td></td>#}
+{#                    <td></td>#}
+{#                    <td></td>#}
 {#                    <td><input type="checkbox" name="delete_owned" value="{{ s['key'].urlsafe() }}"></td>#}
-
-                    <td><input type="checkbox" name="delete_owned"></td>
-
-                </tr>
-            </table>
-            <br>
-            <input style="margin-bottom:20px;" type="submit" class="btn btn-info" value="Delete Checked">
-
+{##}
+{#                    <td><input type="checkbox" name="delete_owned"></td>#}
+{##}
+{#                </tr>#}
+{#            </table>#}
+{#            <br>#}
+{#            <input style="margin-bottom:20px;" type="submit" class="btn btn-info" value="Delete Checked">#}
+{##}
         </form>
+              </div>
+    </div>
 
         <!-- drop zone -->
+    <div class="container example">
 
+        <div class="player">
+            <div class="pl"></div>
+            <div class="title"></div>
+            <div class="artist"></div>
+            <div class="cover"></div>
+            <div class="controls">
+                <div class="play"></div>
+                <div class="pause"></div>
+                <div class="rew"></div>
+                <div class="fwd"></div>
+            </div>
+            <div class="volume"></div>
+            <div class="tracker"></div>
+        </div>
+        <ul class="playlist">
+            {% for media_nbr in range(links_uploaded|length) %}
+                <li audiourl="/view_media/{{links_uploaded[media_nbr]  }}" ><b>{{playlist_name}}</b></li>
+            {% endfor %}
+        </ul>
+    </div>
 
+<br><br>
+<div class="container">
 
-
-
-{#<div class="container">#}
+    <div id="actions" >
 
 
         <!-- The fileinput-button span is used to style the file input field as button -->
@@ -143,38 +177,37 @@
             <i class="glyphicon glyphicon-ban-circle"></i>
             <span>Cancel upload</span>
         </button>
-      </div>
 
         <!-- The global file processing state -->
-        <div class="container">
         <span class="fileupload-process">
-          <div id="total-progress" class=" progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:44%;">
+          <div id="total-progress" class=" progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:30%;">
             <div class="progress-bar progress-bar-success" style="width:0%" data-dz-uploadprogress></div>
           </div>
         </span>
         </div>
-    </div>
 
 
-<div class="container table table-striped" class="files" id="previews">
+
+
+<div class=" table table-striped" class="files" id="previews">
 
   <div id="template" class="file-row">
     <!-- This is used as the file preview template -->
     <div>
-        <span class="preview" style="margin-left: 150px; "><img data-dz-thumbnail /></span>
+        <span class="preview" ><img data-dz-thumbnail /></span>
     </div>
     <div>
-        <p class="name" data-dz-name  style="margin-left: 150px; margin-bottom:20px;"></p>
+        <p class="name" data-dz-name  style= margin-bottom:20px;"></p>
         <strong class="error text-danger" data-dz-errormessage></strong>
     </div>
     <div>
-        <p class="size" data-dz-size style="margin-left: 150px; margin-bottom:20px;"></p>
-        <div class="container progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="margin-left:150px;width:30%;">
+        <p class="size" data-dz-size style="margin-bottom:20px;"></p>
+        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:30%;">
           <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
         </div>
     </div>
     <div>
-      <button class="btn btn-primary start" style="margin-left: 150px; margin-bottom:20px;">
+      <button class="btn btn-primary start" style="margin-bottom:20px;">
           <i class="glyphicon glyphicon-upload"></i>
           <span>Start</span>
       </button>
@@ -190,9 +223,8 @@
   </div>
 
 </div>
+
 </div>
-
-
 
        <script>
       // Get the template HTML and remove it from the doument
@@ -218,8 +250,10 @@
         // Hookup the start button
 
           console.log("adding file")
-          file.previewElement.querySelector(".start").onclick = function() {
+          var extension = file.name.substring(0,file.name.lastIndexOf('.'));
+          console.log(extension);
 
+          file.previewElement.querySelector(".start").onclick = function() {
               $.ajax({
                   type: 'POST',                            // http method
                   url: '/playlist_url',               // target URL
@@ -228,6 +262,7 @@
                           console.log('image added successfully!');
                           myDropzone.options.url = serverResp.response;
                           console.log(myDropzone.options.url);
+                          console.log(file.name)
                           myDropzone.enqueueFile(file);
 
                       }
@@ -312,6 +347,12 @@
 
 
     </script>
+              <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+                  <script type="text/javascript" src="/playlist/js/jquery-1.7.2.min.js"></script>
+                  <script type="text/javascript" src="/playlist/js/jquery-ui-1.8.21.custom.min.js"></script>
+                  <script type="text/javascript" src="/playlist/js/main.js"></script>
+
 
 
    </body>
