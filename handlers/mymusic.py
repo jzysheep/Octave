@@ -42,6 +42,7 @@ class MyMusic(webapp2.RequestHandler):
                 'url': url,
                 'posts': posts,
                 'replies': replies,
+                'user_email': user_fetch.email,
                 'user_name': user_fetch.name,
                 'user_role': user_fetch.role,
                 'user_signature': user_signature,
@@ -143,7 +144,6 @@ class ReplyHandlerAjax(webapp2.RequestHandler):
         posts = Post.query(ancestor=user_fetch.key).order(-Post.date).fetch()
         print "post_nbr: " + post_nbr
         post_key=posts[int(post_nbr)].key
-
         reply_text = self.request.get("reply_text_" + post_nbr)
 
         reply = Reply(parent=post_key)
@@ -186,10 +186,8 @@ class ViewMediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
 
 class Image(webapp2.RequestHandler):
     def get(self):
-        user = users.get_current_user()
-        if user is not None:
-            user_query = User.gql("WHERE email =:1", user.email())
-            user_fetch = user_query.get()
+        user_query = User.gql("WHERE email =:1", self.request.get('email'))
+        user_fetch = user_query.get()
 
 
         if(user_fetch.profile_image):

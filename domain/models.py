@@ -29,7 +29,6 @@ class User(ndb.Model):
     role = ndb.StringProperty()
     #blob_key_photo=ndb.BlobKeyProperty()
     profile_image= ndb.BlobProperty()
-
     followers = ndb.StringProperty(repeated=True) #Their emails
 
 class Post(ndb.Model):
@@ -39,6 +38,11 @@ class Post(ndb.Model):
     tags = ndb.StringProperty(repeated=True) # construct entities from the strings
     blob_key_media = ndb.BlobKeyProperty()
     user_key = ndb.KeyProperty(kind=User)
+
+class Like(ndb.Model):
+    user_key = ndb.KeyProperty(kind=User)
+    post_key = ndb.KeyProperty(kind=Post)
+    likes = ndb.IntegerProperty()
 
 class Reply(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)

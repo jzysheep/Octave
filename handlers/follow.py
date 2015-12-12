@@ -11,8 +11,8 @@ class FollowUser(webapp2.RequestHandler):
             self.redirect(users.create_login_url(self.request.uri))
         else:
             user_key = ndb.Key(urlsafe=self.request.get("user_key"))
-            followed_user = user_key.get()
-            follower_list = followed_user.followers
+            searched_user = user_key.get()
+            follower_list = searched_user.followers
             resp = {}
             if user.email() not in follower_list:
                 follower_list.append(user.email())
@@ -22,7 +22,7 @@ class FollowUser(webapp2.RequestHandler):
                 follower_list.remove(user.email())
                 resp['follow_button'] = 'Follow'
 
-            followed_user.put()
+            searched_user.put()
             self.response.headers['Content-Type'] = 'application/json'
             self.response.out.write(json.dumps(resp))
 

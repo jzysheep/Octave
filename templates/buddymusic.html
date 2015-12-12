@@ -3,9 +3,10 @@
    <head>
       <meta charset="UTF-8" />
       <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-      <title>homemusic</title>
-
+      <title>mymusic</title>
        <link type="text/css" rel="stylesheet" href="/bootstrap33/dist/css/bootstrap.css" />
+      <link  type="text/css" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css" rel="stylesheet"/>
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
       <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-poster-comment-150512101535.css?max_age=31536000" rel="stylesheet"/>
@@ -13,13 +14,20 @@
 
 
 
-      <link type="text/css" rel="stylesheet" href="../assets/css/icons.css" >
+      <link type="text/css" rel="stylesheet" href="/assets/css/icons.css" >
 
-
+       <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+       <script type="text/javascript" src="/assets/js/jquery-dropzone.js"></script>
+       <script src="http://www.dropzonejs.com/js/build/build.js?v=6"></script>
+       <script>
+            var Dropzone = require("enyo-dropzone");
+            Dropzone.autoDiscover = false;
+        </script>
 
       <style id="mainJSBg" type="text/css">
          .background-container {
-             background-repeat: no-repeat;
+             background-repeat: repeat;
              background-position: center top;
              background-attachment: scroll;
              background-image: url();
@@ -44,17 +52,17 @@
                   <ul class="top-nav">
                      <li class="nav-list" id="tb_ic_li">
                         <div class="nav-list-inner">
-                           <a href="/templates/playlist.html" class="" x><i class="ui-icon icon-icenter"></i><span>Playlist</span></a>
+                           <a href="/playlist" class="" x><i class="ui-icon icon-icenter"></i><span>Playlist</span></a>
                         </div>
                      </li>
                      <li class="nav-list" id="tb_index_li">
                         <div class="nav-list-inner">
-                           <a href="" class="homepage-link a-link "><i class="ui-icon icon-homepage"></i><span>MyMusic</span></a>
+                           <a href="/MyMusic" class="homepage-link a-link "><i class="ui-icon icon-homepage"></i><span>My Music</span></a>
                         </div>
                      </li>
                      <li class="nav-list" id="tb_friend_li">
                         <div class="nav-list-inner">
-                           <a href="" class="friends-link a-link"><i class="ui-icon icon-friend"></i><span>Home Music</span></a>
+                           <a href="/buddymusic" class="friends-link a-link"><i class="ui-icon icon-friend"></i><span>Buddy Music</span></a>
                         </div>
                      </li>
                      <li class="nav-list" id="tb_app_li">
@@ -72,15 +80,21 @@
                            <a href="{{url}}" class="logout-link a-link" ><i class="ui-icon icon-logout"></i><span>{{url_log}}</span></a>
                         </div>
                      </li>
+
                   </ul>
 
                   <!-- Search Box -->
-                  <div class="top-search">
-                     <div class="search-box">
-                        <input class="search-input" type="text" placeholder="">
-                        <a href="" class="search-button"><i class="ui-icon icon-search"></i></a>
-                     </div>
-                  </div>
+                   <form action="/search" method="get">
+                      <div class="top-search">
+                         <div class="search-box">
+                            <input class="search-input" id="search_str" name="search_str" type="text" placeholder="" />
+                            <input type="submit" id="search_button" name="search_button" style="display: none;"/>
+                            <a onclick="search_user();" class="search-button">
+                                <i class="ui-icon icon-search"></i>
+                            </a>
+                         </div>
+                      </div>
+                    </form>
                </div>
             </div>
          </div>
@@ -101,6 +115,14 @@
                   <div class="head-detail-name">
                      <span class="user-name textoverflow">{{user_name}}</span>
                   </div>
+                   {% if not is_self %}
+                   <form method="post" id="form_follow" action="/follow">
+                       <button id="follow_button" class="poster-skin-box">
+                            {{follow_button}}
+                        </button>
+                       <div style="display:None" id="user_key">{{user_key.urlsafe()}}</div>
+                   </form>
+                   {% endif %}
                </div>
 
             </div>
@@ -110,17 +132,109 @@
                <div class="head-avatar">
                   <a href="javascript:;">
                      <div class="head-dress"></div>
-                     <img src="/assets/images/kobe.png" class="user-avatar"  />
+                     <img src="/profile_img" class="user-avatar"  />
                   </a>
                </div>
             </div>
          </div>
-
          <div class="layout-background">
             <div class="layout-body">
                <div id="pageContent" class="layout-page clearfix">
                   <div id="main_feed_container" class="col-main ">
                      <div class="col-main-feed">
+
+                         <form enctype="multipart/form-data" method="post" action="/MyMusic">
+
+                            <div id="QM_Mood_Poster_Container">
+                               <div id="QM_Mood_Poster_Inner" class="qz-poster bg b-test">
+                                  <div class="qz-inputer bor2">
+
+                                     <div id="qz_poster_editor_v4_container" class="textarea c_tx2" contenteditable="true">
+
+                                     </div>
+                                     <input type="hidden" name="post_text" id="post_data_field"/>
+
+                                  </div>
+                                  <!-- attach -->
+                                  <div class="qz-poster-attach-side">
+                                         <!-- submit post -->
+                                         <div class="item bor3 bg4 item-other">
+                                             <input type="submit" id="submitPost" name="submitPost" style="display: none;"/>
+                                                <a style="height:60px;" onclick="submit();" class="">
+                                                     <i class="icon icon-music"></i>
+                                                </a>
+                                             </div>
+                                     </div>
+                                  </div>
+                               </div>
+                         </form>
+
+                                        <div id="actions" class="row">
+
+                                          <div class="container qz-poster">
+                                            <!-- The fileinput-button span is used to style the file input field as button -->
+
+                                            <button class="poster-skin-box fileinput-button">
+                                                <i class="glyphicon glyphicon-plus"></i>
+                                                <span>Add</span>
+                                            </button>
+                                            <button type="submit" class="poster-skin-box start">
+                                                <i class="glyphicon glyphicon-upload"></i>
+                                                <span>upload</span>
+                                            </button>
+                                            <button type="reset" class="poster-skin-box cancel">
+                                                <i class="glyphicon glyphicon-ban-circle"></i>
+                                                <span>Cancel</span>
+                                            </button>
+                                          </div>
+
+                                          <div class="col-lg-5">
+                                            <!-- The global file processing state -->
+                                            <span class="fileupload-process">
+                                              <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                                              </div>
+                                            </span>
+                                          </div>
+
+                                        </div>
+
+
+                                    <div class="table table-striped" class="files" id="previews" style="display: none;">
+
+                                      <div id="template" class="file-row">
+                                        <!-- This is used as the file preview template -->
+                                        <div>
+                                            <span class="preview"><img data-dz-thumbnail /></span>
+                                        </div>
+                                        <div>
+                                            <p class="name" data-dz-name></p>
+                                            <strong class="error text-danger" data-dz-errormessage></strong>
+                                        </div>
+                                        <div>
+                                            <p class="size" data-dz-size></p>
+                                            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                              <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                          <button class="poster-skin-box start">
+                                              <i class="glyphicon glyphicon-upload"></i>
+                                              <span>Start</span>
+                                          </button>
+                                          <button data-dz-remove class="poster-skin-box cancel">
+                                              <i class="glyphicon glyphicon-ban-circle"></i>
+                                              <span>Cancel</span>
+                                          </button>
+                                          <button data-dz-remove class="poster-skin-box delete">
+                                            <i class="glyphicon glyphicon-trash"></i>
+                                            <span>Delete</span>
+                                          </button>
+                                        </div>
+
+                                      </div>
+
+                                    </div>
 
                         <div id="feed_friend" >
                            <div class="fn-feed-container">
@@ -133,7 +247,7 @@
                                             <li class="f-single f-s-s">
                                              <div class="f-aside">
                                                <div class="f-user-pto">
-                                                <a href="javascript:" class="f-user-avatar q_namecard f-s-a" style="background-image: url(/assets/images/kobe.png);">
+                                                <a href="javascript:" class="f-user-avatar q_namecard f-s-a" style="background-image: url(/profile_img);">
                                                 </a>
                                              </div>
                                              <div class="f-user-info">
@@ -173,6 +287,7 @@
                                                    </div>
                                                    <div class="f-op-wrap">
                                                       <p class="f-detail">&nbsp;
+
                                                          <a href="javascript:;" style="height:30px;" class=" item  "><i class="ui-icon icon-forward"></i>share</a>
                                                          <span class="item-line"></span>
                                                         <a href="javascript:;" style="height:30px;" class=" item  "><i class="ui-icon icon-praise"></i>like</a>
@@ -188,7 +303,7 @@
 
 
                                                                   <div class="comments-item-bd">
-                                                                     <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/assets/images/kobe.png" /></a></div>
+                                                                     <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/profile_img" /></a></div>
                                                                      <div class="comments-content">
                                                                         &nbsp;<a class="c_tx q_namecard" href="javascript:;">{{user_name}}</a>&nbsp;: {{replies[i][j].reply}}
                                                                         <div class="comments-op">
@@ -255,13 +370,39 @@
                         </div>
                      </div>
                      <!-- right hand side bar -->
-
                   </div>
                   <!-- left menu -->
+                   <div id="leftMenu" class="col-menu">
+                     <div class="mod-side-nav mod-side-nav-message">
+                        <div class="inner">
+                           <div class="bd">
+                              <ul id="tab_menu_list" class="sn-list">
+                                 <li type="friend">
+                                    <a href="javascript:;" class="qz-grid">
+                                       <div class="qz-main"><span class="sn-title">You might like:</span></div>
+                                    </a>
+                                 </li>
+                               <li type="friend">
+                                    <a href="javascript:;" class="qz-grid">
+                                       <div class="qz-left"><i class="ui-icon sp-friend-feed"></i></div>
+                                       <div class="qz-main"><span class="sn-title">Nima</span></div>
+                                    </a>
+                                 </li>
+                                 <li type="friend">
+                                    <a href="javascript:;" class="qz-grid">
+                                       <div class="qz-left"><i class="ui-icon sp-friend-feed"></i></div>
+                                       <div class="qz-main"><span class="sn-title">Kevin</span></div>
+                                    </a>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
                </div>
             </div>
             <div class="layout-copyright">
-               <p>Copyright &copy; Ziyang Jiang, Ahmad Ei Youssef</p>
+               <p>Copyright &copy; Ziyang Jiang, Ahmad El Youssef</p>
             </div>
          </div>
       </div>
@@ -269,7 +410,7 @@
       <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/ac/qzone/qzfl/qzfl_v8_2.1.45.js" ></script>
       <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/ac/lib/seajs/sea-2.1.1.js" ></script>
       <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/c/=/qzone/v8/core/seajs_config.js,/qzone/v8/engine/plugin-combo.js,/qzone/v8/core/ic.js?max_age=31536001&amp;d=50108" ></script>
-        <script type='text/javascript' src="../assets/js/jquery-2.1.4.js"></script>
+        <script type='text/javascript' src="/assets/js/jquery-2.1.4.js"></script>
 
 
       <script type="text/javascript">
@@ -277,6 +418,7 @@
               document.getElementById("fileInput").click();
            }
       </script>
+
       <script type="text/javascript">
 
           function submit() {
@@ -286,6 +428,34 @@
 
            }
        </script>
+
+      <!-- follow -->
+      <script type="text/javascript">
+       // Attach a submit handler to the form
+        $( "[id^='follow_button']" ).click(function( event ) {
+
+          // Stop form from submitting normally
+          event.preventDefault();
+
+          // Get some values from elements on the page:
+
+            var user_key = $("#user_key").html();
+            var url = $("#form_follow").attr( "action" );
+            var toBackEnd = {};
+
+            toBackEnd["user_key"] = user_key;
+
+          // Send the data using post
+
+          var posting = $.post(url, toBackEnd);
+          posting.done(function( data ) {
+            var follow_button = data["follow_button"];
+            $("#follow_button").html(follow_button);
+          });
+        });
+      </script>
+
+
 
       <script>
         // Attach a submit handler to the form
@@ -316,7 +486,7 @@
             var user_name = data["user_name"];
 
             var new_comment = '<div class="comments-item-bd"> \
-             <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/assets/images/kobe.png" /></a></div> \
+             <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/profile_img" /></a></div> \
              <div class="comments-content"> \
              &nbsp;<a class="c_tx q_namecard" href="javascript:;">' + user_name + '</a>&nbsp;: ' + reply_text + ' \
              <div class="comments-op"> \
@@ -341,6 +511,133 @@
                   document.getElementById("replyPost_" + i).click();
                }
        </script>
+
+      <!-- search -->
+      <script type="text/javascript">
+              function search_user() {
+                  document.getElementById("search_button").click();
+               }
+       </script>
+
+      <!-- autocomplete -->
+      <script src="/assets/js/jquery-ui.js"></script>
+      <script type="text/javascript">
+
+
+            $(document).ready(function() {
+                var cache = {};
+                $(document).tooltip();
+                $("#search_str").autocomplete({
+                    minLength: 1,
+                    autoFocus: true,
+                    source: function(request, response) {
+
+                        var term = request.term;
+                        if (term.trim() == '')
+                            return;
+                        if (term in cache) {
+                            response(cache[term]);
+                            return;
+                        }
+                        $.getJSON("autocomplete", request, function(data, status, xhr) {
+                            cache[term] = data.user_names;
+                            response(data.user_names);
+                        });
+                    }
+                });
+            });
+      </script>
+
+    <script>
+      // Get the template HTML and remove it from the doument
+      var previewNode = document.querySelector("#template");
+      previewNode.id = "";
+      var previewTemplate = previewNode.parentNode.innerHTML;
+      previewNode.parentNode.removeChild(previewNode);
+      var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+        url: '/', // Set the url
+        acceptedFiles: 'audio/*, video/*',
+        maxFilesize: 100,
+        maxFiles: 100,
+        parallelUploads: 100,
+        previewTemplate: previewTemplate,
+        autoQueue: false, // Make sure the files aren't queued until manually added
+        previewsContainer: "#previews", // Define the container to display the previews
+        clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+      });
+      myDropzone.on("addedfile", function(file) {
+        // Hookup the start button
+          console.log("adding file")
+          file.previewElement.querySelector(".start").onclick = function() {
+              $.ajax({
+                  type: 'POST',                            // http method
+                  url: '/media_url',               // target URL
+                  success: function (serverResp) {          // on ajax success
+                      if (serverResp.code == '200') {
+                          console.log('image added successfully!');
+                          myDropzone.options.url = serverResp.response;
+                          console.log(myDropzone.options.url);
+                          myDropzone.enqueueFile(file);
+                      }
+                      else {
+                          console.log('detective already exists!');
+                      }
+                  },
+                  error: function (serverResp) {            // on ajax failure
+                      console.log('5xx http status code or unexpected response content');
+                  }
+              });
+                console.log("ENQUE file");
+  };
+      });
+      // Update the total progress bar
+      myDropzone.on("totaluploadprogress", function(progress) {
+        document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+      });
+      myDropzone.on("sending", function(file) {
+        // Show the total progress bar when upload starts
+        document.querySelector("#total-progress").style.opacity = "1";
+        // And disable the start button
+        file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+      });
+      // Hide the total progress bar when nothing's uploading anymore
+      myDropzone.on("queuecomplete", function(progress) {
+        document.querySelector("#total-progress").style.opacity = "0";
+      });
+      // Setup the buttons for all transfers
+      // The "add files" button doesn't need to be setup because the config
+      // `clickable` has already been specified.
+      document.querySelector("#actions .start").onclick = function() {
+//          myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+          var i;
+          for (i=0;i<myDropzone.getFilesWithStatus(Dropzone.ADDED).length;i++) {
+              $.ajax({
+                  type: 'POST',                            // http method
+                  url: '/media_url',               // target URL
+                  success: function (serverResp) {          // on ajax success
+                      if (serverResp.code == '200') {
+                          console.log('image added successfully!');
+                          myDropzone.options.url = serverResp.response;
+                          console.log(myDropzone.options.url);
+                          myDropzone.enqueueFile(myDropzone.getFilesWithStatus(Dropzone.ADDED)[0]);
+                          console.log("ENQUE file");
+                      }
+                      else {
+                          console.log('detective already exists!');
+                      }
+                  },
+                  error: function (serverResp) {            // on ajax failure
+                      console.log('5xx http status code or unexpected response content');
+                  }
+              });
+          }
+      };
+          document.querySelector("#actions .cancel").onclick = function () {
+              myDropzone.removeAllFiles(true);
+          };
+    </script>
+
+
 
 
    </body>
