@@ -24,9 +24,9 @@ class MyMusic(webapp2.RequestHandler):
             posts = []
 
             if user_fetch:
-                posts = Post.query(ancestor=user_fetch.key).order(-Post.date).fetch()
+                posts = Post.query(Post.user_key == user_fetch.key).order(-Post.date).fetch()
                 for count in range(0 , posts.__len__()):
-                    temp = Reply.query(ancestor=posts[count].key).order(Reply.date).fetch()
+                    temp = Reply.query(Reply.post_key == posts[count].key).order(Reply.date).fetch()
                     replies.insert(count,temp)
 
                 if not user_fetch.signature:
@@ -42,6 +42,7 @@ class MyMusic(webapp2.RequestHandler):
                 'url': url,
                 'posts': posts,
                 'replies': replies,
+                'user_email': user_fetch.email,
                 'user_name': user_fetch.name,
                 'user_role': user_fetch.role,
                 'user_signature': user_signature,
@@ -78,10 +79,12 @@ class MyMusic(webapp2.RequestHandler):
             post.populate(
             date_created=date_created,
             text=post_text,
-            user_key=user_fetch.key
+            user_key=user_fetch.key,
+            likes=0
             )
 
         post.put()
+        time.sleep(0.1)
         self.redirect('/MyMusic')
 
         #define a post method for the reply
@@ -93,34 +96,6 @@ class MyMusic(webapp2.RequestHandler):
         # user_key = user_fetch.key
         # post_key = post.key       #which post
 
-class Reply_Handler(webapp2.RequestHandler):
-    def post(self):
-        print "ENTERED"
-        post_nbr=self.request.get('post_nbr')
-
-        print "NBR= " + post_nbr
-        date_reply = strftime("%Y-%m-%d %H:%M")
-
-        user = users.get_current_user()
-        user_query = User.gql("WHERE email =:1 ", user.email())
-        user_fetch = user_query.get()
-
-        posts = Post.query(ancestor=user_fetch.key).order(-Post.date).fetch()
-
-        post_key=posts[int(post_nbr)].key
-        reply_text=self.request.get("reply_text_" + post_nbr)
-
-        reply = Reply(parent=post_key)
-
-        reply.populate(
-        user_key=user_fetch.key,
-        reply=reply_text,
-        date_reply = date_reply,
-        post_key = post_key
-        )
-
-        reply.put()
-        self.redirect('/MyMusic')
 
 
 class ReplyHandlerAjax(webapp2.RequestHandler):
@@ -139,21 +114,17 @@ class ReplyHandlerAjax(webapp2.RequestHandler):
         user_query = User.gql("WHERE email =:1 ", user.email())
         user_fetch = user_query.get()
 
-        posts = Post.query(ancestor=user_fetch.key).order(-Post.date).fetch()
+        posts = Post.query(Post.user_key == user_fetch.key).order(-Post.date).fetch()
         print "post_nbr: " + post_nbr
         post_key=posts[int(post_nbr)].key
-
         reply_text = self.request.get("reply_text_" + post_nbr)
 
-        reply = Reply(parent=post_key)
-
-        reply.populate(
-        user_key=user_fetch.key,
-        reply=reply_text,
-        date_reply = date_reply,
-        post_key = post_key
+        reply = Reply(
+            user_key=user_fetch.key,
+            reply=reply_text,
+            date_reply = date_reply,
+            post_key = post_key
         )
-
         reply.put()
         resp = {}
 
@@ -174,7 +145,7 @@ class MediaUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         upload = self.get_uploads()[0]
         user_media = Media(key_media=upload.key(),upload_check=True,views=0, date_created=now_string)
         user_media.put()
-
+        time.sleep(0.1)
 
 class ViewMediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
     def get(self, media_key):
@@ -186,10 +157,8 @@ class ViewMediaHandler(blobstore_handlers.BlobstoreDownloadHandler):
 
 class Image(webapp2.RequestHandler):
     def get(self):
-        user = users.get_current_user()
-        if user is not None:
-            user_query = User.gql("WHERE email =:1", user.email())
-            user_fetch = user_query.get()
+        user_query = User.gql("WHERE email =:1", self.request.get('email'))
+        user_fetch = user_query.get()
 
         if(user_fetch.profile_image):
             self.response.headers['Content-Type'] = 'image/png'

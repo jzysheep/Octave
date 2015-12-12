@@ -17,10 +17,21 @@ indexes:
     direction: desc
 
 - kind: Post
+  properties:
+  - name: user_key
+  - name: date
+    direction: desc
+
+- kind: Post
   ancestor: yes
   properties:
   - name: date
     direction: desc
+
+- kind: Reply
+  properties:
+  - name: post_key
+  - name: date
 
 - kind: Reply
   ancestor: yes

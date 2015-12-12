@@ -3,9 +3,9 @@
    <head>
       <meta charset="UTF-8" />
       <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-      <title>homemusic</title>
+      <title>mymusic</title>
 
-       <link type="text/css" rel="stylesheet" href="/bootstrap33/dist/css/bootstrap.css" />
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
       <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-poster-comment-150512101535.css?max_age=31536000" rel="stylesheet"/>
@@ -13,13 +13,13 @@
 
 
 
-      <link type="text/css" rel="stylesheet" href="../assets/css/icons.css" >
+      <link type="text/css" rel="stylesheet" href="/assets/css/icons.css" >
 
 
 
       <style id="mainJSBg" type="text/css">
          .background-container {
-             background-repeat: no-repeat;
+             background-repeat: repeat;
              background-position: center top;
              background-attachment: scroll;
              background-image: url();
@@ -37,6 +37,13 @@
 
    <body class="bg-body">
       <!-- nav bar -->
+
+      <!-- hidden input -->
+      <div type="hidden" id="logged_user_email">{{logged_user.email}}</div>
+      <div type="hidden" id="searched_user_email">{{searched_user.email}}</div>
+
+
+
       <div class="top-fix-bar">
          <div class="top-fix-inner" >
             <div class="" id="QZ_Toolbar_Container">
@@ -44,22 +51,22 @@
                   <ul class="top-nav">
                      <li class="nav-list" id="tb_ic_li">
                         <div class="nav-list-inner">
-                           <a href="/templates/playlist.html" class="" x><i class="ui-icon icon-icenter"></i><span>Playlist</span></a>
+                           <a href="/playlist" class="" x><i class="ui-icon icon-icenter"></i><span>Playlist</span></a>
                         </div>
                      </li>
                      <li class="nav-list" id="tb_index_li">
                         <div class="nav-list-inner">
-                           <a href="" class="homepage-link a-link "><i class="ui-icon icon-homepage"></i><span>MyMusic</span></a>
+                           <a href="/MyMusic" class="homepage-link a-link "><i class="ui-icon icon-homepage"></i><span>My Music</span></a>
                         </div>
                      </li>
                      <li class="nav-list" id="tb_friend_li">
                         <div class="nav-list-inner">
-                           <a href="" class="friends-link a-link"><i class="ui-icon icon-friend"></i><span>Home Music</span></a>
+                           <a href="/buddymusic" class="friends-link a-link"><i class="ui-icon icon-friend"></i><span>Buddy Music</span></a>
                         </div>
                      </li>
                      <li class="nav-list" id="tb_app_li">
                         <div class="nav-list-inner">
-                           <a href="" class="application-link a-link"><i class="ui-icon icon-application"></i><span>Popular Music</span></a>
+                           <a href="/popularmusic" class="application-link a-link"><i class="ui-icon icon-application"></i><span>Popular Music</span></a>
                         </div>
                      </li>
                      <li class="nav-list" id="tb_dress_li">
@@ -72,15 +79,21 @@
                            <a href="{{url}}" class="logout-link a-link" ><i class="ui-icon icon-logout"></i><span>{{url_log}}</span></a>
                         </div>
                      </li>
+
                   </ul>
 
                   <!-- Search Box -->
-                  <div class="top-search">
-                     <div class="search-box">
-                        <input class="search-input" type="text" placeholder="">
-                        <a href="" class="search-button"><i class="ui-icon icon-search"></i></a>
-                     </div>
-                  </div>
+                   <form action="/search" method="get">
+                      <div class="top-search">
+                         <div class="search-box">
+                            <input class="search-input" id="search_str" name="search_str" type="text" placeholder="" />
+                            <input type="submit" id="search_button" name="search_button" style="display: none;"/>
+                            <a onclick="search_user();" class="search-button">
+                                <i class="ui-icon icon-search"></i>
+                            </a>
+                         </div>
+                      </div>
+                    </form>
                </div>
             </div>
          </div>
@@ -94,13 +107,19 @@
                   <h1 class="head-title" id="top_head_title"><span class="title-text ui-mr5">Octave</span>
                   </h1>
                   <div class="head-description">
-                     <span class="description-text" id="QZ_Space_Desc">{{user_signature}}</span>
+                     <span class="description-text" id="QZ_Space_Desc">{{searched_user.signature}}</span>
                   </div>
                </div>
                <div class="head-detail">
                   <div class="head-detail-name">
-                     <span class="user-name textoverflow">{{user_name}}</span>
+                     <span class="user-name textoverflow">{{searched_user.name}}</span>
                   </div>
+                   <form method="post" id="form_follow" action="/follow">
+                       <button id="follow_button" class="poster-skin-box">
+                            {{follow_button}}
+                        </button>
+                       <div style="display:None" id="user_key">{{searched_user.key.urlsafe()}}</div>
+                   </form>
                </div>
 
             </div>
@@ -110,17 +129,52 @@
                <div class="head-avatar">
                   <a href="javascript:;">
                      <div class="head-dress"></div>
-                     <img src="/assets/images/kobe.png" class="user-avatar"  />
+                     <img src="/profile_img?email={{searched_user.email}}" class="user-avatar"  />
                   </a>
                </div>
             </div>
          </div>
-
          <div class="layout-background">
             <div class="layout-body">
                <div id="pageContent" class="layout-page clearfix">
                   <div id="main_feed_container" class="col-main ">
                      <div class="col-main-feed">
+
+                                    <div class="table table-striped" class="files" id="previews" style="display: none;">
+
+                                      <div id="template" class="file-row">
+                                        <!-- This is used as the file preview template -->
+                                        <div>
+                                            <span class="preview"><img data-dz-thumbnail /></span>
+                                        </div>
+                                        <div>
+                                            <p class="name" data-dz-name></p>
+                                            <strong class="error text-danger" data-dz-errormessage></strong>
+                                        </div>
+                                        <div>
+                                            <p class="size" data-dz-size></p>
+                                            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                              <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                          <button class="poster-skin-box start">
+                                              <i class="glyphicon glyphicon-upload"></i>
+                                              <span>Start</span>
+                                          </button>
+                                          <button data-dz-remove class="poster-skin-box cancel">
+                                              <i class="glyphicon glyphicon-ban-circle"></i>
+                                              <span>Cancel</span>
+                                          </button>
+                                          <button data-dz-remove class="poster-skin-box delete">
+                                            <i class="glyphicon glyphicon-trash"></i>
+                                            <span>Delete</span>
+                                          </button>
+                                        </div>
+
+                                      </div>
+
+                                    </div>
 
                         <div id="feed_friend" >
                            <div class="fn-feed-container">
@@ -128,35 +182,35 @@
                                  <div class="feed_inner">
                                     <ul id="feed_friend_list">
 
-                                        {% for i in range(posts|length) %}
+                                        {% for i in range(post_user_reply|length) %}
 
                                             <li class="f-single f-s-s">
                                              <div class="f-aside">
                                                <div class="f-user-pto">
-                                                <a href="javascript:" class="f-user-avatar q_namecard f-s-a" style="background-image: url(/assets/images/kobe.png);">
+                                                <a href="javascript:" class="f-user-avatar q_namecard f-s-a" style="background-image: url(/profile_img?email={{post_user_reply[i][1].email}});">
                                                 </a>
                                              </div>
                                              <div class="f-user-info">
                                                 <div class="f-nick">
-                                                   <a class="f-name q_namecard ">{{user_name}}</a>
-                                                   <a href="javascript:"class="f-sign-show state">{{user_role}}</a>
+                                                   <a class="f-name q_namecard ">{{post_user_reply[i][1].name}}</a>
+                                                   <a href="javascript:"class="f-sign-show state">{{post_user_reply[i][1].role}}</a>
                                                 </div>
                                                 <div class="info-detail">
-                                                   <span  class=" ui-mr8 state" >{{posts[i].date}}</span>
+                                                   <span  class=" ui-mr8 state" >{{post_user_reply[i][0].date}}</span>
                                                 </div>
                                              </div>
                                           </div>
                                           <div class="f-wrap">
                                              <div class="f-item f-s-i">
-                                                <div class="f-info">{{posts[i].text}}</div>
+                                                <div class="f-info">{{post_user_reply[i][0].text}}</div>
                                                 <div class="qz_summary wupfeed">
                                                    <div class="f-ct f-ct-b-bg" >
                                                       <div class="f-ct-txtimg">
 
-                                                          {% if posts[i].blob_key_media != None %}
+                                                          {% if post_user_reply[i][0].blob_key_media != None %}
                                                           <audio controls>
 
-                                                       <source src="/view_media/{{posts[i].blob_key_media}}" type="audio/mp3">
+                                                       <source src="/view_media/{{post_user_reply[i][0].blob_key_media}}" type="audio/mp3">
  >
 
                                                           </audio>
@@ -173,10 +227,17 @@
                                                    </div>
                                                    <div class="f-op-wrap">
                                                       <p class="f-detail">&nbsp;
+
                                                          <a href="javascript:;" style="height:30px;" class=" item  "><i class="ui-icon icon-forward"></i>share</a>
                                                          <span class="item-line"></span>
-                                                        <a href="javascript:;" style="height:30px;" class=" item  "><i class="ui-icon icon-praise"></i>like</a>
+                                                        <a onclick="like_icon({{i}});" style="height:30px;" id="like_icon{{i}}" class="item"><i class="ui-icon icon-praise"></i>like ({{post_user_reply[i][0].likes}})</a>
                                                          <span class="item-line"></span>
+                                                        <form id="post_like{{i}}" method="post" action="/like_post">
+                                                          <input type="submit" id="post_like_input_{{i}}" style="display: none;"/>
+                                                        </form>
+                                                       <div type="hidden" style="display:None;" id="post_key_{{i}}">
+                                                           {{post_user_reply[i][0].key.urlsafe()}}
+                                                       </div>
                                                       </p>
                                                       <div class="mod-comments">
                                                             <div class="comments-list ">
@@ -184,15 +245,15 @@
 
 
                                                                <li class="comments-item bor3">
-                                                                   {% for j in range(replies[i]|length) %}
+                                                                   {% for j in range(post_user_reply[i][2]|length) %}
 
 
                                                                   <div class="comments-item-bd">
-                                                                     <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/assets/images/kobe.png" /></a></div>
+                                                                     <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/profile_img?email={{post_user_reply[i][3][j].email}}" /></a></div>
                                                                      <div class="comments-content">
-                                                                        &nbsp;<a class="c_tx q_namecard" href="javascript:;">{{user_name}}</a>&nbsp;: {{replies[i][j].reply}}
+                                                                        &nbsp;<a class="c_tx q_namecard" href="javascript:;">{{post_user_reply[i][3][j].name}}</a>&nbsp;: {{post_user_reply[i][2][j].reply}}
                                                                         <div class="comments-op">
-                                                                            <span  class=" ui-mr10 state" >{{replies[i][j].date}}</span>
+                                                                            <span  class=" ui-mr10 state" >{{post_user_reply[i][2][j].date}}</span>
                                                                             <a class="act-reply" href="javascript:;">
                                                                                 <b class="hide-clip">Reply</b>
                                                                             </a>
@@ -203,7 +264,7 @@
                                                                     {%endfor%}
 
                                                                    <!-- comment box wrap -->
-                                                                   <form id="form_{{i}}" method="post" action="/ajax_reply">
+                                                                   <form id="form_{{i}}" method="post" action="/search_ajax_reply">
 
                                                                    <div class="comment-box-wrap">
                                                                        <div class="qz-poster bg qz-poster-show-setter qz-poster-active">
@@ -255,13 +316,39 @@
                         </div>
                      </div>
                      <!-- right hand side bar -->
-
                   </div>
                   <!-- left menu -->
+                   <div id="leftMenu" class="col-menu">
+                     <div class="mod-side-nav mod-side-nav-message">
+                        <div class="inner">
+                           <div class="bd">
+                              <ul id="tab_menu_list" class="sn-list">
+                                 <li type="friend">
+                                    <a href="javascript:;" class="qz-grid">
+                                       <div class="qz-main"><span class="sn-title">You might like:</span></div>
+                                    </a>
+                                 </li>
+                               <li type="friend">
+                                    <a href="javascript:;" class="qz-grid">
+                                       <div class="qz-left"><i class="ui-icon sp-friend-feed"></i></div>
+                                       <div class="qz-main"><span class="sn-title">Nima</span></div>
+                                    </a>
+                                 </li>
+                                 <li type="friend">
+                                    <a href="javascript:;" class="qz-grid">
+                                       <div class="qz-left"><i class="ui-icon sp-friend-feed"></i></div>
+                                       <div class="qz-main"><span class="sn-title">Kevin</span></div>
+                                    </a>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
                </div>
             </div>
             <div class="layout-copyright">
-               <p>Copyright &copy; Ziyang Jiang, Ahmad Ei Youssef</p>
+               <p>Copyright &copy; Ziyang Jiang, Ahmad El Youssef</p>
             </div>
          </div>
       </div>
@@ -269,7 +356,7 @@
       <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/ac/qzone/qzfl/qzfl_v8_2.1.45.js" ></script>
       <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/ac/lib/seajs/sea-2.1.1.js" ></script>
       <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/c/=/qzone/v8/core/seajs_config.js,/qzone/v8/engine/plugin-combo.js,/qzone/v8/core/ic.js?max_age=31536001&amp;d=50108" ></script>
-        <script type='text/javascript' src="../assets/js/jquery-2.1.4.js"></script>
+        <script type='text/javascript' src="/assets/js/jquery-2.1.4.js"></script>
 
 
       <script type="text/javascript">
@@ -277,6 +364,7 @@
               document.getElementById("fileInput").click();
            }
       </script>
+
       <script type="text/javascript">
 
           function submit() {
@@ -287,10 +375,39 @@
            }
        </script>
 
-      <script>
+
+
+      <!-- follow -->
+      <script type="text/javascript">
+       // Attach a submit handler to the form
+        $( "[id^='follow_button']" ).click(function( event ) {
+
+          // Stop form from submitting normally
+          event.preventDefault();
+
+          // Get some values from elements on the page:
+
+            var user_key = $("#user_key").html();
+            var url = $("#form_follow").attr( "action" );
+            var toBackEnd = {};
+
+            toBackEnd["user_key"] = user_key;
+
+          // Send the data using post
+
+          var posting = $.post(url, toBackEnd);
+          posting.done(function( data ) {
+            var follow_button = data["follow_button"];
+            $("#follow_button").html(follow_button);
+          });
+        });
+      </script>
+
+
+
+      <script type="text/javascript">
         // Attach a submit handler to the form
         $( "[id^='replyPost_']" ).click(function( event ) {
-
           // Stop form from submitting normally
           event.preventDefault();
 
@@ -298,25 +415,28 @@
 
           // Get some values from elements on the page:
 
-            var term = $("#reply_data_field_" + count).val();
+            var reply_text = $("#reply_data_field_" + count).val();
             var url = $("#form_" + count).attr( "action" );
-            var reply_text  = "reply_text_" + count;
+            var post_key = $("#post_key_" + count).html()
+            var logged_user_email = $("#logged_user_email").html()
+
             var toBackEnd = {};
             toBackEnd["post_nbr"] = count;
-            toBackEnd["reply_text_" + count] = term;
+            toBackEnd["reply_text"] = reply_text;
+            toBackEnd["post_key"] = post_key;
 
           // Send the data using post
 
           var posting = $.post(url, toBackEnd);
           posting.done(function( data ) {
 
-            var post_nbr = data["post_nbr"];
+
             var reply_text = data["reply_text"];
             var date_reply = data["date_reply"];
             var user_name = data["user_name"];
 
             var new_comment = '<div class="comments-item-bd"> \
-             <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/assets/images/kobe.png" /></a></div> \
+             <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/profile_img?email=' + logged_user_email + '"/></a></div> \
              <div class="comments-content"> \
              &nbsp;<a class="c_tx q_namecard" href="javascript:;">' + user_name + '</a>&nbsp;: ' + reply_text + ' \
              <div class="comments-op"> \
@@ -328,8 +448,8 @@
               </div> \
             '
 
-               $( "#form_" + post_nbr).before(new_comment);
-               $("#qz_reply_editor_v4_container" + post_nbr).empty();
+               $( "#form_" + count).before(new_comment);
+               $("#qz_reply_editor_v4_container" + count).empty();
           });
         });
         </script>
@@ -341,6 +461,72 @@
                   document.getElementById("replyPost_" + i).click();
                }
        </script>
+
+
+      <!-- like post -->
+      <script type="text/javascript">
+       // Attach a submit handler to the form
+        $( "[id^='post_like_input_']" ).click(function( event ) {
+          event.preventDefault();
+          var count = this.id.slice(-1);
+          var post_key = $("#post_key_" + count).html()
+          var url = $("#post_like" + count).attr( "action" );
+          var toBackEnd = {};
+          toBackEnd["post_key"] = post_key;
+          var posting = $.post(url, toBackEnd);
+          posting.done(function( data ) {
+             $("#like_icon" + count).empty();
+             var insert_html = '<i class="ui-icon icon-praise"></i>like (' + data['like_nbr'] + ')';
+             $("#like_icon" + count).html(insert_html);
+          });
+        });
+      </script>
+
+        <script type="text/javascript">
+              function like_icon(i) {
+                  document.getElementById("post_like_input_" + i).click();
+               }
+       </script>
+
+      <!-- search -->
+      <script type="text/javascript">
+              function search_user() {
+                  document.getElementById("search_button").click();
+               }
+       </script>
+
+      <!-- autocomplete -->
+      <script src="/assets/js/jquery-ui.js"></script>
+      <script type="text/javascript">
+
+
+            $(document).ready(function() {
+                var cache = {};
+                $(document).tooltip();
+                $("#search_str").autocomplete({
+                    minLength: 1,
+                    autoFocus: true,
+                    source: function(request, response) {
+
+                        var term = request.term;
+                        if (term.trim() == '')
+                            return;
+                        if (term in cache) {
+                            response(cache[term]);
+                            return;
+                        }
+                        $.getJSON("autocomplete", request, function(data, status, xhr) {
+                            cache[term] = data.user_names;
+                            response(data.user_names);
+                        });
+                    }
+                });
+            });
+      </script>
+
+
+
+
 
 
    </body>
