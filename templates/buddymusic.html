@@ -4,8 +4,7 @@
       <meta charset="UTF-8" />
       <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
       <title>mymusic</title>
-       <link type="text/css" rel="stylesheet" href="/bootstrap33/dist/css/bootstrap.css" />
-      <link  type="text/css" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css" rel="stylesheet"/>
+
       <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
       <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
@@ -16,14 +15,7 @@
 
       <link type="text/css" rel="stylesheet" href="/assets/css/icons.css" >
 
-       <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
-       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-       <script type="text/javascript" src="/assets/js/jquery-dropzone.js"></script>
-       <script src="http://www.dropzonejs.com/js/build/build.js?v=6"></script>
-       <script>
-            var Dropzone = require("enyo-dropzone");
-            Dropzone.autoDiscover = false;
-        </script>
+
 
       <style id="mainJSBg" type="text/css">
          .background-container {
@@ -45,6 +37,12 @@
 
    <body class="bg-body">
       <!-- nav bar -->
+
+      <!-- hidden input -->
+      <div type="hidden" id="logged_user_email">{{logged_user.email}}</div>
+
+
+
       <div class="top-fix-bar">
          <div class="top-fix-inner" >
             <div class="" id="QZ_Toolbar_Container">
@@ -67,7 +65,7 @@
                      </li>
                      <li class="nav-list" id="tb_app_li">
                         <div class="nav-list-inner">
-                           <a href="" class="application-link a-link"><i class="ui-icon icon-application"></i><span>Popular Music</span></a>
+                           <a href="/popularmusic" class="application-link a-link"><i class="ui-icon icon-application"></i><span>Popular Music</span></a>
                         </div>
                      </li>
                      <li class="nav-list" id="tb_dress_li">
@@ -108,21 +106,14 @@
                   <h1 class="head-title" id="top_head_title"><span class="title-text ui-mr5">Octave</span>
                   </h1>
                   <div class="head-description">
-                     <span class="description-text" id="QZ_Space_Desc">{{user_signature}}</span>
+                     <span class="description-text" id="QZ_Space_Desc">{{logged_user.signature}}</span>
                   </div>
                </div>
                <div class="head-detail">
                   <div class="head-detail-name">
-                     <span class="user-name textoverflow">{{user_name}}</span>
+                     <span class="user-name textoverflow">{{logged_user.name}}</span>
                   </div>
-                   {% if not is_self %}
-                   <form method="post" id="form_follow" action="/follow">
-                       <button id="follow_button" class="poster-skin-box">
-                            {{follow_button}}
-                        </button>
-                       <div style="display:None" id="user_key">{{user_key.urlsafe()}}</div>
-                   </form>
-                   {% endif %}
+
                </div>
 
             </div>
@@ -132,7 +123,7 @@
                <div class="head-avatar">
                   <a href="javascript:;">
                      <div class="head-dress"></div>
-                     <img src="/profile_img" class="user-avatar"  />
+                     <img src="/profile_img?email={{logged_user.email}}" class="user-avatar"  />
                   </a>
                </div>
             </div>
@@ -142,63 +133,6 @@
                <div id="pageContent" class="layout-page clearfix">
                   <div id="main_feed_container" class="col-main ">
                      <div class="col-main-feed">
-
-                         <form enctype="multipart/form-data" method="post" action="/MyMusic">
-
-                            <div id="QM_Mood_Poster_Container">
-                               <div id="QM_Mood_Poster_Inner" class="qz-poster bg b-test">
-                                  <div class="qz-inputer bor2">
-
-                                     <div id="qz_poster_editor_v4_container" class="textarea c_tx2" contenteditable="true">
-
-                                     </div>
-                                     <input type="hidden" name="post_text" id="post_data_field"/>
-
-                                  </div>
-                                  <!-- attach -->
-                                  <div class="qz-poster-attach-side">
-                                         <!-- submit post -->
-                                         <div class="item bor3 bg4 item-other">
-                                             <input type="submit" id="submitPost" name="submitPost" style="display: none;"/>
-                                                <a style="height:60px;" onclick="submit();" class="">
-                                                     <i class="icon icon-music"></i>
-                                                </a>
-                                             </div>
-                                     </div>
-                                  </div>
-                               </div>
-                         </form>
-
-                                        <div id="actions" class="row">
-
-                                          <div class="container qz-poster">
-                                            <!-- The fileinput-button span is used to style the file input field as button -->
-
-                                            <button class="poster-skin-box fileinput-button">
-                                                <i class="glyphicon glyphicon-plus"></i>
-                                                <span>Add</span>
-                                            </button>
-                                            <button type="submit" class="poster-skin-box start">
-                                                <i class="glyphicon glyphicon-upload"></i>
-                                                <span>upload</span>
-                                            </button>
-                                            <button type="reset" class="poster-skin-box cancel">
-                                                <i class="glyphicon glyphicon-ban-circle"></i>
-                                                <span>Cancel</span>
-                                            </button>
-                                          </div>
-
-                                          <div class="col-lg-5">
-                                            <!-- The global file processing state -->
-                                            <span class="fileupload-process">
-                                              <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                                                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-                                              </div>
-                                            </span>
-                                          </div>
-
-                                        </div>
-
 
                                     <div class="table table-striped" class="files" id="previews" style="display: none;">
 
@@ -242,35 +176,35 @@
                                  <div class="feed_inner">
                                     <ul id="feed_friend_list">
 
-                                        {% for i in range(posts|length) %}
+                                        {% for i in range(post_user_reply|length) %}
 
                                             <li class="f-single f-s-s">
                                              <div class="f-aside">
                                                <div class="f-user-pto">
-                                                <a href="javascript:" class="f-user-avatar q_namecard f-s-a" style="background-image: url(/profile_img);">
+                                                <a href="javascript:" class="f-user-avatar q_namecard f-s-a" style="background-image: url(/profile_img?email={{post_user_reply[i][1].email}});">
                                                 </a>
                                              </div>
                                              <div class="f-user-info">
                                                 <div class="f-nick">
-                                                   <a class="f-name q_namecard ">{{user_name}}</a>
-                                                   <a href="javascript:"class="f-sign-show state">{{user_role}}</a>
+                                                   <a class="f-name q_namecard ">{{post_user_reply[i][1].name}}</a>
+                                                   <a href="javascript:"class="f-sign-show state">{{post_user_reply[i][1].role}}</a>
                                                 </div>
                                                 <div class="info-detail">
-                                                   <span  class=" ui-mr8 state" >{{posts[i].date}}</span>
+                                                   <span  class=" ui-mr8 state" >{{post_user_reply[i][0].date}}</span>
                                                 </div>
                                              </div>
                                           </div>
                                           <div class="f-wrap">
                                              <div class="f-item f-s-i">
-                                                <div class="f-info">{{posts[i].text}}</div>
+                                                <div class="f-info">{{post_user_reply[i][0].text}}</div>
                                                 <div class="qz_summary wupfeed">
                                                    <div class="f-ct f-ct-b-bg" >
                                                       <div class="f-ct-txtimg">
 
-                                                          {% if posts[i].blob_key_media != None %}
+                                                          {% if post_user_reply[i][0].blob_key_media != None %}
                                                           <audio controls>
 
-                                                       <source src="/view_media/{{posts[i].blob_key_media}}" type="audio/mp3">
+                                                       <source src="/view_media/{{post_user_reply[i][0].blob_key_media}}" type="audio/mp3">
  >
 
                                                           </audio>
@@ -290,8 +224,14 @@
 
                                                          <a href="javascript:;" style="height:30px;" class=" item  "><i class="ui-icon icon-forward"></i>share</a>
                                                          <span class="item-line"></span>
-                                                        <a href="javascript:;" style="height:30px;" class=" item  "><i class="ui-icon icon-praise"></i>like</a>
+                                                        <a onclick="like_icon({{i}});" style="height:30px;" id="like_icon{{i}}" class="item"><i class="ui-icon icon-praise"></i>like ({{post_user_reply[i][0].likes}})</a>
                                                          <span class="item-line"></span>
+                                                        <form id="post_like{{i}}" method="post" action="/like_post">
+                                                          <input type="submit" id="post_like_input_{{i}}" style="display: none;"/>
+                                                        </form>
+                                                       <div type="hidden" style="display:None;" id="post_key_{{i}}">
+                                                           {{post_user_reply[i][0].key.urlsafe()}}
+                                                       </div>
                                                       </p>
                                                       <div class="mod-comments">
                                                             <div class="comments-list ">
@@ -299,15 +239,15 @@
 
 
                                                                <li class="comments-item bor3">
-                                                                   {% for j in range(replies[i]|length) %}
+                                                                   {% for j in range(post_user_reply[i][2]|length) %}
 
 
                                                                   <div class="comments-item-bd">
-                                                                     <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/profile_img" /></a></div>
+                                                                     <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/profile_img?email={{post_user_reply[i][3][j].email}}" /></a></div>
                                                                      <div class="comments-content">
-                                                                        &nbsp;<a class="c_tx q_namecard" href="javascript:;">{{user_name}}</a>&nbsp;: {{replies[i][j].reply}}
+                                                                        &nbsp;<a class="c_tx q_namecard" href="javascript:;">{{post_user_reply[i][3][j].name}}</a>&nbsp;: {{post_user_reply[i][2][j].reply}}
                                                                         <div class="comments-op">
-                                                                            <span  class=" ui-mr10 state" >{{replies[i][j].date}}</span>
+                                                                            <span  class=" ui-mr10 state" >{{post_user_reply[i][2][j].date}}</span>
                                                                             <a class="act-reply" href="javascript:;">
                                                                                 <b class="hide-clip">Reply</b>
                                                                             </a>
@@ -318,7 +258,7 @@
                                                                     {%endfor%}
 
                                                                    <!-- comment box wrap -->
-                                                                   <form id="form_{{i}}" method="post" action="/ajax_reply">
+                                                                   <form id="form_{{i}}" method="post" action="/search_ajax_reply">
 
                                                                    <div class="comment-box-wrap">
                                                                        <div class="qz-poster bg qz-poster-show-setter qz-poster-active">
@@ -429,6 +369,8 @@
            }
        </script>
 
+
+
       <!-- follow -->
       <script type="text/javascript">
        // Attach a submit handler to the form
@@ -457,10 +399,9 @@
 
 
 
-      <script>
+      <script type="text/javascript">
         // Attach a submit handler to the form
         $( "[id^='replyPost_']" ).click(function( event ) {
-
           // Stop form from submitting normally
           event.preventDefault();
 
@@ -468,25 +409,28 @@
 
           // Get some values from elements on the page:
 
-            var term = $("#reply_data_field_" + count).val();
+            var reply_text = $("#reply_data_field_" + count).val();
             var url = $("#form_" + count).attr( "action" );
-            var reply_text  = "reply_text_" + count;
+            var post_key = $("#post_key_" + count).html()
+            var logged_user_email = $("#logged_user_email").html()
+
             var toBackEnd = {};
             toBackEnd["post_nbr"] = count;
-            toBackEnd["reply_text_" + count] = term;
+            toBackEnd["reply_text"] = reply_text;
+            toBackEnd["post_key"] = post_key;
 
           // Send the data using post
 
           var posting = $.post(url, toBackEnd);
           posting.done(function( data ) {
 
-            var post_nbr = data["post_nbr"];
+
             var reply_text = data["reply_text"];
             var date_reply = data["date_reply"];
             var user_name = data["user_name"];
 
             var new_comment = '<div class="comments-item-bd"> \
-             <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/profile_img" /></a></div> \
+             <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/profile_img?email=' + logged_user_email + '"/></a></div> \
              <div class="comments-content"> \
              &nbsp;<a class="c_tx q_namecard" href="javascript:;">' + user_name + '</a>&nbsp;: ' + reply_text + ' \
              <div class="comments-op"> \
@@ -498,8 +442,8 @@
               </div> \
             '
 
-               $( "#form_" + post_nbr).before(new_comment);
-               $("#qz_reply_editor_v4_container" + post_nbr).empty();
+               $( "#form_" + count).before(new_comment);
+               $("#qz_reply_editor_v4_container" + count).empty();
           });
         });
         </script>
@@ -509,6 +453,32 @@
                   var data = document.getElementById("qz_reply_editor_v4_container" + i).textContent;
                   document.getElementById("reply_data_field_" + i).value = data;
                   document.getElementById("replyPost_" + i).click();
+               }
+       </script>
+
+
+      <!-- like post -->
+      <script type="text/javascript">
+       // Attach a submit handler to the form
+        $( "[id^='post_like_input_']" ).click(function( event ) {
+          event.preventDefault();
+          var count = this.id.slice(-1);
+          var post_key = $("#post_key_" + count).html()
+          var url = $("#post_like" + count).attr( "action" );
+          var toBackEnd = {};
+          toBackEnd["post_key"] = post_key;
+          var posting = $.post(url, toBackEnd);
+          posting.done(function( data ) {
+             $("#like_icon" + count).empty();
+             var insert_html = '<i class="ui-icon icon-praise"></i>like (' + data['like_nbr'] + ')';
+             $("#like_icon" + count).html(insert_html);
+          });
+        });
+      </script>
+
+        <script type="text/javascript">
+              function like_icon(i) {
+                  document.getElementById("post_like_input_" + i).click();
                }
        </script>
 
@@ -548,94 +518,7 @@
             });
       </script>
 
-    <script>
-      // Get the template HTML and remove it from the doument
-      var previewNode = document.querySelector("#template");
-      previewNode.id = "";
-      var previewTemplate = previewNode.parentNode.innerHTML;
-      previewNode.parentNode.removeChild(previewNode);
-      var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-        url: '/', // Set the url
-        acceptedFiles: 'audio/*, video/*',
-        maxFilesize: 100,
-        maxFiles: 100,
-        parallelUploads: 100,
-        previewTemplate: previewTemplate,
-        autoQueue: false, // Make sure the files aren't queued until manually added
-        previewsContainer: "#previews", // Define the container to display the previews
-        clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
-      });
-      myDropzone.on("addedfile", function(file) {
-        // Hookup the start button
-          console.log("adding file")
-          file.previewElement.querySelector(".start").onclick = function() {
-              $.ajax({
-                  type: 'POST',                            // http method
-                  url: '/media_url',               // target URL
-                  success: function (serverResp) {          // on ajax success
-                      if (serverResp.code == '200') {
-                          console.log('image added successfully!');
-                          myDropzone.options.url = serverResp.response;
-                          console.log(myDropzone.options.url);
-                          myDropzone.enqueueFile(file);
-                      }
-                      else {
-                          console.log('detective already exists!');
-                      }
-                  },
-                  error: function (serverResp) {            // on ajax failure
-                      console.log('5xx http status code or unexpected response content');
-                  }
-              });
-                console.log("ENQUE file");
-  };
-      });
-      // Update the total progress bar
-      myDropzone.on("totaluploadprogress", function(progress) {
-        document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
-      });
-      myDropzone.on("sending", function(file) {
-        // Show the total progress bar when upload starts
-        document.querySelector("#total-progress").style.opacity = "1";
-        // And disable the start button
-        file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
-      });
-      // Hide the total progress bar when nothing's uploading anymore
-      myDropzone.on("queuecomplete", function(progress) {
-        document.querySelector("#total-progress").style.opacity = "0";
-      });
-      // Setup the buttons for all transfers
-      // The "add files" button doesn't need to be setup because the config
-      // `clickable` has already been specified.
-      document.querySelector("#actions .start").onclick = function() {
-//          myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
-          var i;
-          for (i=0;i<myDropzone.getFilesWithStatus(Dropzone.ADDED).length;i++) {
-              $.ajax({
-                  type: 'POST',                            // http method
-                  url: '/media_url',               // target URL
-                  success: function (serverResp) {          // on ajax success
-                      if (serverResp.code == '200') {
-                          console.log('image added successfully!');
-                          myDropzone.options.url = serverResp.response;
-                          console.log(myDropzone.options.url);
-                          myDropzone.enqueueFile(myDropzone.getFilesWithStatus(Dropzone.ADDED)[0]);
-                          console.log("ENQUE file");
-                      }
-                      else {
-                          console.log('detective already exists!');
-                      }
-                  },
-                  error: function (serverResp) {            // on ajax failure
-                      console.log('5xx http status code or unexpected response content');
-                  }
-              });
-          }
-      };
-          document.querySelector("#actions .cancel").onclick = function () {
-              myDropzone.removeAllFiles(true);
-          };
-    </script>
+
 
 
 
