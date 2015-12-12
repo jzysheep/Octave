@@ -14,7 +14,9 @@ app = webapp2.WSGIApplication([
     ('/search', SearchUser),
     ('/follow', FollowUser),
     ('/profile_img',Image),
-    ('/playlist', Playlist),
-    ('/manage',Manage)
+    ('/playlist', MyPlaylist),
+    ('/manage',Manage),
+    ('/playlist_url',PlaylistUploadFormHandler),
+    ('/PlaylistUpload',PlaylistUploadHandler),
+    ('/create_playlist',Create)
     ], debug=True)
-

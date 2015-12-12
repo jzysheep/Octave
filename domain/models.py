@@ -29,8 +29,9 @@ class User(ndb.Model):
     role = ndb.StringProperty()
     #blob_key_photo=ndb.BlobKeyProperty()
     profile_image= ndb.BlobProperty()
-
     followers = ndb.StringProperty(repeated=True) #Their emails
+
+
 
 class Post(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
@@ -39,6 +40,14 @@ class Post(ndb.Model):
     tags = ndb.StringProperty(repeated=True) # construct entities from the strings
     blob_key_media = ndb.BlobKeyProperty()
     user_key = ndb.KeyProperty(kind=User)
+
+
+
+class Like(ndb.Model):
+    user_key = ndb.KeyProperty(kind=User)
+    post_key = ndb.KeyProperty(kind=Post)
+    likes = ndb.IntegerProperty()
+
 
 class Reply(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
@@ -50,8 +59,14 @@ class Reply(ndb.Model):
 class Playlist(ndb.Model):
     name = ndb.StringProperty()
     user_key = ndb.KeyProperty()
-    media = ndb.BlobKeyProperty(repeated=True)
+    key_media = ndb.BlobKeyProperty(repeated=True)
     privacy = ndb.StringProperty()
+    date_created = ndb.StringProperty()
+    date = ndb.DateTimeProperty(auto_now_add=True)
+    links = ndb.StringProperty(repeated=True)
+    cover_url= ndb.StringProperty()
+    upload_check=ndb.BooleanProperty()
+
 
 class Artist(ndb.Model):
     user = ndb.StructuredProperty(User,repeated=False)

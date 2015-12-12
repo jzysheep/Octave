@@ -222,7 +222,7 @@
 
               $.ajax({
                   type: 'POST',                            // http method
-                  url: '/generate_url',               // target URL
+                  url: '/playlist_url',               // target URL
                   success: function (serverResp) {          // on ajax success
                       if (serverResp.code == '200') {
                           console.log('image added successfully!');
@@ -279,7 +279,7 @@
           for (i=0;i<myDropzone.getFilesWithStatus(Dropzone.ADDED).length;i++) {
               $.ajax({
                   type: 'POST',                            // http method
-                  url: '/generate_url',               // target URL
+                  url: '/playlist_url',               // target URL
                   success: function (serverResp) {          // on ajax success
                       if (serverResp.code == '200') {
                           console.log('image added successfully!');
