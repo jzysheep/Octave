@@ -2,13 +2,7 @@ from domain import *
 from time import strftime
 from google.appengine.api import users
 import webapp2
-from collections import OrderedDict
-import json
-from datetime import datetime, tzinfo,timedelta
-from google.appengine.ext.webapp import blobstore_handlers
-import time
-from google.appengine.ext import blobstore
-from google.appengine.ext.db import GqlQuery
+import heapq
 
 class PopularMusic(webapp2.RequestHandler):
     def get(self):
@@ -37,15 +31,20 @@ class PopularMusic(webapp2.RequestHandler):
                         user_reply.append(reply.user_key.get())
                     post_user_reply.append((post, post_user, post_replies, user_reply, posts_share))
 
+                # You might like section:
+                all_users = User.query().fetch()
+                 # choose top k uses which has the most shared posts
+                top_k_users = heapq.nlargest(8, all_users, key=lambda x: x.num_shared_posts)
 
                 values = {
                     'url_log': url_linktext,
                     'url': url,
                     'post_user_reply': post_user_reply,
                     'logged_user': logged_user_fetch,
+                    'top_k_users': top_k_users
                 }
 
-                template = JINJA_ENVIRONMENT.get_template('buddymusic.html')
+                template = JINJA_ENVIRONMENT.get_template('popularmusic.html')
                 self.response.write(template.render(values))
 
             else:

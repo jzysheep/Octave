@@ -19,6 +19,8 @@ class SharePost(webapp2.RequestHandler):
             if post_key not in logged_user_fetch.shared_posts:
                 logged_user_fetch.shared_posts.append(post_key)
                 logged_user_fetch.put()
+                post_user = post_key.get().user_key.get()
+                post_user.num_shared_posts += 1
             resp['share_status'] = "Shared"
 
             time.sleep(0.1)

@@ -6,6 +6,7 @@ import json
 from datetime import datetime, tzinfo,timedelta
 from google.appengine.ext.webapp import blobstore_handlers
 import time
+import heapq
 from google.appengine.ext import blobstore
 from google.appengine.ext.db import GqlQuery
 
@@ -21,6 +22,11 @@ class MyMusic(webapp2.RequestHandler):
 
             logged_user_query = User.gql("WHERE email =:1 ", logged_user.email())
             logged_user_fetch = logged_user_query.get()
+
+            if logged_user_fetch.role == 'Artist':
+                is_artist = True
+            else:
+                is_artist = False
 
             post_user_reply = []
 
@@ -39,13 +45,20 @@ class MyMusic(webapp2.RequestHandler):
                     user_reply.append(reply.user_key.get())
                 post_user_reply.append((post, post_user, post_replies, user_reply))
 
+            # You might like section:
+            all_users = User.query().fetch()
+             # choose top k uses which has the most shared posts
+            top_k_users = heapq.nlargest(8, all_users, key=lambda x: x.num_shared_posts)
+
 
             values = {
                 'url_log': url_linktext,
                 'url': url,
                 'logged_user': logged_user_fetch,
                 'post_user_reply': post_user_reply,
-                'is_self': True
+                'is_self': True,
+                'is_artist': is_artist,
+                'top_k_users': top_k_users
             }
 
             template = JINJA_ENVIRONMENT.get_template('mymusic.html')

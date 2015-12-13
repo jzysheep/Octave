@@ -219,12 +219,15 @@
                                                          </div>
                                                       </div>
                                                    </div>
+
                                                    <div class="f-op-wrap">
                                                       <p class="f-detail">&nbsp;
+                                                        {% if logged_user.name|string() != post_user_reply[i][1].name|string() %}
 
                                                          <a onclick="share_icon({{i}});" style="height:30px;" id="share_icon{{i}}" class=" item  "><i class="ui-icon icon-forward"></i>{{post_user_reply[i][4]}}</a>
                                                          <span class="item-line"></span>
 
+                                                          {% endif %}
                                                         <a onclick="like_icon({{i}});" style="height:30px;" id="like_icon{{i}}" class="item"><i class="ui-icon icon-praise"></i>like ({{post_user_reply[i][0].likes}})</a>
                                                          <span class="item-line"></span>
                                                         <form id="post_share{{i}}" method="post" action="/share_post">
@@ -274,7 +277,6 @@
                                                                                    <div class="qz-inputer bor2" style="padding-right: 0px;" class="textinput textarea c_tx2">
                                                                                              <div id="qz_reply_editor_v4_container{{i}}" name="reply_text_{{i}}" class="textinput textarea c_tx2" contenteditable="true"></div>
                                                                                             <input type="hidden" name="reply_text_{{i}}" id="reply_data_field_{{i}}"/>
-
                                                                                    </div>
                                                                                 </div>
                                                                              </div>
@@ -326,18 +328,14 @@
                                        <div class="qz-main"><span class="sn-title">You might like:</span></div>
                                     </a>
                                  </li>
+                                  {% for user in top_k_users %}
                                <li type="friend">
-                                    <a href="javascript:;" class="qz-grid">
+                                    <a href="/search?search_str={{user.name}}" class="qz-grid">
                                        <div class="qz-left"><i class="ui-icon sp-friend-feed"></i></div>
-                                       <div class="qz-main"><span class="sn-title">Nima</span></div>
+                                       <div class="qz-main"><span class="sn-title">{{user.name}}</span></div>
                                     </a>
                                  </li>
-                                 <li type="friend">
-                                    <a href="javascript:;" class="qz-grid">
-                                       <div class="qz-left"><i class="ui-icon sp-friend-feed"></i></div>
-                                       <div class="qz-main"><span class="sn-title">Kevin</span></div>
-                                    </a>
-                                 </li>
+                                    {% endfor %}
                               </ul>
                            </div>
                         </div>

@@ -8,6 +8,10 @@
       <title>mymusic</title>
        <link type="text/css" rel="stylesheet" href="/bootstrap33/dist/css/bootstrap.css" />
       <link  type="text/css" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css" rel="stylesheet"/>
+
+
+
+
       <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
       <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
@@ -290,9 +294,21 @@
                                                    </div>
                                                    <div class="f-op-wrap">
                                                       <p class="f-detail">&nbsp;
+                                                          {% if is_artist %}
+
+                                                          <a onclick="promote_icon({{i}});" style="height:30px;" id="promote_icon{{i}}" class="item"><i class="ui-icon icon-feed-collect"></i>Promote</a>
+                                                         <span class="item-line"></span>
+                                                          {% endif %}
 
                                                         <a onclick="like_icon({{i}});" style="height:30px;" id="like_icon{{i}}" class="item"><i class="ui-icon icon-praise"></i>like ({{post_user_reply[i][0].likes}})</a>
                                                          <span class="item-line"></span>
+
+
+                                                       <form id="post_promote{{i}}" method="post" action="/promote_post">
+                                                          <input type="submit" id="promote_like_input_{{i}}" style="display: none;"/>
+                                                        </form>
+
+
                                                         <form id="post_like{{i}}" method="post" action="/like_post">
                                                           <input type="submit" id="post_like_input_{{i}}" style="display: none;"/>
                                                         </form>
@@ -389,18 +405,14 @@
                                        <div class="qz-main"><span class="sn-title">You might like:</span></div>
                                     </a>
                                  </li>
+                                  {% for user in top_k_users %}
                                <li type="friend">
-                                    <a href="javascript:;" class="qz-grid">
+                                    <a href="/search?search_str={{user.name}}" class="qz-grid">
                                        <div class="qz-left"><i class="ui-icon sp-friend-feed"></i></div>
-                                       <div class="qz-main"><span class="sn-title">Nima</span></div>
+                                       <div class="qz-main"><span class="sn-title">{{user.name}}</span></div>
                                     </a>
                                  </li>
-                                 <li type="friend">
-                                    <a href="javascript:;" class="qz-grid">
-                                       <div class="qz-left"><i class="ui-icon sp-friend-feed"></i></div>
-                                       <div class="qz-main"><span class="sn-title">Kevin</span></div>
-                                    </a>
-                                 </li>
+                                    {% endfor %}
                               </ul>
                            </div>
                         </div>
@@ -420,6 +432,7 @@
         <script type='text/javascript' src="/assets/js/jquery-2.1.4.js"></script>
 
 
+
       <script type="text/javascript">
            function chooseFile() {
               document.getElementById("fileInput").click();
@@ -436,6 +449,19 @@
            }
        </script>
 
+      <script type="text/javascript">
+       // Attach a submit handler to the form
+        $( "[id^='promote_like_input_']" ).click(function( event ) {
+          event.preventDefault();
+          alert("entered")
+        });
+      </script>
+
+        <script type="text/javascript">
+              function promote_icon(i) {
+                  document.getElementById("promote_like_input_" + i).click();
+               }
+       </script>
       <!-- like post -->
       <script type="text/javascript">
        // Attach a submit handler to the form

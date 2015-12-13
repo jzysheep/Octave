@@ -29,7 +29,8 @@ class User(ndb.Model):
     role = ndb.StringProperty()
     profile_image= ndb.BlobProperty()
     followers = ndb.StringProperty(repeated=True) #Their emails
-    shared_posts = ndb.KeyProperty(repeated=True)
+    shared_posts = ndb.KeyProperty(repeated=True) # share other people's posts
+    num_shared_posts = ndb.IntegerProperty(default=1) # number of posts shared by other people
 
 class Post(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
