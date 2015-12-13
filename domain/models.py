@@ -27,11 +27,9 @@ class User(ndb.Model):
     name = ndb.StringProperty()
     signature = ndb.StringProperty()
     role = ndb.StringProperty()
-    #blob_key_photo=ndb.BlobKeyProperty()
     profile_image= ndb.BlobProperty()
     followers = ndb.StringProperty(repeated=True) #Their emails
-
-
+    shared_posts = ndb.KeyProperty(repeated=True)
 
 class Post(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
@@ -39,20 +37,12 @@ class Post(ndb.Model):
     text = ndb.StringProperty()
     tags = ndb.StringProperty(repeated=True) # construct entities from the strings
     blob_key_media = ndb.BlobKeyProperty()
-    user_key = ndb.KeyProperty(kind=User)
+    user_key = ndb.KeyProperty()
     likes = ndb.IntegerProperty()
 
 class Like(ndb.Model):
     user_key = ndb.KeyProperty(kind=User)
     post_key = ndb.KeyProperty(kind=Post)
-
-
-
-class Like(ndb.Model):
-    user_key = ndb.KeyProperty(kind=User)
-    post_key = ndb.KeyProperty(kind=Post)
-    likes = ndb.IntegerProperty()
-
 
 class Reply(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)

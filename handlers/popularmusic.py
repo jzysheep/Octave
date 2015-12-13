@@ -10,7 +10,7 @@ import time
 from google.appengine.ext import blobstore
 from google.appengine.ext.db import GqlQuery
 
-class BuddyMusic(webapp2.RequestHandler):
+class PopularMusic(webapp2.RequestHandler):
     def get(self):
         logged_user = users.get_current_user()
         if not logged_user:
@@ -20,16 +20,11 @@ class BuddyMusic(webapp2.RequestHandler):
             logged_user_fetch = logged_user_query.get()
             url = users.create_logout_url('/')
             url_linktext = 'Logout'
-            followed_user_query = User.query(User.followers == logged_user.email())
-            followed_user_fetch = followed_user_query.fetch()
-            unordered_posts = []
+            unordered_posts = Post.query().fetch()
             post_user_reply = []
 
-            if followed_user_fetch:
-                is_self = False
-                for user_item in followed_user_fetch:
-                    unordered_posts.extend(Post.query(Post.user_key == user_item.key).fetch())
-                unordered_posts.sort(key=lambda x: x.date, reverse=True)
+            if unordered_posts:
+                unordered_posts.sort(key=lambda x: x.likes, reverse=True)
                 for post in unordered_posts:
                     if post.key in logged_user_fetch.shared_posts:
                         posts_share = "Shared"
@@ -43,13 +38,11 @@ class BuddyMusic(webapp2.RequestHandler):
                     post_user_reply.append((post, post_user, post_replies, user_reply, posts_share))
 
 
-
                 values = {
                     'url_log': url_linktext,
                     'url': url,
                     'post_user_reply': post_user_reply,
                     'logged_user': logged_user_fetch,
-                    'is_self': is_self
                 }
 
                 template = JINJA_ENVIRONMENT.get_template('buddymusic.html')

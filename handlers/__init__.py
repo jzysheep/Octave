@@ -9,3 +9,5 @@ from .search import SearchUser, SearchAutoComplete, SearchReplyHandlerAjax
 from .follow import FollowUser
 from .buddymusic import BuddyMusic
 from .likepost import LikePost
+from .sharepost import SharePost
+from .popularmusic import PopularMusic

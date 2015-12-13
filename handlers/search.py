@@ -7,43 +7,43 @@ from google.appengine.api import users, search
 
 class SearchUser(webapp2.RequestHandler):
     def get(self):
-        user = users.get_current_user()
-        if not user:
+        logged_user = users.get_current_user()
+        if not logged_user:
             self.redirect(users.create_login_url(self.request.uri))
         else:
             url = users.create_logout_url('/')
             url_linktext = 'Logout'
             search_str = self.request.get("search_str").strip()
             user_query = User.query(User.name == search_str)
+            logged_user_query = User.gql("WHERE email =:1 ", logged_user.email())
+            logged_user_fetch = logged_user_query.get()
             searched_user = user_query.get()
             post_user_reply = []
-            user_reply = []
 
             if searched_user:
-                if user.email() == searched_user.email:
+                if logged_user.email() == searched_user.email:
                     is_self = True
                 else:
                     is_self = False
                 posts = Post.query(Post.user_key == searched_user.key).order(-Post.date).fetch()
                 for post in posts:
+                    if post.key in logged_user_fetch.shared_posts:
+                        posts_share = "Shared"
+                    else:
+                        posts_share = "Share"
                     post_user = post.user_key.get()
                     post_replies = Reply.query(Reply.post_key == post.key).order(Reply.date).fetch()
+                    user_reply = []
                     for reply in post_replies:
                         user_reply.append(reply.user_key.get())
-                        # print "reply" + reply.reply
-                        # print "user" + reply.user_key.get().name
-                    post_user_reply.append((post, post_user, post_replies, user_reply))
+                    post_user_reply.append((post, post_user, post_replies, user_reply, posts_share))
 
                 for i in range(len(post_user_reply)):
                     for j in range(len(post_user_reply[i][2])):
                         print "reply " + post_user_reply[i][2][j].reply
                         print "user " + post_user_reply[i][3][j].name
-                if not searched_user.signature:
-                    user_signature = ""
-                else:
-                    user_signature = searched_user.signature
 
-                if user.email() in searched_user.followers:
+                if logged_user.email() in searched_user.followers:
                     follow_button = "Unfollow"
                 else:
                     follow_button = "Follow"
@@ -54,7 +54,7 @@ class SearchUser(webapp2.RequestHandler):
                     'url': url,
                     'post_user_reply': post_user_reply,
                     'searched_user': searched_user,
-                    'logged_user': User.gql("WHERE email =:1", user.email()).get(),
+                    'logged_user': User.gql("WHERE email =:1", logged_user.email()).get(),
                     'is_self': is_self,
                     'follow_button': follow_button
                 }

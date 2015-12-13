@@ -3,7 +3,7 @@
    <head>
       <meta charset="UTF-8" />
       <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-      <title>mymusic</title>
+      <title>buddymusic</title>
 
       <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
       <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
@@ -181,12 +181,12 @@
                                             <li class="f-single f-s-s">
                                              <div class="f-aside">
                                                <div class="f-user-pto">
-                                                <a href="javascript:" class="f-user-avatar q_namecard f-s-a" style="background-image: url(/profile_img?email={{post_user_reply[i][1].email}});">
+                                                <a href="/search?search_str={{post_user_reply[i][1].name}}" class="f-user-avatar q_namecard f-s-a" style="background-image: url(/profile_img?email={{post_user_reply[i][1].email}});">
                                                 </a>
                                              </div>
                                              <div class="f-user-info">
                                                 <div class="f-nick">
-                                                   <a class="f-name q_namecard ">{{post_user_reply[i][1].name}}</a>
+                                                   <a href="/search?search_str={{post_user_reply[i][1].name}}" class="f-name q_namecard ">{{post_user_reply[i][1].name}}</a>
                                                    <a href="javascript:"class="f-sign-show state">{{post_user_reply[i][1].role}}</a>
                                                 </div>
                                                 <div class="info-detail">
@@ -222,10 +222,14 @@
                                                    <div class="f-op-wrap">
                                                       <p class="f-detail">&nbsp;
 
-                                                         <a href="javascript:;" style="height:30px;" class=" item  "><i class="ui-icon icon-forward"></i>share</a>
+                                                         <a onclick="share_icon({{i}});" style="height:30px;" id="share_icon{{i}}" class=" item  "><i class="ui-icon icon-forward"></i>{{post_user_reply[i][4]}}</a>
                                                          <span class="item-line"></span>
+
                                                         <a onclick="like_icon({{i}});" style="height:30px;" id="like_icon{{i}}" class="item"><i class="ui-icon icon-praise"></i>like ({{post_user_reply[i][0].likes}})</a>
                                                          <span class="item-line"></span>
+                                                        <form id="post_share{{i}}" method="post" action="/share_post">
+                                                          <input type="submit" id="post_share_input_{{i}}" style="display: none;"/>
+                                                        </form>
                                                         <form id="post_like{{i}}" method="post" action="/like_post">
                                                           <input type="submit" id="post_like_input_{{i}}" style="display: none;"/>
                                                         </form>
@@ -243,9 +247,9 @@
 
 
                                                                   <div class="comments-item-bd">
-                                                                     <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/profile_img?email={{post_user_reply[i][3][j].email}}" /></a></div>
+                                                                     <div class="ui-avatar"><a href="/search?search_str={{post_user_reply[i][3][j].name}}"><img class="q_namecard" src="/profile_img?email={{post_user_reply[i][3][j].email}}" /></a></div>
                                                                      <div class="comments-content">
-                                                                        &nbsp;<a class="c_tx q_namecard" href="javascript:;">{{post_user_reply[i][3][j].name}}</a>&nbsp;: {{post_user_reply[i][2][j].reply}}
+                                                                        &nbsp;<a class="c_tx q_namecard" href="/search?search_str={{post_user_reply[i][3][j].name}}">{{post_user_reply[i][3][j].name}}</a>&nbsp;: {{post_user_reply[i][2][j].reply}}
                                                                         <div class="comments-op">
                                                                             <span  class=" ui-mr10 state" >{{post_user_reply[i][2][j].date}}</span>
                                                                             <a class="act-reply" href="javascript:;">
@@ -411,8 +415,8 @@
 
             var reply_text = $("#reply_data_field_" + count).val();
             var url = $("#form_" + count).attr( "action" );
-            var post_key = $("#post_key_" + count).html()
-            var logged_user_email = $("#logged_user_email").html()
+            var post_key = $("#post_key_" + count).html();
+            var logged_user_email = $("#logged_user_email").html();
 
             var toBackEnd = {};
             toBackEnd["post_nbr"] = count;
@@ -453,6 +457,30 @@
                   var data = document.getElementById("qz_reply_editor_v4_container" + i).textContent;
                   document.getElementById("reply_data_field_" + i).value = data;
                   document.getElementById("replyPost_" + i).click();
+               }
+       </script>
+      <!-- share post -->
+      <script type="text/javascript">
+       // Attach a submit handler to the form
+        $( "[id^='post_share_input_']" ).click(function( event ) {
+          event.preventDefault();
+          var count = this.id.slice(-1);
+          var post_key = $("#post_key_" + count).html()
+          var url = $("#post_share" + count).attr( "action" );
+          var toBackEnd = {};
+          toBackEnd["post_key"] = post_key;
+          var posting = $.post(url, toBackEnd);
+          posting.done(function( data ) {
+             $("#share_icon" + count).empty();
+             var insert_html = '<i class="ui-icon icon-forward"></i>' + data['share_status']
+             $("#share_icon" + count).html(insert_html);
+          });
+        });
+      </script>
+
+        <script type="text/javascript">
+              function share_icon(i) {
+                  document.getElementById("post_share_input_" + i).click();
                }
        </script>
 
