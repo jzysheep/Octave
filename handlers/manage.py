@@ -4,7 +4,7 @@ from google.appengine.api import users
 from google.appengine.ext.webapp import blobstore_handlers
 import time
 from google.appengine.ext import blobstore
-
+import json
             
 class Manage(webapp2.RequestHandler):
     def get(self):
@@ -37,23 +37,54 @@ class Manage(webapp2.RequestHandler):
 
 
 
-            links_uploaded=[]
+            links_audio=[]
+            links_video=[]
+            name_audio=[]
+            name_video=[]
 
             for key in playlist.key_media:
-                links_uploaded.append(key)
+                media_query = Media.gql("WHERE key_media = :1", key)
+                media=media_query.get()
+                if media.media_type=='audio':
+                    links_audio.append(str(key))
+                    name_audio.append(media.name)
+
+                else:
+                    links_video.append(str(key))
+                    name_video.append(media.name)
+
+
+            for link in links_audio:
+                link.decode("utf8")
+
+            for link in links_video:
+                link.decode("utf8")
+
+            for name in name_audio:
+                name.decode("utf8")
+
+            for name in name_video:
+                name.decode("utf8")
+
+
 
             values={
                'url_log':url_linktext,
                'url':url,
-               'links_uploaded':links_uploaded,
+               'links_audio':json.dumps(links_audio),
+               'links_video':json.dumps(links_video),
                'playlist_name':playlist.name,
                'playlist_cover':playlist.cover_url,
-               'media_name':playlist.media_name
+               'name_audio':json.dumps(name_audio),
+               'name_video':json.dumps(name_video),
+               'size_audio':links_audio.__len__(),
+               'size_video':links_video.__len__()
+
                 }
 
 
 
-            template = JINJA_ENVIRONMENT.get_template('manage.html')
+            template = JINJA_ENVIRONMENT.get_template('jplayer.html')
             self.response.write(template.render(values))
 
 

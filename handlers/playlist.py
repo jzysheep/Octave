@@ -4,7 +4,7 @@ from google.appengine.api import users
 from time import strftime
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.ext import blobstore
-
+import re
 import time
 class MyPlaylist(webapp2.RequestHandler):
     def get(self):
@@ -115,8 +115,13 @@ class PlaylistUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         #     else:
 
         blob_info = blobstore.BlobInfo.get(upload.key())
+        filename=blob_info.filename
+        if '.mp3' in filename:
+            type='audio'
+        else:
+            type='video'
 
-        media=Media(name=blob_info.filename,key_media=upload.key(),upload_check=True,date_created=now_string)
+        media=Media(name=filename,key_media=upload.key(),upload_check=True,date_created=now_string,media_type=type)
         media.put()
 
 
