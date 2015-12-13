@@ -250,6 +250,14 @@
        </script>
 
       <script>
+          function sleep(milliseconds) {
+              var start = new Date().getTime();
+              for (var i = 0; i < 1e7; i++) {
+                if ((new Date().getTime() - start) > milliseconds){
+                  break;
+                }
+              }
+            }
       // Get the template HTML and remove it from the doument
       var previewNode = document.querySelector("#template");
       var filename;
@@ -272,11 +280,13 @@
 
       myDropzone.on("addedfile", function(file) {
         // Hookup the start button
-          filename = file.name.substring(0,file.name.lastIndexOf('.'));
-          console.log(filename);
 
           console.log("adding file")
+
           file.previewElement.querySelector(".start").onclick = function() {
+
+              filename = file.name.substring(0,file.name.lastIndexOf('.'));
+              console.log(filename);
 
               $.ajax({
                   type: 'POST',                            // http method
@@ -331,13 +341,14 @@
       document.querySelector("#actions .start").onclick = function() {
 
 //          myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
-
           var i;
+
+          filename=myDropzone.files;
 
           for (i=0;i<myDropzone.getFilesWithStatus(Dropzone.ADDED).length;i++) {
               $.ajax({
                   type: 'POST',                            // http method
-                  url: '/playlist_url?media_name=' + filename,               // target URL
+                  url: '/playlist_url?media_name=' + filename[i].name.substring(0,filename[i].name.lastIndexOf('.')),               // target URL
                   success: function (serverResp) {          // on ajax success
                       if (serverResp.code == '200') {
                           console.log('image added successfully!');

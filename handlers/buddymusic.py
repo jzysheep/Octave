@@ -23,7 +23,6 @@ class BuddyMusic(webapp2.RequestHandler):
             followed_user_fetch = followed_user_query.fetch()
             unordered_posts = []
             post_user_reply = []
-            user_reply = []
 
             if followed_user_fetch:
                 is_self = False
@@ -33,8 +32,10 @@ class BuddyMusic(webapp2.RequestHandler):
                 for post in unordered_posts:
                     post_user = post.user_key.get()
                     post_replies = Reply.query(Reply.post_key == post.key).order(Reply.date).fetch()
+                    user_reply=[]
                     for reply in post_replies:
                         user_reply.append(reply.user_key.get())
+
                     post_user_reply.append((post, post_user, post_replies, user_reply))
 
                 if not logged_user.signature:

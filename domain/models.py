@@ -15,8 +15,9 @@ class Media(ndb.Model):
     media_nbr = ndb.IntegerProperty()
     upload_check=ndb.BooleanProperty()
     key_media = ndb.BlobKeyProperty()
-    name=ndb.StringProperty()
-
+    name = ndb.StringProperty()
+    date = ndb.DateTimeProperty(auto_now_add=True)
+    uploaded=ndb.BooleanProperty()
 
 class Tag(ndb.Model):
     name = ndb.StringProperty()
@@ -48,13 +49,6 @@ class Like(ndb.Model):
     post_key = ndb.KeyProperty(kind=Post)
 
 
-
-class Like(ndb.Model):
-    user_key = ndb.KeyProperty(kind=User)
-    post_key = ndb.KeyProperty(kind=Post)
-    likes = ndb.IntegerProperty()
-
-
 class Reply(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
     user_key = ndb.KeyProperty(kind=User)
@@ -72,6 +66,7 @@ class Playlist(ndb.Model):
     links = ndb.StringProperty(repeated=True)
     cover_url= ndb.StringProperty()
     upload_check=ndb.BooleanProperty()
+    media_name=ndb.StringProperty(repeated=True)
 
 
 class Artist(ndb.Model):

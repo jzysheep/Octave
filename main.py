@@ -13,13 +13,13 @@ app = webapp2.WSGIApplication([
     ('/search', SearchUser),
     ('/follow', FollowUser),
     ('/profile_img',Image),
-    ('/playlist', Playlist),
+    ('/playlist', MyPlaylist),
     ('/manage', Manage),
     ('/autocomplete', SearchAutoComplete),
     ('/like_post', LikePost),
     ('/buddymusic', BuddyMusic),
-  ('/playlist_url',PlaylistUploadFormHandler),
-  ('/PlaylistUpload',PlaylistUploadHandler),
+    ('/playlist_url',PlaylistUploadFormHandler),
+    ('/PlaylistUpload',PlaylistUploadHandler),
     ('/create_playlist',Create)
     ], debug=True)
 

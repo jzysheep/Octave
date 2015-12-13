@@ -153,7 +153,7 @@
         </div>
         <ul class="playlist">
             {% for media_nbr in range(links_uploaded|length) %}
-                <li audiourl="/view_media/{{links_uploaded[media_nbr]  }}" ><b>{{playlist_name}}</b></li>
+                <li audiourl="/view_media/{{links_uploaded[media_nbr]  }}" ><b>{{media_name[media_nbr]}}</b></li>
             {% endfor %}
         </ul>
     </div>
@@ -178,13 +178,20 @@
             <span>Cancel upload</span>
         </button>
 
+        <button class="btn btn-info" style="margin-bottom:20px;">
+            <a href="/manage?playlist={{playlist_name}}" style="text-decoration:none;"><span>Update Playlist</span> </a>
+        </button>
+
+
         <!-- The global file processing state -->
         <span class="fileupload-process">
           <div id="total-progress" class=" progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:30%;">
             <div class="progress-bar progress-bar-success" style="width:0%" data-dz-uploadprogress></div>
           </div>
         </span>
-        </div>
+
+
+    </div>
 
 
 
