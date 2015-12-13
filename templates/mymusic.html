@@ -8,6 +8,10 @@
       <title>mymusic</title>
        <link type="text/css" rel="stylesheet" href="/bootstrap33/dist/css/bootstrap.css" />
       <link  type="text/css" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css" rel="stylesheet"/>
+
+
+
+
       <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
       <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
@@ -46,6 +50,8 @@
    </head>
 
    <body class="bg-body">
+         <!-- hidden input -->
+      <div type="hidden" id="logged_user_email">{{logged_user.email}}</div>
       <!-- nav bar -->
       <div class="top-fix-bar">
          <div class="top-fix-inner" >
@@ -116,21 +122,13 @@
                   <h1 class="head-title" id="top_head_title"><span class="title-text ui-mr5">Octave</span>
                   </h1>
                   <div class="head-description">
-                     <span class="description-text" id="QZ_Space_Desc">{{user_signature}}</span>
+                     <span class="description-text" id="QZ_Space_Desc">{{logged_user.signature}}</span>
                   </div>
                </div>
                <div class="head-detail">
                   <div class="head-detail-name">
-                     <span class="user-name textoverflow">{{user_name}}</span>
+                     <span class="user-name textoverflow">{{logged_user.name}}</span>
                   </div>
-                   {% if not is_self %}
-                   <form method="post" id="form_follow" action="/follow">
-                       <button id="follow_button" class="poster-skin-box">
-                            {{follow_button}}
-                        </button>
-                       <div style="display:None" id="user_key">{{user_key.urlsafe()}}</div>
-                   </form>
-                   {% endif %}
                </div>
 
             </div>
@@ -140,8 +138,8 @@
                <div class="head-avatar">
                   <a href="javascript:;">
                      <div class="head-dress"></div>
-                     <img src="/profile_img?email={{user_email}}" class="user-avatar"  />
-                      <div type="hidden" id="user_email">{{user_email}}</div>
+                     <img src="/profile_img?email={{logged_user.email}}" class="user-avatar"  />
+                      <div type="hidden" id="user_email">{{logged_user.email}}</div>
                   </a>
                </div>
             </div>
@@ -151,7 +149,6 @@
                <div id="pageContent" class="layout-page clearfix">
                   <div id="main_feed_container" class="col-main ">
                      <div class="col-main-feed">
-                        {% if is_self %}
 
                          <form enctype="multipart/form-data" method="post" action="/MyMusic">
 
@@ -208,7 +205,6 @@
                                           </div>
 
                                         </div>
-                            {% endif %}
 
 
                                     <div class="table table-striped" class="files" id="previews" style="display: none;">
@@ -253,35 +249,35 @@
                                  <div class="feed_inner">
                                     <ul id="feed_friend_list">
 
-                                        {% for i in range(posts|length) %}
+                                        {% for i in range(post_user_reply|length) %}
 
                                             <li class="f-single f-s-s">
                                              <div class="f-aside">
                                                <div class="f-user-pto">
-                                                <a href="javascript:" class="f-user-avatar q_namecard f-s-a" style="background-image: url(/profile_img?email={{user_email}});">
+                                                <a href="/search?search_str={{post_user_reply[i][1].name}}" class="f-user-avatar q_namecard f-s-a" style="background-image: url(/profile_img?email={{post_user_reply[i][1].email}});">
                                                 </a>
                                              </div>
                                              <div class="f-user-info">
                                                 <div class="f-nick">
-                                                   <a class="f-name q_namecard ">{{user_name}}</a>
-                                                   <a href="javascript:"class="f-sign-show state">{{user_role}}</a>
+                                                   <a href="/search?search_str={{post_user_reply[i][1].name}}" class="f-name q_namecard ">{{post_user_reply[i][1].name}}</a>
+                                                   <a href="javascript:"class="f-sign-show state">{{post_user_reply[i][1].role}}</a>
                                                 </div>
                                                 <div class="info-detail">
-                                                   <span  class=" ui-mr8 state" >{{posts[i].date}}</span>
+                                                   <span  class=" ui-mr8 state" >{{post_user_reply[i][0].date}}</span>
                                                 </div>
                                              </div>
                                           </div>
                                           <div class="f-wrap">
                                              <div class="f-item f-s-i">
-                                                <div class="f-info">{{posts[i].text}}</div>
+                                                <div class="f-info">{{post_user_reply[i][0].text}}</div>
                                                 <div class="qz_summary wupfeed">
                                                    <div class="f-ct f-ct-b-bg" >
                                                       <div class="f-ct-txtimg">
 
-                                                          {% if posts[i].blob_key_media != None %}
+                                                          {% if post_user_reply[i][0].blob_key_media != None %}
                                                           <audio controls>
 
-                                                       <source src="/view_media/{{posts[i].blob_key_media}}" type="audio/mp3">
+                                                       <source src="/view_media/{{post_user_reply[i][0].blob_key_media}}" type="audio/mp3">
  >
 
                                                           </audio>
@@ -298,14 +294,27 @@
                                                    </div>
                                                    <div class="f-op-wrap">
                                                       <p class="f-detail">&nbsp;
-                                                          {% if not is_self %}
+                                                          {% if is_artist %}
 
-                                                         <a href="javascript:;" style="height:30px;" class=" item  "><i class="ui-icon icon-forward"></i>share</a>
+                                                          <a onclick="promote_icon({{i}});" style="height:30px;" id="promote_icon{{i}}" class="item"><i class="ui-icon icon-feed-collect"></i>Promote</a>
                                                          <span class="item-line"></span>
-                                                        <a href="javascript:;" style="height:30px;" class=" item  "><i class="ui-icon icon-praise"></i>like</a>
-                                                         <span class="item-line"></span>
-
                                                           {% endif %}
+
+                                                        <a onclick="like_icon({{i}});" style="height:30px;" id="like_icon{{i}}" class="item"><i class="ui-icon icon-praise"></i>like ({{post_user_reply[i][0].likes}})</a>
+                                                         <span class="item-line"></span>
+
+
+                                                       <form id="post_promote{{i}}" method="post" action="/promote_post">
+                                                          <input type="submit" id="promote_like_input_{{i}}" style="display: none;"/>
+                                                        </form>
+
+
+                                                        <form id="post_like{{i}}" method="post" action="/like_post">
+                                                          <input type="submit" id="post_like_input_{{i}}" style="display: none;"/>
+                                                        </form>
+                                                       <div type="hidden" style="display:None;" id="post_key_{{i}}">
+                                                           {{post_user_reply[i][0].key.urlsafe()}}
+                                                       </div>
                                                       </p>
                                                       <div class="mod-comments">
                                                             <div class="comments-list ">
@@ -313,15 +322,15 @@
 
 
                                                                <li class="comments-item bor3">
-                                                                   {% for j in range(replies[i]|length) %}
+                                                                   {% for j in range(post_user_reply[i][2]|length) %}
 
 
                                                                   <div class="comments-item-bd">
-                                                                     <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/profile_img?email={{user_email}}" /></a></div>
+                                                                     <div class="ui-avatar"><a href="/search?search_str={{post_user_reply[i][3][j].name}}"><img class="q_namecard" src="/profile_img?email={{post_user_reply[i][3][j].email}}" /></a></div>
                                                                      <div class="comments-content">
-                                                                        &nbsp;<a class="c_tx q_namecard" href="javascript:;">{{user_name}}</a>&nbsp;: {{replies[i][j].reply}}
+                                                                        &nbsp;<a class="c_tx q_namecard" href="/search?search_str={{post_user_reply[i][3][j].name}}">{{post_user_reply[i][3][j].name}}</a>&nbsp;: {{post_user_reply[i][2][j].reply}}
                                                                         <div class="comments-op">
-                                                                            <span  class=" ui-mr10 state" >{{replies[i][j].date}}</span>
+                                                                            <span  class=" ui-mr10 state" >{{post_user_reply[i][2][j].date}}</span>
                                                                             <a class="act-reply" href="javascript:;">
                                                                                 <b class="hide-clip">Reply</b>
                                                                             </a>
@@ -332,7 +341,7 @@
                                                                     {%endfor%}
 
                                                                    <!-- comment box wrap -->
-                                                                   <form id="form_{{i}}" method="post" action="/ajax_reply">
+                                                                   <form id="form_{{i}}" method="post" action="/search_ajax_reply">
 
                                                                    <div class="comment-box-wrap">
                                                                        <div class="qz-poster bg qz-poster-show-setter qz-poster-active">
@@ -396,18 +405,14 @@
                                        <div class="qz-main"><span class="sn-title">You might like:</span></div>
                                     </a>
                                  </li>
+                                  {% for user in top_k_users %}
                                <li type="friend">
-                                    <a href="javascript:;" class="qz-grid">
+                                    <a href="/search?search_str={{user.name}}" class="qz-grid">
                                        <div class="qz-left"><i class="ui-icon sp-friend-feed"></i></div>
-                                       <div class="qz-main"><span class="sn-title">Nima</span></div>
+                                       <div class="qz-main"><span class="sn-title">{{user.name}}</span></div>
                                     </a>
                                  </li>
-                                 <li type="friend">
-                                    <a href="javascript:;" class="qz-grid">
-                                       <div class="qz-left"><i class="ui-icon sp-friend-feed"></i></div>
-                                       <div class="qz-main"><span class="sn-title">Kevin</span></div>
-                                    </a>
-                                 </li>
+                                    {% endfor %}
                               </ul>
                            </div>
                         </div>
@@ -427,6 +432,7 @@
         <script type='text/javascript' src="/assets/js/jquery-2.1.4.js"></script>
 
 
+
       <script type="text/javascript">
            function chooseFile() {
               document.getElementById("fileInput").click();
@@ -443,38 +449,47 @@
            }
        </script>
 
-      <!-- follow -->
       <script type="text/javascript">
        // Attach a submit handler to the form
-        $( "[id^='follow_button']" ).click(function( event ) {
-
-          // Stop form from submitting normally
+        $( "[id^='promote_like_input_']" ).click(function( event ) {
           event.preventDefault();
+          alert("entered")
+        });
+      </script>
 
-          // Get some values from elements on the page:
-
-            var user_key = $("#user_key").html();
-            var url = $("#form_follow").attr( "action" );
-            var toBackEnd = {};
-
-            toBackEnd["user_key"] = user_key;
-
-          // Send the data using post
-
+        <script type="text/javascript">
+              function promote_icon(i) {
+                  document.getElementById("promote_like_input_" + i).click();
+               }
+       </script>
+      <!-- like post -->
+      <script type="text/javascript">
+       // Attach a submit handler to the form
+        $( "[id^='post_like_input_']" ).click(function( event ) {
+          event.preventDefault();
+          var count = this.id.slice(-1);
+          var post_key = $("#post_key_" + count).html()
+          var url = $("#post_like" + count).attr( "action" );
+          var toBackEnd = {};
+          toBackEnd["post_key"] = post_key;
           var posting = $.post(url, toBackEnd);
           posting.done(function( data ) {
-            var follow_button = data["follow_button"];
-            $("#follow_button").html(follow_button);
+             $("#like_icon" + count).empty();
+             var insert_html = '<i class="ui-icon icon-praise"></i>like (' + data['like_nbr'] + ')';
+             $("#like_icon" + count).html(insert_html);
           });
         });
       </script>
 
+        <script type="text/javascript">
+              function like_icon(i) {
+                  document.getElementById("post_like_input_" + i).click();
+               }
+       </script>
 
-
-      <script>
+       <script type="text/javascript">
         // Attach a submit handler to the form
         $( "[id^='replyPost_']" ).click(function( event ) {
-
           // Stop form from submitting normally
           event.preventDefault();
 
@@ -482,24 +497,28 @@
 
           // Get some values from elements on the page:
 
-            var term = $("#reply_data_field_" + count).val();
+            var reply_text = $("#reply_data_field_" + count).val();
             var url = $("#form_" + count).attr( "action" );
-            var reply_text  = "reply_text_" + count;
+            var post_key = $("#post_key_" + count).html()
+            var logged_user_email = $("#logged_user_email").html()
+
             var toBackEnd = {};
             toBackEnd["post_nbr"] = count;
-            toBackEnd["reply_text_" + count] = term;
+            toBackEnd["reply_text"] = reply_text;
+            toBackEnd["post_key"] = post_key;
+
           // Send the data using post
 
           var posting = $.post(url, toBackEnd);
           posting.done(function( data ) {
 
-            var post_nbr = data["post_nbr"];
+
             var reply_text = data["reply_text"];
             var date_reply = data["date_reply"];
             var user_name = data["user_name"];
-            var user_email = $("#user_email").html();
+
             var new_comment = '<div class="comments-item-bd"> \
-             <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/profile_img?email=' + user_email + '"/></a></div> \
+             <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/profile_img?email=' + logged_user_email + '"/></a></div> \
              <div class="comments-content"> \
              &nbsp;<a class="c_tx q_namecard" href="javascript:;">' + user_name + '</a>&nbsp;: ' + reply_text + ' \
              <div class="comments-op"> \
@@ -510,8 +529,9 @@
               </div> \
               </div> \
             '
-               $( "#form_" + post_nbr).before(new_comment);
-               $("#qz_reply_editor_v4_container" + post_nbr).empty();
+
+               $( "#form_" + count).before(new_comment);
+               $("#qz_reply_editor_v4_container" + count).empty();
           });
         });
         </script>

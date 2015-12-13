@@ -6,47 +6,59 @@ import json
 from datetime import datetime, tzinfo,timedelta
 from google.appengine.ext.webapp import blobstore_handlers
 import time
+import heapq
 from google.appengine.ext import blobstore
 from google.appengine.ext.db import GqlQuery
 
 class MyMusic(webapp2.RequestHandler):
     def get(self):
-        user = users.get_current_user()
-        if user is not None:
+        logged_user = users.get_current_user()
+        if not logged_user:
+            self.redirect(users.create_login_url(self.request.uri))
+        else:
             url = users.create_logout_url('/')
             url_linktext = 'Logout'
-            global upload_key
-            upload_key=""
 
-            user_query = User.gql("WHERE email =:1", user.email())
-            user_fetch = user_query.get()
-            replies = []
-            posts = []
 
-            if user_fetch:
-                posts = Post.query(Post.user_key == user_fetch.key).order(-Post.date).fetch()
-                for count in range(0 , posts.__len__()):
-                    temp = Reply.query(Reply.post_key == posts[count].key).order(Reply.date).fetch()
-                    replies.insert(count,temp)
+            logged_user_query = User.gql("WHERE email =:1 ", logged_user.email())
+            logged_user_fetch = logged_user_query.get()
 
-                if not user_fetch.signature:
-                    user_signature = ""
-                else:
-                    user_signature = user_fetch.signature
+            if logged_user_fetch.role == 'Artist':
+                is_artist = True
+            else:
+                is_artist = False
+
+            post_user_reply = []
+
+            posts = Post.query(Post.user_key == logged_user_fetch.key).fetch()
+
+            for post_key in logged_user_fetch.shared_posts:
+                posts.append(post_key.get())
+
+            posts.sort(key=lambda x: x.date, reverse=True)
 
             for post in posts:
-                print "BLOB_KEY_MEDIA: " + str(post.blob_key_media)
+                post_user = post.user_key.get()
+                post_replies = Reply.query(Reply.post_key == post.key).order(Reply.date).fetch()
+                user_reply = []
+                for reply in post_replies:
+                    user_reply.append(reply.user_key.get())
+                post_user_reply.append((post, post_user, post_replies, user_reply))
+
+            # You might like section:
+            all_users = User.query().fetch()
+             # choose top k uses which has the most shared posts
+            top_k_users = heapq.nlargest(8, all_users, key=lambda x: x.num_shared_posts)
+
 
             values = {
                 'url_log': url_linktext,
                 'url': url,
-                'posts': posts,
-                'replies': replies,
-                'user_email': user_fetch.email,
-                'user_name': user_fetch.name,
-                'user_role': user_fetch.role,
-                'user_signature': user_signature,
-                'is_self': True
+                'logged_user': logged_user_fetch,
+                'post_user_reply': post_user_reply,
+                'is_self': True,
+                'is_artist': is_artist,
+                'top_k_users': top_k_users
             }
 
             template = JINJA_ENVIRONMENT.get_template('mymusic.html')
@@ -71,7 +83,8 @@ class MyMusic(webapp2.RequestHandler):
             date_created=date_created,
             text=post_text,
             user_key=user_fetch.key,
-            blob_key_media=media_fetch.key_media
+            blob_key_media=media_fetch.key_media,
+            likes=0
             )
             media_fetch.upload_check=False;
             media_fetch.put()

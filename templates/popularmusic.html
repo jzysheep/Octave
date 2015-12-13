@@ -3,7 +3,7 @@
    <head>
       <meta charset="UTF-8" />
       <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-      <title>searchmusic</title>
+      <title>popularmusic</title>
 
       <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
       <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
@@ -40,7 +40,6 @@
 
       <!-- hidden input -->
       <div type="hidden" id="logged_user_email">{{logged_user.email}}</div>
-      <div type="hidden" id="searched_user_email">{{searched_user.email}}</div>
 
 
 
@@ -107,21 +106,13 @@
                   <h1 class="head-title" id="top_head_title"><span class="title-text ui-mr5">Octave</span>
                   </h1>
                   <div class="head-description">
-                     <span class="description-text" id="QZ_Space_Desc">{{searched_user.signature}}</span>
+                     <span class="description-text" id="QZ_Space_Desc">{{logged_user.signature}}</span>
                   </div>
                </div>
                <div class="head-detail">
                   <div class="head-detail-name">
-                     <span class="user-name textoverflow">{{searched_user.name}}</span>
+                     <span class="user-name textoverflow">{{logged_user.name}}</span>
                   </div>
-                   {% if not is_self %}
-                   <form method="post" id="form_follow" action="/follow">
-                       <button id="follow_button" class="poster-skin-box">
-                            {{follow_button}}
-                        </button>
-                       <div style="display:None" id="user_key">{{searched_user.key.urlsafe()}}</div>
-                   </form>
-                  {% endif %}
 
                </div>
 
@@ -132,7 +123,7 @@
                <div class="head-avatar">
                   <a href="javascript:;">
                      <div class="head-dress"></div>
-                     <img src="/profile_img?email={{searched_user.email}}" class="user-avatar"  />
+                     <img src="/profile_img?email={{logged_user.email}}" class="user-avatar"  />
                   </a>
                </div>
             </div>
@@ -228,12 +219,15 @@
                                                          </div>
                                                       </div>
                                                    </div>
+
                                                    <div class="f-op-wrap">
                                                       <p class="f-detail">&nbsp;
+                                                        {% if logged_user.name|string() != post_user_reply[i][1].name|string() %}
 
                                                          <a onclick="share_icon({{i}});" style="height:30px;" id="share_icon{{i}}" class=" item  "><i class="ui-icon icon-forward"></i>{{post_user_reply[i][4]}}</a>
                                                          <span class="item-line"></span>
 
+                                                          {% endif %}
                                                         <a onclick="like_icon({{i}});" style="height:30px;" id="like_icon{{i}}" class="item"><i class="ui-icon icon-praise"></i>like ({{post_user_reply[i][0].likes}})</a>
                                                          <span class="item-line"></span>
                                                         <form id="post_share{{i}}" method="post" action="/share_post">
@@ -283,7 +277,6 @@
                                                                                    <div class="qz-inputer bor2" style="padding-right: 0px;" class="textinput textarea c_tx2">
                                                                                              <div id="qz_reply_editor_v4_container{{i}}" name="reply_text_{{i}}" class="textinput textarea c_tx2" contenteditable="true"></div>
                                                                                             <input type="hidden" name="reply_text_{{i}}" id="reply_data_field_{{i}}"/>
-
                                                                                    </div>
                                                                                 </div>
                                                                              </div>
@@ -325,6 +318,29 @@
                      <!-- right hand side bar -->
                   </div>
                   <!-- left menu -->
+                   <div id="leftMenu" class="col-menu">
+                     <div class="mod-side-nav mod-side-nav-message">
+                        <div class="inner">
+                           <div class="bd">
+                              <ul id="tab_menu_list" class="sn-list">
+                                 <li type="friend">
+                                    <a href="javascript:;" class="qz-grid">
+                                       <div class="qz-main"><span class="sn-title">You might like:</span></div>
+                                    </a>
+                                 </li>
+                                  {% for user in top_k_users %}
+                               <li type="friend">
+                                    <a href="/search?search_str={{user.name}}" class="qz-grid">
+                                       <div class="qz-left"><i class="ui-icon sp-friend-feed"></i></div>
+                                       <div class="qz-main"><span class="sn-title">{{user.name}}</span></div>
+                                    </a>
+                                 </li>
+                                    {% endfor %}
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
                </div>
             </div>
             <div class="layout-copyright">
@@ -400,7 +416,6 @@
             var post_key = $("#post_key_" + count).html();
             var logged_user_email = $("#logged_user_email").html();
 
-
             var toBackEnd = {};
             toBackEnd["post_nbr"] = count;
             toBackEnd["reply_text"] = reply_text;
@@ -442,7 +457,6 @@
                   document.getElementById("replyPost_" + i).click();
                }
        </script>
-
       <!-- share post -->
       <script type="text/javascript">
        // Attach a submit handler to the form
@@ -467,6 +481,7 @@
                   document.getElementById("post_share_input_" + i).click();
                }
        </script>
+
 
       <!-- like post -->
       <script type="text/javascript">

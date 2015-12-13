@@ -47,6 +47,19 @@ class Like(ndb.Model):
     user_key = ndb.KeyProperty(kind=User)
     post_key = ndb.KeyProperty(kind=Post)
 
+<<<<<<< HEAD
+
+||||||| merged common ancestors
+
+
+class Like(ndb.Model):
+    user_key = ndb.KeyProperty(kind=User)
+    post_key = ndb.KeyProperty(kind=Post)
+    likes = ndb.IntegerProperty()
+
+
+=======
+>>>>>>> 85229cd33007d29c5604a76a4263102d5eb81ff9
 class Reply(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
     user_key = ndb.KeyProperty(kind=User)

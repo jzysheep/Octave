@@ -2,15 +2,9 @@ from domain import *
 from time import strftime
 from google.appengine.api import users
 import webapp2
-from collections import OrderedDict
-import json
-from datetime import datetime, tzinfo,timedelta
-from google.appengine.ext.webapp import blobstore_handlers
-import time
-from google.appengine.ext import blobstore
-from google.appengine.ext.db import GqlQuery
+import heapq
 
-class BuddyMusic(webapp2.RequestHandler):
+class PopularMusic(webapp2.RequestHandler):
     def get(self):
         logged_user = users.get_current_user()
         if not logged_user:
@@ -20,16 +14,11 @@ class BuddyMusic(webapp2.RequestHandler):
             logged_user_fetch = logged_user_query.get()
             url = users.create_logout_url('/')
             url_linktext = 'Logout'
-            followed_user_query = User.query(User.followers == logged_user.email())
-            followed_user_fetch = followed_user_query.fetch()
-            unordered_posts = []
+            unordered_posts = Post.query().fetch()
             post_user_reply = []
 
-            if followed_user_fetch:
-                is_self = False
-                for user_item in followed_user_fetch:
-                    unordered_posts.extend(Post.query(Post.user_key == user_item.key).fetch())
-                unordered_posts.sort(key=lambda x: x.date, reverse=True)
+            if unordered_posts:
+                unordered_posts.sort(key=lambda x: x.likes, reverse=True)
                 for post in unordered_posts:
                     if post.key in logged_user_fetch.shared_posts:
                         posts_share = "Shared"
@@ -42,17 +31,20 @@ class BuddyMusic(webapp2.RequestHandler):
                         user_reply.append(reply.user_key.get())
                     post_user_reply.append((post, post_user, post_replies, user_reply, posts_share))
 
-
+                # You might like section:
+                all_users = User.query().fetch()
+                 # choose top k uses which has the most shared posts
+                top_k_users = heapq.nlargest(8, all_users, key=lambda x: x.num_shared_posts)
 
                 values = {
                     'url_log': url_linktext,
                     'url': url,
                     'post_user_reply': post_user_reply,
                     'logged_user': logged_user_fetch,
-                    'is_self': is_self
+                    'top_k_users': top_k_users
                 }
 
-                template = JINJA_ENVIRONMENT.get_template('buddymusic.html')
+                template = JINJA_ENVIRONMENT.get_template('popularmusic.html')
                 self.response.write(template.render(values))
 
             else:

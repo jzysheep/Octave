@@ -19,9 +19,9 @@ app = webapp2.WSGIApplication([
     ('/like_post', LikePost),
     ('/share_post', SharePost),
     ('/buddymusic', BuddyMusic),
+    ('/playlist_url',PlaylistUploadFormHandler),
+    ('/PlaylistUpload',PlaylistUploadHandler),
+    ('/create_playlist',Create)
     ('/popularmusic', PopularMusic),
-    ('/playlist_url', PlaylistUploadFormHandler),
-    ('/PlaylistUpload', PlaylistUploadHandler),
-    ('/create_playlist', Create)
     ], debug=True)
 
