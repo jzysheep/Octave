@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="utf-8" />
 <!-- Website Design By: www.happyworm.com -->
 <title>Demo : jPlayer as video playlist and audio playlist players</title>
@@ -56,10 +57,29 @@
          background-image: url();
          background-repeat: repeat;
          }
+
+
       </style>
       <style id="mainJSTitleBar" type="text/css">
          .layout-head-inner {height:220px;}
       </style>
+    <style>
+h2 {
+    display: block;
+    font-size: 2.5em;
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+    color:green;
+    font-style: italic;
+
+}
+</style>
+
+
+
 <script type="text/javascript">
 //<![CDATA[
 
@@ -213,19 +233,20 @@ $(document).ready(function(){
          </div>
       </div>
       <!-- background -->
-    <div class="container" id="actions" class="row">
-              <div class="col-lg-7">
-
-        <form action="{{ delete_music_handler_url }}" method="post" style="display: inline;">
-            <h3>Music in Playlist: {{playlist_name}}</h3>
-        </form>
-              </div>
-    </div>
+{#    <div class="container" id="actions" class="row">#}
+{#              <div class="col-lg-7">#}
+{##}
+{#        <form action="{{ delete_music_handler_url }}" method="post" style="display: inline;">#}
+{#            <h2>Music in Playlist: {{playlist_name}}</h2>#}
+{#        </form>#}
+{#              </div>#}
+{#    </div>#}
 
 <div id="container">
 
     <div id="content_main row">
 
+            <h2>Music in Playlist: {{playlist_name}}</h2>
 
 <div id="jp_container_1" class="jp-video jp-video-270p col-md-8"  role="application" aria-label="media player">
 	<div class="jp-type-playlist">
