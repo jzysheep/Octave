@@ -63,11 +63,13 @@
                            <a href="/popularmusic" class="application-link a-link"><i class="ui-icon icon-application"></i><span>Popular Music</span></a>
                         </div>
                      </li>
+                      {% if is_self %}
                       <li class="nav-list" id="tb_create_li">
                         <div class="nav-list-inner">
                            <a href="/create_playlist" class="create-link a-link" ><i class="ui-icon icon-create"></i><span>Create Playlist</span></a>
                         </div>
                      </li>
+                      {% endif %}
 
                      <li class="nav-list" id="tb_logout_li">
                         <div class="nav-list-inner">
@@ -154,9 +156,8 @@
                                                     </ul>
                                                     <div class="amazingaudioplayer-engine"><a href="http://amazingaudioplayer.com" title="jquery music player">html5 audio player</a></div>
                                                     <button class="">
-                                                        <a href="/manage?playlist={{playlist[playlist_nbr].name}}"><span>Manage</span> </a>
+                                                        <a href="/manage?playlist={{playlist[playlist_nbr].name}}"><span>{{button_manage}}</span> </a>
                                                     </button>
-
                                                 </div>
 
                                           </div>

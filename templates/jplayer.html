@@ -234,7 +234,7 @@ $(document).ready(function(){
          </div>
       </div>
       <!-- background -->
-{#    <div class="container" id="actions" class="row">#}
+{#    <div class="container" id="" class="row">#}
 {#              <div class="col-lg-7">#}
 {##}
 {#        <form action="{{ delete_music_handler_url }}" method="post" style="display: inline;">#}
@@ -347,6 +347,8 @@ $(document).ready(function(){
 
 	</div>
 
+    {% if is_self %}
+
 
 {#<div class="container">#}
 
@@ -419,6 +421,7 @@ $(document).ready(function(){
 
 </div>
 </div>
+    {%endif%}
 
 
        <script>

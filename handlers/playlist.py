@@ -39,7 +39,9 @@ class MyPlaylist(webapp2.RequestHandler):
                'url':url,
                'playlist':playlist,
                'user_email':user.email(),
-               'links':links_front
+               'links':links_front,
+                'is_self': True,
+                'button_manage': "manage"
                 }
 
             template = JINJA_ENVIRONMENT.get_template('playlist.html')
@@ -58,12 +60,30 @@ class ViewPlaylist(webapp2.RequestHandler):
             searched_user_query = User.query(User.name == search_str)
             searched_user = searched_user_query.get()
             playlist=Playlist.query(ancestor=searched_user.key).order(-Playlist.date).fetch()
+            links=[]
+
+            for play in playlist:
+                if play.key_media:
+                    links.append(play.key_media[0])
+                else:
+                    links.append("")
+
+            links_front=[]
+            for i in range(0,links.__len__()):
+                if links[i]!="":
+                    links_front.insert(i,'/view_media/' + str(links[i]))
+                else:
+                    links_front.insert(i,"")
+
             values={
                'url_log':url_linktext,
                'url':url,
                'playlist':playlist,
                'user_email':searched_user.email,
-                'is_self': False
+               'links':links_front,
+                'is_self': False,
+                'button_manage': "View"
+
                 }
         template = JINJA_ENVIRONMENT.get_template('playlist.html')
         self.response.write(template.render(values))
