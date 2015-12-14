@@ -29,6 +29,10 @@ class BuddyMusic(webapp2.RequestHandler):
                 is_self = False
                 for user_item in followed_user_fetch:
                     unordered_posts.extend(Post.query(Post.user_key == user_item.key).fetch())
+                    for post_key in user_item.shared_posts:
+                        post = post_key.get()
+                        if post not in unordered_posts:
+                            unordered_posts.append(post)
                 unordered_posts.sort(key=lambda x: x.date, reverse=True)
                 for post in unordered_posts:
                     if post.key in logged_user_fetch.shared_posts:

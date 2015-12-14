@@ -50,22 +50,17 @@
                      </li>
                      <li class="nav-list" id="tb_index_li">
                         <div class="nav-list-inner">
-                           <a href="/MyMusic" class="homepage-link a-link "><i class="ui-icon icon-homepage"></i><span>MyMusic</span></a>
+                           <a href="/MyMusic" class="homepage-link a-link "><i class="ui-icon icon-homepage"></i><span>My Music</span></a>
                         </div>
                      </li>
                      <li class="nav-list" id="tb_friend_li">
                         <div class="nav-list-inner">
-                           <a href="" class="friends-link a-link"><i class="ui-icon icon-friend"></i><span>Home Music</span></a>
+                           <a href="/buddymusic" class="friends-link a-link"><i class="ui-icon icon-friend"></i><span>Buddy Music</span></a>
                         </div>
                      </li>
                      <li class="nav-list" id="tb_app_li">
                         <div class="nav-list-inner">
-                           <a href="" class="application-link a-link"><i class="ui-icon icon-application"></i><span>Popular Music</span></a>
-                        </div>
-                     </li>
-                     <li class="nav-list" id="tb_dress_li">
-                        <div class="nav-list-inner">
-                           <a href="" class="dress-up-link a-link" ><i class="ui-icon icon-dress-up"></i><span>Artist</span></a>
+                           <a href="/popularmusic" class="application-link a-link"><i class="ui-icon icon-application"></i><span>Popular Music</span></a>
                         </div>
                      </li>
                       <li class="nav-list" id="tb_create_li">
@@ -81,12 +76,17 @@
                      </li>
                   </ul>
                   <!-- Search Box -->
-                  <div class="top-search">
-                     <div class="search-box">
-                        <input class="search-input" type="text" placeholder="">
-                        <a href="" class="search-button"><i class="ui-icon icon-search"></i></a>
-                     </div>
-                  </div>
+                   <form action="/search" method="get">
+                      <div class="top-search">
+                         <div class="search-box">
+                            <input class="search-input" id="search_str" name="search_str" type="text" placeholder="" />
+                            <input type="submit" id="search_button" name="search_button" style="display: none;"/>
+                            <a onclick="search_user();" class="search-button">
+                                <i class="ui-icon icon-search"></i>
+                            </a>
+                         </div>
+                      </div>
+                    </form>
                </div>
             </div>
          </div>
@@ -150,7 +150,6 @@
 {#                                                            <div class="amazingaudioplayer-source" data-src="/audios/Somewhere off Jazz Street - Collateral Damage.mp3" data-type="audio/mpeg" />#}
 {#                                                        </li>#}
                                                     </ul>
-
                                                     <div class="amazingaudioplayer-engine"><a href="http://amazingaudioplayer.com" title="jquery music player">html5 audio player</a></div>
                                                     <button class="">
                                                         <a href="/manage?playlist={{playlist[playlist_nbr].name}}"><span>Manage</span> </a>
@@ -182,7 +181,40 @@
             </div>
 
       </div>
+      <!-- search -->
+      <script type="text/javascript">
+              function search_user() {
+                  document.getElementById("search_button").click();
+               }
+       </script>
+      <!-- autocomplete -->
+      <script src="/assets/js/jquery-ui.js"></script>
+      <script type="text/javascript">
 
+
+            $(document).ready(function() {
+                var cache = {};
+                $(document).tooltip();
+                $("#search_str").autocomplete({
+                    minLength: 1,
+                    autoFocus: true,
+                    source: function(request, response) {
+
+                        var term = request.term;
+                        if (term.trim() == '')
+                            return;
+                        if (term in cache) {
+                            response(cache[term]);
+                            return;
+                        }
+                        $.getJSON("autocomplete", request, function(data, status, xhr) {
+                            cache[term] = data.user_names;
+                            response(data.user_names);
+                        });
+                    }
+                });
+            });
+      </script>
 
       <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/ac/qzone/qzfl/qzfl_v8_2.1.45.js" ></script>
       <script type="text/javascript" src="http://os.qzonestyle.gtimg.cn/ac/lib/seajs/sea-2.1.1.js" ></script>

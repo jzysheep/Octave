@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html class="skin-dark">
+<html class="skin-dark" xmlns="http://www.w3.org/1999/html">
    <head>
       <meta charset="UTF-8" />
       <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -69,11 +69,6 @@
                            <a href="/popularmusic" class="application-link a-link"><i class="ui-icon icon-application"></i><span>Popular Music</span></a>
                         </div>
                      </li>
-                     <li class="nav-list" id="tb_dress_li">
-                        <div class="nav-list-inner">
-                           <a href="" class="dress-up-link a-link" ><i class="ui-icon icon-dress-up"></i><span>Artist</span></a>
-                        </div>
-                     </li>
                     <li class="nav-list" id="tb_logout_li">
                         <div class="nav-list-inner">
                            <a href="{{url}}" class="logout-link a-link" ><i class="ui-icon icon-logout"></i><span>{{url_log}}</span></a>
@@ -120,6 +115,13 @@
                             {{follow_button}}
                         </button>
                        <div style="display:None" id="user_key">{{searched_user.key.urlsafe()}}</div>
+                   </form>
+                   <br>
+                  <form method="get" id="form_see_playlist" action="/view_playlist">
+                      <textarea style="display:None" class="search-input" name="search_str" type="text" placeholder="" />{{searched_user.name}}</textarea>
+                       <button id="playlist_button" class="poster-skin-box" type="submit">
+                            Playlist
+                        </button>
                    </form>
                   {% endif %}
 

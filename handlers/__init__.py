@@ -3,7 +3,7 @@ from .mainpage import MainPage
 from .mymusic import MyMusic, MediaUploadHandler,ReplyHandlerAjax,ViewMediaHandler, Image
 from .signup import SignUp
 from .bloburl import MediaUploadFormHandler,PlaylistUploadFormHandler
-from .playlist import MyPlaylist,Create,PlaylistUploadHandler
+from .playlist import MyPlaylist,Create,PlaylistUploadHandler, ViewPlaylist
 from .manage import Manage
 from .search import SearchUser, SearchAutoComplete, SearchReplyHandlerAjax
 from .follow import FollowUser

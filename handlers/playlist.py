@@ -31,8 +31,28 @@ class MyPlaylist(webapp2.RequestHandler):
             self.response.write(template.render(values))
 
 
+class ViewPlaylist(webapp2.RequestHandler):
+    def get(self):
+        logged_user = users.get_current_user()
+        if not logged_user:
+            self.redirect(users.create_login_url(self.request.uri))
+        else:
+            url = users.create_logout_url('/')
+            url_linktext = 'Logout'
+            search_str = self.request.get("search_str").strip()
+            searched_user_query = User.query(User.name == search_str)
+            searched_user = searched_user_query.get()
+            playlist=Playlist.query(ancestor=searched_user.key).order(-Playlist.date).fetch()
+            values={
+               'url_log':url_linktext,
+               'url':url,
+               'playlist':playlist,
+               'user_email':searched_user.email,
+                'is_self': False
+                }
+        template = JINJA_ENVIRONMENT.get_template('playlist.html')
+        self.response.write(template.render(values))
 
-            
 class Create(webapp2.RequestHandler):
     def get(self):
         user=users.get_current_user()

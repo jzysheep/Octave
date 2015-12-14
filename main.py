@@ -23,6 +23,8 @@ app = webapp2.WSGIApplication([
     ('/playlist_url', PlaylistUploadFormHandler),
     ('/PlaylistUpload', PlaylistUploadHandler),
     ('/create_playlist', Create),
-    ('/promote_post', PromotePost)
+    ('/promote_post', PromotePost),
+    ('/view_playlist', ViewPlaylist)
     ], debug=True)
+
 
