@@ -305,13 +305,14 @@
 
                                                            </audio>
 
-                                                              {% else %}
+                                                              {% elif media_types[i]=="video" %}
+                                                                      <video width="410" height="238" controls>
+                                                                              <source src="/view_media/{{post_user_reply[i][0].blob_key_media}}" type="video/mp4">
+                                                                      </video>
 
 
-                                                              <video width="410" height="238" controls>
-                                                                      <source src="/view_media/{{post_user_reply[i][0].blob_key_media}}" type="video/mp4">
-                                                              </video>
-
+                                                                {% else %}
+                                                                    <img height="100" width="100" src="/view_media/{{post_user_reply[i][0].blob_key_media}}">
 
 
                                                         {% endif %}
@@ -629,7 +630,7 @@
       previewNode.parentNode.removeChild(previewNode);
       var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
         url: '/', // Set the url
-        acceptedFiles: 'audio/*, video/*',
+        acceptedFiles: 'audio/*, video/*, image/*',
         maxFilesize: 100,
         maxFiles: 1,
         parallelUploads: 100,

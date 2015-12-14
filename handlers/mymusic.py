@@ -245,8 +245,10 @@ class MediaUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         filename=blob_info.filename
         if '.mp3' in filename:
             type='audio'
-        else:
+        elif '.mp4' in filename:
             type='video'
+        else:
+            type='image'
 
         user_media = Media(key_media=upload.key(),upload_check=True,views=0, date_created=now_string,media_type=type)
         user_media.put()
