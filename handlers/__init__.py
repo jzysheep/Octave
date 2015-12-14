@@ -11,3 +11,4 @@ from .buddymusic import BuddyMusic
 from .likepost import LikePost
 from .sharepost import SharePost
 from .popularmusic import PopularMusic
+from .promotepost import PromotePost

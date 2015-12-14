@@ -230,9 +230,11 @@
                                                    </div>
                                                    <div class="f-op-wrap">
                                                       <p class="f-detail">&nbsp;
-
+                                                    <!-- if posts not owned by logged user, you can share it -->
+                                                          {% if not post_user_reply[i][5] %}
                                                          <a onclick="share_icon({{i}});" style="height:30px;" id="share_icon{{i}}" class=" item  "><i class="ui-icon icon-forward"></i>{{post_user_reply[i][4]}}</a>
                                                          <span class="item-line"></span>
+                                                          {% endif %}
 
                                                         <a onclick="like_icon({{i}});" style="height:30px;" id="like_icon{{i}}" class="item"><i class="ui-icon icon-praise"></i>like ({{post_user_reply[i][0].likes}})</a>
                                                          <span class="item-line"></span>
