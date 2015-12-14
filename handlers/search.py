@@ -115,7 +115,11 @@ class SearchReplyHandlerAjax(webapp2.RequestHandler):
             self.redirect(users.create_login_url(self.request.uri))
         else:
             post_key = ndb.Key(urlsafe=self.request.get("post_key"))
-            date_reply = strftime("%Y-%m-%d %H:%M:%S")
+            # date_reply = strftime("%Y-%m-%d %H:%M:%S")
+            date = self.request.get('date_reply')
+
+            # print date
+            date_reply = date[:-15]
 
             logged_user_query = User.gql("WHERE email =:1 ", logged_user.email())
             logged_user_fetch = logged_user_query.get()

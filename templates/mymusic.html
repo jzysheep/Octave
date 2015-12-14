@@ -170,7 +170,7 @@
                   <div id="main_feed_container" class="col-main ">
                      <div class="col-main-feed">
 
-                         <form enctype="multipart/form-data" method="post" action="/MyMusic">
+                         <form enctype="multipart/form-data" id="post_id" method="post" >
 
                             <div id="QM_Mood_Poster_Container">
                                <div id="QM_Mood_Poster_Inner" class="qz-poster bg b-test">
@@ -196,7 +196,7 @@
                                </div>
                          </form>
 
-                                        <div id="actions" class="row">
+                                    <div id="actions" class="row">
 
                                           <div class="container qz-poster">
                                             <!-- The fileinput-button span is used to style the file input field as button -->
@@ -283,7 +283,7 @@
                                                    <a href="javascript:"class="f-sign-show state">{{post_user_reply[i][1].role}}</a>
                                                 </div>
                                                 <div class="info-detail">
-                                                   <span  class=" ui-mr8 state" >{{post_user_reply[i][0].date}}</span>
+                                                   <span  class=" ui-mr8 state" >{{post_user_reply[i][0].date_created}}</span>
                                                 </div>
                                              </div>
                                           </div>
@@ -390,7 +390,7 @@
                                                                      <div class="comments-content">
                                                                         &nbsp;<a class="c_tx q_namecard" href="/search?search_str={{post_user_reply[i][3][j].name}}">{{post_user_reply[i][3][j].name}}</a>&nbsp;: {{post_user_reply[i][2][j].reply}}
                                                                         <div class="comments-op">
-                                                                            <span  class=" ui-mr10 state" >{{post_user_reply[i][2][j].date}}</span>
+                                                                            <span  class=" ui-mr10 state" >{{post_user_reply[i][2][j].date_reply}}</span>
                                                                             <a class="act-reply" href="javascript:;">
                                                                                 <b class="hide-clip">Reply</b>
                                                                             </a>
@@ -503,7 +503,10 @@
           function submit() {
               var data = document.getElementById("qz_poster_editor_v4_container").textContent;
               document.getElementById("post_data_field").value = data;
+              document.getElementById("post_id").action="/MyMusic?date_created=" + Date();
+
               document.getElementById("submitPost").click();
+
            }
        </script>
 
@@ -541,6 +544,9 @@
           var count = this.id.slice(-1);
           // Get some values from elements on the page:
             var reply_text = $("#reply_data_field_" + count).val();
+
+            document.getElementById("form_" + count).action="/search_ajax_reply?date_reply=" + Date();
+
             var url = $("#form_" + count).attr( "action" );
             var post_key = $("#post_key_" + count).html()
             var logged_user_email = $("#logged_user_email").html()
@@ -555,6 +561,7 @@
 
             var date_reply = data["date_reply"];
             var user_name = data["user_name"];
+
             var new_comment = '<div class="comments-item-bd"> \
              <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/profile_img?email=' + logged_user_email + '"/></a></div> \
              <div class="comments-content"> \

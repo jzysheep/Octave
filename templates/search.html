@@ -424,6 +424,8 @@
           // Get some values from elements on the page:
 
             var reply_text = $("#reply_data_field_" + count).val();
+            document.getElementById("form_" + count).action="/search_ajax_reply?date_reply=" + Date();
+
             var url = $("#form_" + count).attr( "action" );
             var post_key = $("#post_key_" + count).html();
             var logged_user_email = $("#logged_user_email").html();

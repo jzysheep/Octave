@@ -118,7 +118,13 @@ class MyMusic(webapp2.RequestHandler):
 
     def post(self):
         post_text = self.request.get('post_text')
-        date_created = strftime("%Y-%m-%d %H:%M")
+        # date_created = strftime("%Y-%m-%d %H:%M")
+
+        date = self.request.get('date_created')
+
+        # print date
+        date_created = date[:-15]
+        print "DATE : " + date_created
 
         grp = re.search("(?P<url>https?://[^\s]+)", post_text)
 
