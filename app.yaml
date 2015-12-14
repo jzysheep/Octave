@@ -1,4 +1,4 @@
-version: 2 
+version: 1 
 runtime: python27
 api_version: 1 
 threadsafe: true
@@ -6,6 +6,12 @@ threadsafe: true
 handlers:
 - url: /bootstrap33
   static_dir: bootstrap33
+
+- url: /jplayer
+  static_dir: jplayer
+
+- url: /playlist
+  static_dir: playlist
 
 - url: /startbootstrap-grayscale-1.0.5
   static_dir: startbootstrap-grayscale-1.0.5
