@@ -18,13 +18,28 @@ class MyPlaylist(webapp2.RequestHandler):
             user_query = User.gql("WHERE email =:1", user.email())
             user_fetch = user_query.get()
             playlist=Playlist.query(ancestor=user_fetch.key).order(-Playlist.date).fetch()
+            links=[]
+
+            for play in playlist:
+                if play.key_media:
+                    links.append(play.key_media[0])
+                else:
+                    links.append("")
+
+            links_front=[]
+            for i in range(0,links.__len__()):
+                if links[i]!="":
+                    links_front.insert(i,'/view_media/' + str(links[i]))
+                else:
+                    links_front.insert(i,"")
 
 
             values={
                'url_log':url_linktext,
                'url':url,
                'playlist':playlist,
-               'user_email':user.email()
+               'user_email':user.email(),
+               'links':links_front
                 }
 
             template = JINJA_ENVIRONMENT.get_template('playlist.html')
@@ -57,7 +72,12 @@ class Create(webapp2.RequestHandler):
 
         else:
             cover_url="http://www.geekersmagazine.com/wp-content/uploads/2012/07/find-songs-music1.jpg"
+
         privacy=self.request.get('privacy')
+
+        music_links=[]
+        music_links = self.request.get_all('music_links',"")
+
 
         user = users.get_current_user()
         user_query = User.gql("WHERE email =:1", user.email())
@@ -76,24 +96,21 @@ class Create(webapp2.RequestHandler):
         for media in media_fetch:
             if media!=None:
                 print "media names inside playlist: " +  media.name
-                playlist.populate(
-                    name=name,
-                    user_key=user_fetch.key,
-                    privacy=privacy,
-                    date_created=date_created,
-                    cover_url=cover_url,
-
-                )
                 media.upload_check=False;
                 playlist.key_media.append(media.key_media)
                 playlist.media_name.append(media.name)
                 media.put()
-            else:
-                playlist.populate(
-                name=name,
-                user_key=user_fetch.key,
-                privacy=privacy,
-                )
+
+        if music_links.__len__()!=0:
+            playlist.links = music_links
+
+        playlist.populate(
+            name=name,
+            user_key=user_fetch.key,
+            privacy=privacy,
+            date_created=date_created,
+            cover_url=cover_url,
+        )
 
         playlist.put()
         self.redirect('/playlist')
