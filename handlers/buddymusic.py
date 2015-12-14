@@ -16,12 +16,8 @@ class BuddyMusic(webapp2.RequestHandler):
         if not logged_user:
             self.redirect(users.create_login_url(self.request.uri))
         else:
-            ######################ADD THIS#########
-
             links=[]
             media_types=[]
-            ######################End ADD#########
-
             logged_user_query = User.gql("WHERE email =:1 ", logged_user.email())
             logged_user_fetch = logged_user_query.get()
             url = users.create_logout_url('/')

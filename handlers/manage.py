@@ -32,8 +32,13 @@ class Manage(webapp2.RequestHandler):
                     playlist.media_name.append(media.name)
                     media.put()
 
-
+            if user_fetch.key==playlist.user_key:
+                is_self = True
+            else:
+                is_self = False
             playlist.put()
+
+
 
 
 
@@ -82,7 +87,8 @@ class Manage(webapp2.RequestHandler):
                'name_audio':json.dumps(name_audio),
                'name_video':json.dumps(name_video),
                'size_audio':links_audio.__len__(),
-               'size_video':links_video.__len__()
+               'size_video':links_video.__len__(),
+                'is_self':is_self
 
                 }
 
