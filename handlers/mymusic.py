@@ -48,10 +48,10 @@ class MyMusic(webapp2.RequestHandler):
                 links=[]
                 for post in posts:
                     media_query = Media.gql("WHERE key_media = :1", post.blob_key_media)
-                    if post.links:
-                        links.append(post.links[0])
+                    if post.link:
+                        links.append(post.link)
                         print "LINKS SAVED: "
-                        print post.links[0]
+                        print post.link
 
                     entity=media_query.get()
                     if entity!=None:
@@ -174,7 +174,7 @@ class MyMusic(webapp2.RequestHandler):
         media_link = Media(link=link)
         media_link.put()
 
-        post.links.append(link)
+        post.link=link
         post.put()
         time.sleep(0.1)
         self.redirect('/MyMusic')
