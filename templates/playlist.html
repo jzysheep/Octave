@@ -143,8 +143,10 @@
                                                 <div class="amazingaudioplayer" style="display:block;position:relative;width:100%;height:auto;margin:0px auto 0px;">
 
                                                     <ul class="amazingaudioplayer-audios" style="display:none;">
+{#                                                        {% if playlist[playlist_nbr].key_media[0] is defined %}#}
+
                                                         <li data-artist="" data-title="{{ playlist[playlist_nbr].name }}" data-album="{{ playlist[playlist_nbr].name }} First Song" data-info="" data-image="{{playlist[playlist_nbr].cover_url }}" data-duration="">
-                                                            <div class="amazingaudioplayer-source" data-src="/view_media/{{ playlist[playlist_nbr].key_media[0] }}" data-type="audio/mpeg" />
+                                                            <div class="amazingaudioplayer-source" data-src="{{ links[playlist_nbr] }}" data-type="audio/mpeg" />
                                                         </li>
 {#                                                        <li data-artist="Somewhere off Jazz Street" data-title="Collateral Damage" data-album="Road to Somewhere" data-info="" data-image="" data-duration="505">#}
 {#                                                            <div class="amazingaudioplayer-source" data-src="/audios/Somewhere off Jazz Street - Collateral Damage.mp3" data-type="audio/mpeg" />#}
