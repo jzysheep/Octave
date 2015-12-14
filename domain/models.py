@@ -44,6 +44,7 @@ class Post(ndb.Model):
     blob_key_media = ndb.BlobKeyProperty()
     user_key = ndb.KeyProperty()
     likes = ndb.IntegerProperty()
+    links = ndb.StringProperty(repeated=True) # construct entities from the strings
 
 class Like(ndb.Model):
     user_key = ndb.KeyProperty(kind=User)

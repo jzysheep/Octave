@@ -215,7 +215,7 @@
                                             </button>
                                           </div>
 
-                                          <div class="col-lg-5">
+                                          <div class="col-lg-5" style="display: none;">
                                             <!-- The global file processing state -->
                                             <span class="fileupload-process">
                                               <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
@@ -227,7 +227,7 @@
                                         </div>
 
 
-                                    <div class="table table-striped" class="files" id="previews" style="display: none;">
+                                    <div class="table table-striped" class="files" id="previews" >
 
                                       <div id="template" class="file-row">
                                         <!-- This is used as the file preview template -->
@@ -245,15 +245,15 @@
                                             </div>
                                         </div>
                                         <div>
-                                          <button class="poster-skin-box start">
+                                          <button class="poster-skin-box start " style="display: none;">
                                               <i class="glyphicon glyphicon-upload"></i>
                                               <span>Start</span>
                                           </button>
-                                          <button data-dz-remove class="poster-skin-box cancel">
+                                          <button data-dz-remove class="poster-skin-box cancel" style="display: none;">
                                               <i class="glyphicon glyphicon-ban-circle"></i>
                                               <span>Cancel</span>
                                           </button>
-                                          <button data-dz-remove class="poster-skin-box delete">
+                                          <button data-dz-remove class="poster-skin-box delete" style="display: none;">
                                             <i class="glyphicon glyphicon-trash"></i>
                                             <span>Delete</span>
                                           </button>
@@ -295,13 +295,39 @@
                                                       <div class="f-ct-txtimg">
 
                                                           {% if post_user_reply[i][0].blob_key_media != None %}
-                                                          <audio controls>
 
-                                                       <source src="/view_media/{{post_user_reply[i][0].blob_key_media}}" type="audio/mp3">
+
+                                                          {%  if media_types[i]=="audio" %}
+                                                            <audio controls>
+
+                                                                <source src="/view_media/{{post_user_reply[i][0].blob_key_media}}" type="audio/mp3">
  >
 
-                                                          </audio>
+                                                           </audio>
+
+                                                              {% else %}
+
+
+                                                              <video width="410" height="238" controls>
+                                                                      <source src="/view_media/{{post_user_reply[i][0].blob_key_media}}" type="video/mp4">
+                                                              </video>
+
+
+
                                                         {% endif %}
+
+
+                                                          {% endif %}
+
+                                                      {%  if links[i]!="" %}
+
+                                                            <iframe width="420" height="345"
+                                                            src="{{links[i]}}">
+                                                            </iframe>
+                                                        {% endif %}
+
+
+
                                                          <div class="img-box img-box-row">
 
 
@@ -474,12 +500,10 @@
       </script>
 
       <script type="text/javascript">
-
           function submit() {
               var data = document.getElementById("qz_poster_editor_v4_container").textContent;
               document.getElementById("post_data_field").value = data;
               document.getElementById("submitPost").click();
-
            }
        </script>
 
@@ -514,31 +538,22 @@
         $( "[id^='replyPost_']" ).click(function( event ) {
           // Stop form from submitting normally
           event.preventDefault();
-
           var count = this.id.slice(-1);
-
           // Get some values from elements on the page:
-
             var reply_text = $("#reply_data_field_" + count).val();
             var url = $("#form_" + count).attr( "action" );
             var post_key = $("#post_key_" + count).html()
             var logged_user_email = $("#logged_user_email").html()
-
             var toBackEnd = {};
             toBackEnd["post_nbr"] = count;
             toBackEnd["reply_text"] = reply_text;
             toBackEnd["post_key"] = post_key;
-
           // Send the data using post
-
           var posting = $.post(url, toBackEnd);
           posting.done(function( data ) {
-
-
             var reply_text = data["reply_text"];
             var date_reply = data["date_reply"];
             var user_name = data["user_name"];
-
             var new_comment = '<div class="comments-item-bd"> \
              <div class="ui-avatar"><a href="javascript:;"><img class="q_namecard" src="/profile_img?email=' + logged_user_email + '"/></a></div> \
              <div class="comments-content"> \
@@ -551,7 +566,6 @@
               </div> \
               </div> \
             '
-
                $( "#form_" + count).before(new_comment);
                $("#qz_reply_editor_v4_container" + count).empty();
           });
@@ -576,8 +590,6 @@
       <!-- autocomplete -->
       <script src="/assets/js/jquery-ui.js"></script>
       <script type="text/javascript">
-
-
             $(document).ready(function() {
                 var cache = {};
                 $(document).tooltip();
@@ -585,7 +597,6 @@
                     minLength: 1,
                     autoFocus: true,
                     source: function(request, response) {
-
                         var term = request.term;
                         if (term.trim() == '')
                             return;
@@ -612,7 +623,7 @@
         url: '/', // Set the url
         acceptedFiles: 'audio/*, video/*',
         maxFilesize: 100,
-        maxFiles: 100,
+        maxFiles: 1,
         parallelUploads: 100,
         previewTemplate: previewTemplate,
         autoQueue: false, // Make sure the files aren't queued until manually added
@@ -695,7 +706,6 @@
 <script type="text/javascript">
   $(function() {
     var dialog, form,
-
       // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
       emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
       name = $( "#name" ),
@@ -703,7 +713,6 @@
       password = $( "#password" ),
       allFields = $( [] ).add( name ).add( email ).add( password ),
       tips = $( ".validateTips" );
-
     function updateTips( t ) {
       tips
         .text( t )
@@ -712,7 +721,6 @@
         tips.removeClass( "ui-state-highlight", 1500 );
       }, 500 );
     }
-
     function checkLength( o, n, min, max ) {
       if ( o.val().length > max || o.val().length < min ) {
         o.addClass( "ui-state-error" );
@@ -723,7 +731,6 @@
         return true;
       }
     }
-
     function checkRegexp( o, regexp, n ) {
       if ( !( regexp.test( o.val() ) ) ) {
         o.addClass( "ui-state-error" );
@@ -733,7 +740,6 @@
         return true;
       }
     }
-
     function promote_post() {
          var count = $("#count").html();
           var post_key = $("#post_key_" + count).html()
@@ -751,9 +757,7 @@
              var insert_html = '<i class="ui-icon icon-feed-collect"></i>' + data['promote_status']
              $("#promote_icon" + count).html(insert_html);
           });
-
     }
-
     dialog = $( "#dialog-form" ).dialog({
       autoOpen: false,
       height: 300,
@@ -770,12 +774,10 @@
         allFields.removeClass( "ui-state-error" );
       }
     });
-
     form = dialog.find( "form" ).on( "submit", function( event ) {
       event.preventDefault();
       promote_post();
     });
-
     $( "[id^='promote_icon']" ).click(function( event ) {
           event.preventDefault();
         var count = this.id.slice(-1);
