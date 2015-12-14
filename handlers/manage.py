@@ -5,6 +5,7 @@ from google.appengine.ext.webapp import blobstore_handlers
 import time
 from google.appengine.ext import blobstore
 import json
+from google.appengine.ext.blobstore import BlobKey
             
 class Manage(webapp2.RequestHandler):
     def get(self):
@@ -48,8 +49,10 @@ class Manage(webapp2.RequestHandler):
 
             if user_fetch.key==playlist.user_key:
                 is_self = True
+                self_delete = "true"
             else:
                 is_self = False
+                self_delete="false"
             playlist.put()
 
 
@@ -59,19 +62,23 @@ class Manage(webapp2.RequestHandler):
             name_video=[]
             links=[]
             names=[]
+            keys=[]
 
             for key in playlist.key_media:
                 media_query = Media.gql("WHERE key_media = :1", key)
-                media=media_query.get()
-                links.append(str(key))
-                names.append(media.name)
-                if media.media_type=='audio':
-                    links_audio.append(str(key))
-                    name_audio.append(media.name)
+                media = media_query.get()
+                keys.append(str(key))
+                print media
+                if media:
+                    links.append(str(key))
+                    names.append(media.name)
+                    if media.media_type=='audio':
+                        links_audio.append(str(key))
+                        name_audio.append(media.name)
 
-                else:
-                    links_video.append(str(key))
-                    name_video.append(media.name)
+                    else:
+                        links_video.append(str(key))
+                        name_video.append(media.name)
 
             # for link in playlist.links:
             #     links_video.append(link)
@@ -114,8 +121,9 @@ class Manage(webapp2.RequestHandler):
                 'names':json.dumps(names),
                 'links':json.dumps(links),
                 'size':links.__len__(),
-                'playlist_key':playlist_key
-
+                'playlist_key':playlist_key,
+                'keys':keys,
+                'self_delete':self_delete
                 }
 
 
@@ -125,7 +133,19 @@ class Manage(webapp2.RequestHandler):
 
 
     def post(self):
-        j
+        # key_media = ndb.Key(urlsafe=self.request.get("key_media"))
+        key_media=self.request.get("key_media")
+
+        blobkey = BlobKey (key_media)
+
+        media_query = Media.gql("WHERE key_media = :1", blobkey)
+        media = media_query.get()
+        blobstore.delete(key_media)
+
+        media.key.delete()
+
+
+
 
 
 

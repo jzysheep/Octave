@@ -88,6 +88,7 @@ $(document).ready(function(){
 
     var video_name={{ names|safe }}
     var links_video={{ links|safe }}
+    var keys={{ keys|safe }}
     var cssSelector = { jPlayer: "#jquery_jplayer_1", cssSelectorAncestor: "#jp_container_1" };
     var playlist_video=[];
 
@@ -96,7 +97,8 @@ $(document).ready(function(){
         playlist_video[media_nbr]={
 
             title:video_name[media_nbr],
-			m4v:"/view_media/" + links_video[media_nbr]
+			m4v:"/view_media/" + links_video[media_nbr],
+            keys:keys[media_nbr]
 
 {#            flv :"https://youtu.be/lkRpAK3OtqQ"#}
 		}
@@ -111,7 +113,7 @@ $(document).ready(function(){
         playlist_video,
          {
 		playlistOptions: {
-			enableRemoveControls: true
+			enableRemoveControls: {{ self_delete }}
 		},
 		swfPath: "../dist/jplayer",
 		supplied: "webmv, ogv, m4v, oga, mp3",
@@ -154,46 +156,35 @@ $(document).ready(function(){
 {#	});#}
 
 
+          $(function() {
+
+
+              $('.jp-playlist').on('click', '.jp-playlist-item-remove', function () {
+                  // Determine song index if necessary
+                  console.log("DELETED")
+                  var index = $(this).parents('li').index('.jp-playlist li');
+
+                  // Retrieve song information, if necessary
+                  var song = myPlaylist_video.playlist[index];
+                  var toBackEnd = {};
+                  var url='/manage'
+                  toBackEnd["key_media"] = song.keys;
+
+                  var posting = $.post(url, toBackEnd);
+
+
+              });
+
+
+          });
 
 });
 
-{#	$("#jplayer_inspector_1").jPlayerInspector({jPlayer:$("#jquery_jplayer_1")});#}
-{#	$("#jplayer_inspector_2").jPlayerInspector({jPlayer:$("#jquery_jplayer_2")});#}
-//]]>
+ //]]>
 
 
 </script>
 
-{#    <script>#}
-{#          $(function() {#}
-{##}
-{##}
-{# $('.jp-playlist').on('click', '.jp-playlist-item-remove', function(){#}
-{#    // Determine song index if necessary#}
-{#    var index = $(this).parents('li').index('.jp-playlist li');#}
-{##}
-{#    // Retrieve song information, if necessary#}
-{#    var song = myPlaylist.playlist[index];#}
-{##}
-{#     $.ajax({#}
-{#          type: 'POST',                            // http method#}
-{#          url: '/manage?playlist={{ playlist_name }}&key={{ playlist_key }}',               // target URL#}
-{#          success: function (serverResp) {          // on ajax success#}
-{##}
-{##}
-{##}
-{#          }#}
-{##}
-{#          });#}
-{##}
-{##}
-{#     });#}
-{##}
-{#});#}
-{##}
-{##}
-{##}
-{#    </script>#}
 <!-- Flattr -->
 <script type="text/javascript">
 	/* Flattr code for jPlayer.org */
