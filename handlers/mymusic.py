@@ -52,7 +52,7 @@ class MyMusic(webapp2.RequestHandler):
                         share_status = "Shared from " + post_user.name
                     else:
                         is_share = False
-                        share_status = ""
+                        share_status = "Share"
 
                     if post.key in logged_user_fetch.promoted_own_posts:
                         is_promoted_own = True

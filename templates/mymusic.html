@@ -6,10 +6,10 @@
       <meta charset="UTF-8" />
       <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
       <title>mymusic</title>
+
+
        <link type="text/css" rel="stylesheet" href="/bootstrap33/dist/css/bootstrap.css" />
       <link  type="text/css" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css" rel="stylesheet"/>
-
-
 
 
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -170,7 +170,7 @@
                   <div id="main_feed_container" class="col-main ">
                      <div class="col-main-feed">
 
-                         <form enctype="multipart/form-data" method="post" action="/MyMusic">
+                         <form method="post" action="/MyMusic">
 
                             <div id="QM_Mood_Poster_Container">
                                <div id="QM_Mood_Poster_Inner" class="qz-poster bg b-test">
@@ -327,11 +327,17 @@
                                                          <span class="item-line"></span>
 
                                                             {% endif %}
-                                                          <!-- if posts shared from others-->
-                                                        {% if post_user_reply[i][4] %}
-                                                       <a style="height:30px;" id="share_icon{{i}}" class=" item  "><i class="ui-icon icon-forward"></i>{{post_user_reply[i][5]}}</a>
+                                                          <!-- if posts shared from others or promoted from others-->
+                                                          {% if post_user_reply[i][4] or post_user_reply[i][8] %}
+
+                                                       <a onclick="share_icon({{i}});" style="height:30px;" id="share_icon{{i}}" class=" item  "><i class="ui-icon icon-forward"></i>
+
+                                                           {{post_user_reply[i][5]}}
+
+                                                       </a>
+
                                                          <span class="item-line"></span>
-                                                          {% endif %}
+                                                         {% endif %}
 
                                                         <a onclick="like_icon({{i}});" style="height:30px;" id="like_icon{{i}}" class="item"><i class="ui-icon icon-praise"></i>like ({{post_user_reply[i][0].likes}})</a>
                                                          <span class="item-line"></span>
@@ -341,7 +347,9 @@
                                                           <!--<input type="submit" id="promote_like_input_{{i}}" style="display: none;"/>-->
                                                         <!--</form>-->
 
-
+                                                        <form id="post_share{{i}}" method="post" action="/share_post">
+                                                          <input type="submit" id="post_share_input_{{i}}" style="display: none;"/>
+                                                        </form>
 
                                                         <form id="post_like{{i}}" method="post" action="/like_post">
                                                           <input type="submit" id="post_like_input_{{i}}" style="display: none;"/>
@@ -483,6 +491,30 @@
            }
        </script>
 
+      <!-- share post -->
+      <script type="text/javascript">
+       // Attach a submit handler to the form
+        $( "[id^='post_share_input_']" ).click(function( event ) {
+          event.preventDefault();
+          var count = this.id.slice(-1);
+          var post_key = $("#post_key_" + count).html()
+          var url = $("#post_share" + count).attr( "action" );
+          var toBackEnd = {};
+          toBackEnd["post_key"] = post_key;
+          var posting = $.post(url, toBackEnd);
+          posting.done(function( data ) {
+             $("#share_icon" + count).empty();
+             var insert_html = '<i class="ui-icon icon-forward"></i>' + data['share_status']
+             $("#share_icon" + count).html(insert_html);
+          });
+        });
+      </script>
+
+        <script type="text/javascript">
+              function share_icon(i) {
+                  document.getElementById("post_share_input_" + i).click();
+               }
+       </script>
 
       <!-- like post -->
       <script type="text/javascript">
