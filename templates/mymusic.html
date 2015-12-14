@@ -301,7 +301,7 @@
                                                             <audio controls>
 
                                                                 <source src="/view_media/{{post_user_reply[i][0].blob_key_media}}" type="audio/mp3">
- >
+
 
                                                            </audio>
 
@@ -552,6 +552,7 @@
           var posting = $.post(url, toBackEnd);
           posting.done(function( data ) {
             var reply_text = data["reply_text"];
+
             var date_reply = data["date_reply"];
             var user_name = data["user_name"];
             var new_comment = '<div class="comments-item-bd"> \
@@ -717,7 +718,7 @@
       tips
         .text( t )
         .addClass( "ui-state-highlight" );
-      setTimeout(function() {
+        setTimeout(function() {
         tips.removeClass( "ui-state-highlight", 1500 );
       }, 500 );
     }

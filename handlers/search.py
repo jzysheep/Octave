@@ -19,6 +19,12 @@ class SearchUser(webapp2.RequestHandler):
             logged_user_fetch = logged_user_query.get()
             searched_user = user_query.get()
             post_user_reply = []
+            ######################End ADD#########
+
+            links=[]
+            media_types=[]
+
+            ######################End ADD#########
 
             if searched_user:
                 if logged_user.email() == searched_user.email:
@@ -50,6 +56,18 @@ class SearchUser(webapp2.RequestHandler):
                     for reply in post_replies:
                         user_reply.append(reply.user_key.get())
                     post_user_reply.append((post, post_user, post_replies, user_reply, posts_share, posts_ownedby_logged_user))
+######################End ADD#########
+
+                    media_query = Media.gql("WHERE key_media = :1", post.blob_key_media)
+                    if post.link!=None:
+                        links.append(post.link)
+                        print "LINKS SAVED: "
+                        print post.link
+
+                    entity=media_query.get()
+                    if entity!=None:
+                        media_types.append(entity.media_type)
+######################End ADD#########
 
                 if logged_user.email() in searched_user.followers:
                     follow_button = "Unfollow"
@@ -64,7 +82,10 @@ class SearchUser(webapp2.RequestHandler):
                     'searched_user': searched_user,
                     'logged_user': User.gql("WHERE email =:1", logged_user.email()).get(),
                     'is_self': is_self,
-                    'follow_button': follow_button
+                    'follow_button': follow_button,
+                    'media_types': media_types,
+                    'links':links
+
                 }
 
                 template = JINJA_ENVIRONMENT.get_template('search.html')

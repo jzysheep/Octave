@@ -44,11 +44,11 @@ class MyMusic(webapp2.RequestHandler):
 
                 posts.sort(key=lambda x: x.date, reverse=True)
 
-                media_types=[]
-                links=[]
+                media_types = []
+                links = []
                 for post in posts:
                     media_query = Media.gql("WHERE key_media = :1", post.blob_key_media)
-                    if post.link:
+                    if post.link!=None:
                         links.append(post.link)
                         print "LINKS SAVED: "
                         print post.link
@@ -120,14 +120,13 @@ class MyMusic(webapp2.RequestHandler):
         post_text = self.request.get('post_text')
         date_created = strftime("%Y-%m-%d %H:%M")
 
-        grp = re.search("(?P<url>https?://[^\s]+)", post_text)\
+        grp = re.search("(?P<url>https?://[^\s]+)", post_text)
 
         if grp:
             link=grp.group("url")
         else:
             link=""
 
-        print "link: " + link
 
         user = users.get_current_user()
         user_query = User.gql("WHERE email =:1 ", user.email())
@@ -151,6 +150,9 @@ class MyMusic(webapp2.RequestHandler):
 
             link = "https://www.youtube.com/embed/" + id
 
+        print "link: " + link
+
+
 
         media_fetch=media_query.get()
         if media_fetch!=None:
@@ -171,8 +173,6 @@ class MyMusic(webapp2.RequestHandler):
             likes=0,
             )
 
-        media_link = Media(link=link)
-        media_link.put()
 
         post.link=link
         post.put()
