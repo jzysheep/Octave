@@ -18,8 +18,25 @@ class Manage(webapp2.RequestHandler):
             user_fetch = user_query.get()
 
             playlist_name=self.request.get('playlist')
-            playlist_query=Playlist.gql("WHERE name =:1", playlist_name)
-            playlist = playlist_query.get()
+            playlist_key=self.request.get('key')
+
+
+            playlist_query=Playlist.gql("WHERE name=:1",playlist_name)
+
+
+            # playlist_query=Playlist.gql("")
+            playlist_chosen = playlist_query.fetch()
+
+            print "PLAYLIST KEY: " + playlist_key
+            print "PLAYLIST KEY: " + str(playlist_chosen[0].user_key)
+
+            for play in playlist_chosen:
+                if str(play.user_key)==playlist_key:
+                    playlist = play
+                    break
+
+
+
 
             media_query = Media.gql("WHERE upload_check = :1", True)
             media_fetch = media_query.fetch()
