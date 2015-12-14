@@ -57,10 +57,14 @@ class Manage(webapp2.RequestHandler):
             links_video=[]
             name_audio=[]
             name_video=[]
+            links=[]
+            names=[]
 
             for key in playlist.key_media:
                 media_query = Media.gql("WHERE key_media = :1", key)
                 media=media_query.get()
+                links.append(str(key))
+                names.append(media.name)
                 if media.media_type=='audio':
                     links_audio.append(str(key))
                     name_audio.append(media.name)
@@ -86,6 +90,12 @@ class Manage(webapp2.RequestHandler):
             for name in name_video:
                 name.decode("utf8")
 
+            for name in names:
+                name.decode("utf8")
+
+            for link in links:
+                link.decode("utf8")
+
 
 
             values={
@@ -100,7 +110,11 @@ class Manage(webapp2.RequestHandler):
                'name_video':json.dumps(name_video),
                'size_audio':links_audio.__len__(),
                'size_video':links_video.__len__(),
-               'is_self':is_self
+               'is_self':is_self,
+                'names':json.dumps(names),
+                'links':json.dumps(links),
+                'size':links.__len__(),
+                'playlist_key':playlist_key
 
                 }
 
@@ -110,6 +124,8 @@ class Manage(webapp2.RequestHandler):
             self.response.write(template.render(values))
 
 
+    def post(self):
+        j
 
 
 

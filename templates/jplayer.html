@@ -86,12 +86,12 @@ h2 {
 
 $(document).ready(function(){
 
-    var video_name={{ name_video|safe }}
-    var links_video={{ links_video|safe }}
+    var video_name={{ names|safe }}
+    var links_video={{ links|safe }}
     var cssSelector = { jPlayer: "#jquery_jplayer_1", cssSelectorAncestor: "#jp_container_1" };
     var playlist_video=[];
 
-    for(var media_nbr=0;media_nbr<{{size_video}};media_nbr++)
+    for(var media_nbr=0;media_nbr<{{size}};media_nbr++)
     {
         playlist_video[media_nbr]={
 
@@ -102,64 +102,98 @@ $(document).ready(function(){
 		}
 
     }
-        var optionsvideo={
 
-		swfPath: "../dist/jplayer",
-		supplied: "webmv, ogv, m4v",
-		useStateClassSkin: true,
-		autoBlur: false,
-		smoothPlayBar: true,
-		keyEnabled: true
-	};
 
 
 
     var myPlaylist_video= new jPlayerPlaylist(
         cssSelector,
         playlist_video,
-        optionsvideo
-
-    );
-
-
-    var audio_name={{ name_audio|safe }}
-    var links_audio={{ links_audio|safe }}
-    var cssSelector = { jPlayer: "#jquery_jplayer_2", cssSelectorAncestor:  "#jp_container_2" };
-    var playlist_audio=[];
-    for(var media_nbr=0;media_nbr<{{size_audio}};media_nbr++)
-    {
-        playlist_audio[media_nbr]={
-			title:audio_name[media_nbr],
-			mp3:"/view_media/" + links_audio[media_nbr]
-		}
-
-    }
-
-    var options={
+         {
+		playlistOptions: {
+			enableRemoveControls: true
+		},
 		swfPath: "../dist/jplayer",
-		supplied: "oga, mp3",
-		wmode: "window",
+		supplied: "webmv, ogv, m4v, oga, mp3",
 		useStateClassSkin: true,
 		autoBlur: false,
 		smoothPlayBar: true,
-		keyEnabled: true
-	};
+		keyEnabled: true,
+		audioFullScreen: true
+	});
 
-	var myPlaylist_audio= new jPlayerPlaylist(
-        cssSelector,
-        playlist_audio,
-        options
+{#    myPlaylist_video.remove()#}
+{#    var audio_name={{ name_audio|safe }}#}
+{#    var links_audio={{ links_audio|safe }}#}
+{#    var cssSelector = { jPlayer: "#jquery_jplayer_2", cssSelectorAncestor:  "#jp_container_2" };#}
+{#    var playlist_audio=[];#}
+{#    for(var media_nbr=0;media_nbr<{{size_audio}};media_nbr++)#}
+{#    {#}
+{#        playlist_audio[media_nbr]={#}
+{#			title:audio_name[media_nbr],#}
+{#			mp3:"/view_media/" + links_audio[media_nbr]#}
+{#		}#}
+{##}
+{#    }#}
+{##}
+{##}
+{#	var myPlaylist_audio= new jPlayerPlaylist(#}
+{#        cssSelector,#}
+{#        playlist_audio,#}
+{#        {#}
+{#        playlistOptions: {#}
+{#			enableRemoveControls: true#}
+{#		},#}
+{#        swfPath: "../dist/jplayer",#}
+{#		supplied: "oga, mp3",#}
+{#		wmode: "window",#}
+{#		useStateClassSkin: true,#}
+{#		autoBlur: false,#}
+{#		smoothPlayBar: true,#}
+{#		keyEnabled: true#}
+{#	});#}
 
-    );
 
 
-
+});
 
 {#	$("#jplayer_inspector_1").jPlayerInspector({jPlayer:$("#jquery_jplayer_1")});#}
 {#	$("#jplayer_inspector_2").jPlayerInspector({jPlayer:$("#jquery_jplayer_2")});#}
-});
 //]]>
+
+
 </script>
+
+{#    <script>#}
+{#          $(function() {#}
+{##}
+{##}
+{# $('.jp-playlist').on('click', '.jp-playlist-item-remove', function(){#}
+{#    // Determine song index if necessary#}
+{#    var index = $(this).parents('li').index('.jp-playlist li');#}
+{##}
+{#    // Retrieve song information, if necessary#}
+{#    var song = myPlaylist.playlist[index];#}
+{##}
+{#     $.ajax({#}
+{#          type: 'POST',                            // http method#}
+{#          url: '/manage?playlist={{ playlist_name }}&key={{ playlist_key }}',               // target URL#}
+{#          success: function (serverResp) {          // on ajax success#}
+{##}
+{##}
+{##}
+{#          }#}
+{##}
+{#          });#}
+{##}
+{##}
+{#     });#}
+{##}
+{#});#}
+{##}
+{##}
+{##}
+{#    </script>#}
 <!-- Flattr -->
 <script type="text/javascript">
 	/* Flattr code for jPlayer.org */
@@ -250,9 +284,9 @@ $(document).ready(function(){
 
             <h2>Music in Playlist: {{playlist_name}}</h2>
 
-<div id="jp_container_1" class="jp-video jp-video-270p col-md-8"  role="application" aria-label="media player">
+<div id="jp_container_1" class=" jp-video jp-video-270p"  role="application" aria-label="media player">
 	<div class="jp-type-playlist">
-		<div id="jquery_jplayer_1" class="jp-jplayer" style="margin-left:-16px;"></div>
+		<div id="jquery_jplayer_1" class="jp-jplayer" ></div>
 		<div class="jp-gui">
 			<div class="jp-video-play">
 				<button class="jp-video-play-icon" role="button" tabindex="0">play</button>
@@ -293,7 +327,8 @@ $(document).ready(function(){
 		<div class="jp-playlist">
 			<ul>
 				<!-- The method Playlist.displayPlaylist() uses this unordered list -->
-				<li></li>
+				<li>
+                </li>
 			</ul>
 		</div>
 		<div class="jp-no-solution">
@@ -302,92 +337,92 @@ $(document).ready(function(){
 		</div>
 	</div>
 </div>
-
-<div id="jquery_jplayer_2" class="jp-jplayer" ></div>
-<div id="jp_container_2" class="jp-audio  col-md-4 col-lg-offset-2" style="weigth:100px;" role="application" aria-label="media player">
-	<div class="jp-type-playlist">
-		<div style="margin-left:-10px;" class="jp-gui jp-interface" >
-			<div class="jp-volume-controls" >
-				<button class="jp-mute" role="button" tabindex="0">mute</button>
-				<button class="jp-volume-max" role="button" tabindex="0">max volume</button>
-				<div style="margin-left:-7px;" class="jp-volume-bar">
-					<div style="margin-left:-7px;" class="jp-volume-bar-value"></div>
-				</div>
-			</div>
-			<div style="margin-left:-6px;" class="jp-controls-holder">
-				<div style="margin-left:-5px;" class="jp-controls">
-					<button  class="jp-previous" role="button" tabindex="0">previous</button>
-					<button  class="jp-play" role="button" tabindex="0">play</button>
-					<button  class="jp-stop" role="button" tabindex="0">stop</button>
-					<button  class="jp-next" role="button" tabindex="0">next</button>
-				</div>
-				<div style="margin-left:-3px;" class="jp-progress">
-					<div  class="jp-seek-bar">
-						<div class="jp-play-bar"></div>
-					</div>
-				</div>
-				<div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
-				<div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
-				<div class="jp-toggles">
-					<button class="jp-repeat" role="button" tabindex="0">repeat</button>
-					<button class="jp-shuffle" role="button" tabindex="0">shuffle</button>
-				</div>
-			</div>
-		</div>
-		<div class="jp-playlist"  >
-			<ul>
-				<li>&nbsp;</li>
-			</ul>
-		</div>
-		<div class="jp-no-solution">
-			<span>Update Required</span>
-			To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
-		</div>
-	</div>
+    </div>
 </div>
 
-	</div>
+{#<div id="jquery_jplayer_2" class="jp-jplayer" ></div>#}
+{#<div id="jp_container_2" class="jp-audio  col-md-4 col-lg-offset-2" style="weigth:100px;" role="application" aria-label="media player">#}
+{#	<div class="jp-type-playlist">#}
+{#		<div style="margin-left:-10px;" class="jp-gui jp-interface" >#}
+{#			<div class="jp-volume-controls" >#}
+{#				<button class="jp-mute" role="button" tabindex="0">mute</button>#}
+{#				<button class="jp-volume-max" role="button" tabindex="0">max volume</button>#}
+{#				<div style="margin-left:-7px;" class="jp-volume-bar">#}
+{#					<div style="margin-left:-7px;" class="jp-volume-bar-value"></div>#}
+{#				</div>#}
+{#			</div>#}
+{#			<div style="margin-left:-6px;" class="jp-controls-holder">#}
+{#				<div style="margin-left:-5px;" class="jp-controls">#}
+{#					<button  class="jp-previous" role="button" tabindex="0">previous</button>#}
+{#					<button  class="jp-play" role="button" tabindex="0">play</button>#}
+{#					<button  class="jp-stop" role="button" tabindex="0">stop</button>#}
+{#					<button  class="jp-next" role="button" tabindex="0">next</button>#}
+{#				</div>#}
+{#				<div style="margin-left:-3px;" class="jp-progress">#}
+{#					<div  class="jp-seek-bar">#}
+{#						<div class="jp-play-bar"></div>#}
+{#					</div>#}
+{#				</div>#}
+{#				<div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>#}
+{#				<div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>#}
+{#				<div class="jp-toggles">#}
+{#					<button class="jp-repeat" role="button" tabindex="0">repeat</button>#}
+{#					<button class="jp-shuffle" role="button" tabindex="0">shuffle</button>#}
+{#				</div>#}
+{#			</div>#}
+{#		</div>#}
+{#		<div class="jp-playlist"  >#}
+{#			<ul>#}
+{#				<li>&nbsp;</li>#}
+{#			</ul>#}
+{#		</div>#}
+{#		<div class="jp-no-solution">#}
+{#			<span>Update Required</span>#}
+{#			To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.#}
+{#		</div>#}
+{#	</div>#}
+{#</div>#}
+{##}
 
     {% if is_self %}
 
 
 {#<div class="container">#}
 
-    <div id="actions" class="col-md-8" style="margin-left:-17px; margin-top:40px; ">
+    <div id="actions"  class="container" >
 
 
         <!-- The fileinput-button span is used to style the file input field as button -->
-        <span class="btn btn-success fileinput-button" style="margin-bottom:20px;">
+        <span class="btn btn-success fileinput-button" style="margin-left:90px;margin-bottom:20px; margin-top:20px;">
             <i class="glyphicon glyphicon-plus" ></i>
             <span>Add files...</span>
         </span>
-        <button type="submit" class="btn btn-primary start" style="margin-bottom:20px;">
+        <button type="submit" class="btn btn-primary start" style="margin-bottom:20px; margin-top:20px;">
             <i class="glyphicon glyphicon-upload"></i>
             <span>Start upload</span>
         </button>
-        <button type="reset" class="btn btn-warning cancel" style="margin-bottom:20px;">
+        <button type="reset" class="btn btn-warning cancel" style="margin-bottom:20px;margin-top:20px;">
             <i class="glyphicon glyphicon-ban-circle"></i>
             <span>Cancel upload</span>
         </button>
 
-        <button class="btn btn-info" style="margin-bottom:20px;">
+        <button class="btn btn-info" style="margin-bottom:20px;margin-top:20px;">
             <a href="/manage?playlist={{playlist_name}}&key={{playlist_key}}" style="text-decoration:none;"><span>Update Playlist</span> </a>
         </button>
 
 
         <!-- The global file processing state -->
-        <span class="fileupload-process">
-          <div id="total-progress" class=" progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:30%;">
+        <span  class="fileupload-process">
+          <div  id="total-progress" class=" progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="margin-left:90px;width:30%;">
             <div class="progress-bar progress-bar-success" style="width:0%" data-dz-uploadprogress></div>
           </div>
         </span>
 
 
-    </div>
 
 
 
-<div class="col-md-8 table table-striped" style="margin-left:-17px;" class="files" id="previews">
+<div class=" table table-striped"  class="files" id="previews">
 
   <div id="template" class="file-row">
     <!-- This is used as the file preview template -->
@@ -395,17 +430,18 @@ $(document).ready(function(){
         <span class="preview" ><img data-dz-thumbnail /></span>
     </div>
     <div>
-        <p class="name" data-dz-name  style= margin-bottom:20px;"></p>
+        <p class="name" data-dz-name  style= " margin-left:90px; margin-bottom:20px;"></p>
         <strong class="error text-danger" data-dz-errormessage></strong>
     </div>
     <div>
-        <p class="size" data-dz-size style="margin-bottom:20px;"></p>
-        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:30%;">
+        <p class="size" data-dz-size style="margin-left:90px; margin-bottom:20px;"></p>
+        <div  class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="margin-left:90px; width:30%;">
           <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
         </div>
-    </div>
+        </div>
+
     <div>
-      <button class="btn btn-primary start" style="margin-bottom:20px;">
+      <button class="btn btn-primary start" style="margin-left:90px; margin-bottom:20px;">
           <i class="glyphicon glyphicon-upload"></i>
           <span>Start</span>
       </button>
@@ -421,7 +457,7 @@ $(document).ready(function(){
   </div>
 
 </div>
-</div>
+        </div>
     {%endif%}
 
 
