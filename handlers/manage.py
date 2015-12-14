@@ -24,7 +24,6 @@ class Manage(webapp2.RequestHandler):
             playlist_query=Playlist.gql("WHERE name=:1",playlist_name)
 
 
-            # playlist_query=Playlist.gql("")
             playlist_chosen = playlist_query.fetch()
 
             print "PLAYLIST KEY: " + playlist_key
@@ -34,8 +33,6 @@ class Manage(webapp2.RequestHandler):
                 if str(play.user_key)==playlist_key:
                     playlist = play
                     break
-
-
 
 
             media_query = Media.gql("WHERE upload_check = :1", True)
@@ -54,9 +51,6 @@ class Manage(webapp2.RequestHandler):
             else:
                 is_self = False
             playlist.put()
-
-
-
 
 
             links_audio=[]
@@ -100,12 +94,13 @@ class Manage(webapp2.RequestHandler):
                'links_audio':json.dumps(links_audio),
                'links_video':json.dumps(links_video),
                'playlist_name':playlist.name,
+               'playlist_key':playlist.user_key,
                'playlist_cover':playlist.cover_url,
                'name_audio':json.dumps(name_audio),
                'name_video':json.dumps(name_video),
                'size_audio':links_audio.__len__(),
                'size_video':links_video.__len__(),
-                'is_self':is_self
+               'is_self':is_self
 
                 }
 
