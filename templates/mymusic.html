@@ -12,7 +12,7 @@
 
 
 
-      <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
       <link href="http://os.qzonestyle.gtimg.cn/aoi/skin/28.css?max_age=19830212&d=20150525172555" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-151112170011.css?max_age=31536000" rel="stylesheet"/>
       <link href="http://os.qzonestyle.gtimg.cn/aoi/icenter-poster-comment-150512101535.css?max_age=31536000" rel="stylesheet"/>
@@ -50,8 +50,28 @@
    </head>
 
    <body class="bg-body">
+
+   <!-- modal popup for promotion -->
+<div id="dialog-form" title="Promote Post">
+
+  <form id="post_promote" method="post" action="/promote_post">
+    <fieldset>
+      <label>City</label>
+      <input type="text" name="city" id="city" class="text ui-widget-content ui-corner-all">
+        <br>
+        <br>
+      <label >Number of Users</label>
+      <input type="text" name="num_users" id="num_users" class="text ui-widget-content ui-corner-all">
+
+
+      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </fieldset>
+  </form>
+</div>
          <!-- hidden input -->
       <div type="hidden" id="logged_user_email">{{logged_user.email}}</div>
+   <div type="hidden" id="count"></div>
       <!-- nav bar -->
       <div class="top-fix-bar">
          <div class="top-fix-inner" >
@@ -119,7 +139,7 @@
          <div class="layout-head ">
             <div class="layout-head-inner" id="headContainer">
                <div class="head-info">
-                  <h1 class="head-title" id="top_head_title"><span class="title-text ui-mr5">Octave</span>
+                  <h1 class="head-title" id="top_head_title"><span class="title-text ui-mr5">My Music</span>
                   </h1>
                   <div class="head-description">
                      <span class="description-text" id="QZ_Space_Desc">{{logged_user.signature}}</span>
@@ -294,9 +314,22 @@
                                                    </div>
                                                    <div class="f-op-wrap">
                                                       <p class="f-detail">&nbsp;
-                                                          {% if is_artist %}
+                                                        <!-- if artist and posts is his own -->
+                                                          {% if is_artist and not post_user_reply[i][4] and not post_user_reply[i][8] %}
 
-                                                          <a onclick="promote_icon({{i}});" style="height:30px;" id="promote_icon{{i}}" class="item"><i class="ui-icon icon-feed-collect"></i>Promote</a>
+                                                          <a style="height:30px;" id="promote_icon{{i}}" class="item"><i class="ui-icon icon-feed-collect"></i>{{post_user_reply[i][7]}}</a>
+                                                         <span class="item-line"></span>
+                                                        {% endif %}
+
+                                                        <!-- if posts promoted from others -->
+                                                          {% if post_user_reply[i][8] %}
+                                                          <a style="height:30px;" class="item"><i class="ui-icon icon-feed-collect"></i>{{post_user_reply[i][9]}}</a>
+                                                         <span class="item-line"></span>
+
+                                                            {% endif %}
+                                                          <!-- if posts shared from others-->
+                                                        {% if post_user_reply[i][4] %}
+                                                       <a style="height:30px;" id="share_icon{{i}}" class=" item  "><i class="ui-icon icon-forward"></i>{{post_user_reply[i][5]}}</a>
                                                          <span class="item-line"></span>
                                                           {% endif %}
 
@@ -304,9 +337,10 @@
                                                          <span class="item-line"></span>
 
 
-                                                       <form id="post_promote{{i}}" method="post" action="/promote_post">
-                                                          <input type="submit" id="promote_like_input_{{i}}" style="display: none;"/>
-                                                        </form>
+                                                       <!--<form id="post_promote{{i}}" method="post" action="/promote_post">-->
+                                                          <!--<input type="submit" id="promote_like_input_{{i}}" style="display: none;"/>-->
+                                                        <!--</form>-->
+
 
 
                                                         <form id="post_like{{i}}" method="post" action="/like_post">
@@ -449,19 +483,7 @@
            }
        </script>
 
-      <script type="text/javascript">
-       // Attach a submit handler to the form
-        $( "[id^='promote_like_input_']" ).click(function( event ) {
-          event.preventDefault();
-          alert("entered")
-        });
-      </script>
 
-        <script type="text/javascript">
-              function promote_icon(i) {
-                  document.getElementById("promote_like_input_" + i).click();
-               }
-       </script>
       <!-- like post -->
       <script type="text/javascript">
        // Attach a submit handler to the form
@@ -670,8 +692,113 @@
     </script>
 
 
+<script type="text/javascript">
+  $(function() {
+    var dialog, form,
 
+      // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
+      emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
+      name = $( "#name" ),
+      email = $( "#email" ),
+      password = $( "#password" ),
+      allFields = $( [] ).add( name ).add( email ).add( password ),
+      tips = $( ".validateTips" );
 
+    function updateTips( t ) {
+      tips
+        .text( t )
+        .addClass( "ui-state-highlight" );
+      setTimeout(function() {
+        tips.removeClass( "ui-state-highlight", 1500 );
+      }, 500 );
+    }
+
+    function checkLength( o, n, min, max ) {
+      if ( o.val().length > max || o.val().length < min ) {
+        o.addClass( "ui-state-error" );
+        updateTips( "Length of " + n + " must be between " +
+          min + " and " + max + "." );
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    function checkRegexp( o, regexp, n ) {
+      if ( !( regexp.test( o.val() ) ) ) {
+        o.addClass( "ui-state-error" );
+        updateTips( n );
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    function promote_post() {
+         var count = $("#count").html();
+          var post_key = $("#post_key_" + count).html()
+          var url = "/promote_post";
+          var city = $('#city').val();
+          var num_users = $('#num_users').val()
+          dialog.dialog( "close" );
+          var toBackEnd = {};
+          toBackEnd["post_key"] = post_key;
+          toBackEnd["city"] = city;
+          toBackEnd["num_users"] = num_users;
+          var posting = $.post(url, toBackEnd);
+          posting.done(function( data ) {
+             $("#promote_icon" + count).empty();
+             var insert_html = '<i class="ui-icon icon-feed-collect"></i>' + data['promote_status']
+             $("#promote_icon" + count).html(insert_html);
+          });
+
+    }
+
+    dialog = $( "#dialog-form" ).dialog({
+      autoOpen: false,
+      height: 300,
+      width: 350,
+      modal: true,
+      buttons: {
+        "Promote": promote_post,
+        Cancel: function() {
+          dialog.dialog( "close" );
+        }
+      },
+      close: function() {
+        form[ 0 ].reset();
+        allFields.removeClass( "ui-state-error" );
+      }
+    });
+
+    form = dialog.find( "form" ).on( "submit", function( event ) {
+      event.preventDefault();
+      promote_post();
+    });
+
+    $( "[id^='promote_icon']" ).click(function( event ) {
+          event.preventDefault();
+        var count = this.id.slice(-1);
+          var post_key = $("#post_key_" + count).html()
+        $("#count").empty();
+         $("#count").html(count);
+         dialog.dialog( "open" );
+    });
+  });
+  </script>
+      <script type="text/javascript">
+       // Attach a submit handler to the form
+        $( "[id^='promote_like_input_']" ).click(function( event ) {
+          event.preventDefault();
+          alert("entered")
+        });
+      </script>
+
+        <script type="text/javascript">
+              function promote_icon(i) {
+                  document.getElementById("promote_like_input_" + i).click();
+               }
+       </script>
    </body>
 </html>
 {% endautoescape %}

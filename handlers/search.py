@@ -26,8 +26,20 @@ class SearchUser(webapp2.RequestHandler):
                     self.redirect('/MyMusic')
                 else:
                     is_self = False
-                posts = Post.query(Post.user_key == searched_user.key).order(-Post.date).fetch()
+                posts = Post.query(Post.user_key == searched_user.key).fetch()
+
+                for post_key in searched_user.shared_posts:
+                    posts.append(post_key.get())
+
+                posts.sort(key=lambda x: x.date, reverse=True)
+
+                logged_user_posts = Post.query(Post.user_key == logged_user_fetch.key).fetch()
+
                 for post in posts:
+                    if post in logged_user_posts:
+                        posts_ownedby_logged_user = True
+                    else:
+                        posts_ownedby_logged_user = False
                     if post.key in logged_user_fetch.shared_posts:
                         posts_share = "Shared"
                     else:
@@ -37,7 +49,7 @@ class SearchUser(webapp2.RequestHandler):
                     user_reply = []
                     for reply in post_replies:
                         user_reply.append(reply.user_key.get())
-                    post_user_reply.append((post, post_user, post_replies, user_reply, posts_share))
+                    post_user_reply.append((post, post_user, post_replies, user_reply, posts_share, posts_ownedby_logged_user))
 
                 if logged_user.email() in searched_user.followers:
                     follow_button = "Unfollow"

@@ -23,46 +23,75 @@ class MyMusic(webapp2.RequestHandler):
             logged_user_query = User.gql("WHERE email =:1 ", logged_user.email())
             logged_user_fetch = logged_user_query.get()
 
-            if logged_user_fetch.role == 'Artist':
-                is_artist = True
+            if logged_user_fetch:
+                if logged_user_fetch.role == 'Artist':
+                    is_artist = True
+                else:
+                    is_artist = False
+
+                post_user_reply = []
+
+                posts = Post.query(Post.user_key == logged_user_fetch.key).fetch()
+
+                for post_key in logged_user_fetch.shared_posts:
+                    posts.append(post_key.get())
+
+                for post_key in logged_user_fetch.promoted_others_posts:
+                    if post_key.get() not in posts:
+                        posts.append(post_key.get())
+
+                posts.sort(key=lambda x: x.date, reverse=True)
+
+                for post in posts:
+                    post_user = post.user_key.get()
+                    post_replies = Reply.query(Reply.post_key == post.key).order(Reply.date).fetch()
+                    user_reply = []
+
+                    if post.key in logged_user_fetch.shared_posts:
+                        is_share = True
+                        share_status = "Shared from " + post_user.name
+                    else:
+                        is_share = False
+                        share_status = ""
+
+                    if post.key in logged_user_fetch.promoted_own_posts:
+                        is_promoted_own = True
+                        promoted_own_status = "Promoted"
+                    else:
+                        is_promoted_own = False
+                        promoted_own_status = "Promote"
+
+                    if post.key in logged_user_fetch.promoted_others_posts:
+                        is_promoted_others = True
+                        promoted_others_status = "Promoted from " + post_user.name
+                    else:
+                        is_promoted_others = False
+                        promoted_others_status = ""
+
+                    for reply in post_replies:
+                        user_reply.append(reply.user_key.get())
+                    post_user_reply.append((post, post_user, post_replies, user_reply, is_share, share_status, is_promoted_own, promoted_own_status, is_promoted_others, promoted_others_status))
+
+                # You might like section:
+                all_users = User.query(User.email != logged_user_fetch.email).fetch()
+                 # choose top k uses which has the most shared posts
+                top_k_users = heapq.nlargest(8, all_users, key=lambda x: x.num_shared_posts)
+
+
+                values = {
+                    'url_log': url_linktext,
+                    'url': url,
+                    'logged_user': logged_user_fetch,
+                    'post_user_reply': post_user_reply,
+                    'is_self': True,
+                    'is_artist': is_artist,
+                    'top_k_users': top_k_users
+                }
+
+                template = JINJA_ENVIRONMENT.get_template('mymusic.html')
+                self.response.write(template.render(values))
             else:
-                is_artist = False
-
-            post_user_reply = []
-
-            posts = Post.query(Post.user_key == logged_user_fetch.key).fetch()
-
-            for post_key in logged_user_fetch.shared_posts:
-                posts.append(post_key.get())
-
-            posts.sort(key=lambda x: x.date, reverse=True)
-
-            for post in posts:
-                post_user = post.user_key.get()
-                post_replies = Reply.query(Reply.post_key == post.key).order(Reply.date).fetch()
-                user_reply = []
-                for reply in post_replies:
-                    user_reply.append(reply.user_key.get())
-                post_user_reply.append((post, post_user, post_replies, user_reply))
-
-            # You might like section:
-            all_users = User.query().fetch()
-             # choose top k uses which has the most shared posts
-            top_k_users = heapq.nlargest(8, all_users, key=lambda x: x.num_shared_posts)
-
-
-            values = {
-                'url_log': url_linktext,
-                'url': url,
-                'logged_user': logged_user_fetch,
-                'post_user_reply': post_user_reply,
-                'is_self': True,
-                'is_artist': is_artist,
-                'top_k_users': top_k_users
-            }
-
-            template = JINJA_ENVIRONMENT.get_template('mymusic.html')
-            self.response.write(template.render(values))
+                self.redirect('/signup')
 
 
     def post(self):

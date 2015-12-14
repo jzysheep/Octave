@@ -32,6 +32,8 @@ class User(ndb.Model):
     profile_image= ndb.BlobProperty()
     followers = ndb.StringProperty(repeated=True) #Their emails
     shared_posts = ndb.KeyProperty(repeated=True) # share other people's posts
+    promoted_own_posts = ndb.KeyProperty(repeated=True) # promote the artist's own posts
+    promoted_others_posts = ndb.KeyProperty(repeated=True) # be promoted by other artists
     num_shared_posts = ndb.IntegerProperty(default=1) # number of posts shared by other people
 
 class Post(ndb.Model):
@@ -66,8 +68,3 @@ class Playlist(ndb.Model):
     upload_check=ndb.BooleanProperty()
     media_name=ndb.StringProperty(repeated=True)
 
-
-class Artist(ndb.Model):
-    user = ndb.StructuredProperty(User,repeated=False)
-    cities_ad = ndb.StringProperty(repeated=True)
-    users_to_share = ndb.IntegerProperty()
