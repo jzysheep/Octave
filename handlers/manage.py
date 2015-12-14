@@ -53,6 +53,10 @@ class Manage(webapp2.RequestHandler):
                     links_video.append(str(key))
                     name_video.append(media.name)
 
+            # for link in playlist.links:
+            #     links_video.append(link)
+
+
 
             for link in links_audio:
                 link.decode("utf8")
