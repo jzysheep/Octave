@@ -16,6 +16,11 @@ class PopularMusic(webapp2.RequestHandler):
             url_linktext = 'Logout'
             unordered_posts = Post.query().fetch()
             post_user_reply = []
+            ######################ADD THIS#########
+
+            links=[]
+            media_types=[]
+            ######################End ADD#########
 
             if unordered_posts:
                 unordered_posts.sort(key=lambda x: x.likes, reverse=True)
@@ -31,6 +36,19 @@ class PopularMusic(webapp2.RequestHandler):
                         user_reply.append(reply.user_key.get())
                     post_user_reply.append((post, post_user, post_replies, user_reply, posts_share))
 
+######################End ADD#########
+
+                    media_query = Media.gql("WHERE key_media = :1", post.blob_key_media)
+                    if post.link!=None:
+                        links.append(post.link)
+                        print "LINKS SAVED: "
+                        print post.link
+
+                    entity=media_query.get()
+                    if entity!=None:
+                        media_types.append(entity.media_type)
+######################End ADD#########
+
                 # You might like section:
                 all_users = User.query().fetch()
                  # choose top k uses which has the most shared posts
@@ -41,7 +59,10 @@ class PopularMusic(webapp2.RequestHandler):
                     'url': url,
                     'post_user_reply': post_user_reply,
                     'logged_user': logged_user_fetch,
-                    'top_k_users': top_k_users
+                    'top_k_users': top_k_users,
+                    'media_types': media_types,
+                    'links':links
+
                 }
 
                 template = JINJA_ENVIRONMENT.get_template('popularmusic.html')

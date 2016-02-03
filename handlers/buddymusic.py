@@ -16,6 +16,8 @@ class BuddyMusic(webapp2.RequestHandler):
         if not logged_user:
             self.redirect(users.create_login_url(self.request.uri))
         else:
+            links=[]
+            media_types=[]
             logged_user_query = User.gql("WHERE email =:1 ", logged_user.email())
             logged_user_fetch = logged_user_query.get()
             url = users.create_logout_url('/')
@@ -46,6 +48,17 @@ class BuddyMusic(webapp2.RequestHandler):
                         user_reply.append(reply.user_key.get())
                     post_user_reply.append((post, post_user, post_replies, user_reply, posts_share))
 
+######################ADD THIS#########
+                    media_query = Media.gql("WHERE key_media = :1", post.blob_key_media)
+                    if post.link!=None:
+                        links.append(post.link)
+                        print "LINKS SAVED: "
+                        print post.link
+
+                    entity=media_query.get()
+                    if entity!=None:
+                        media_types.append(entity.media_type)
+######################End ADD#########
 
 
                 values = {
@@ -53,7 +66,10 @@ class BuddyMusic(webapp2.RequestHandler):
                     'url': url,
                     'post_user_reply': post_user_reply,
                     'logged_user': logged_user_fetch,
-                    'is_self': is_self
+                    'is_self': is_self,
+                    'media_types': media_types,
+                    'links':links
+
                 }
 
                 template = JINJA_ENVIRONMENT.get_template('buddymusic.html')

@@ -202,13 +202,38 @@
                                                       <div class="f-ct-txtimg">
 
                                                           {% if post_user_reply[i][0].blob_key_media != None %}
-                                                          <audio controls>
 
-                                                       <source src="/view_media/{{post_user_reply[i][0].blob_key_media}}" type="audio/mp3">
- >
 
-                                                          </audio>
+                                                          {%  if media_types[i]=="audio" %}
+                                                            <audio controls>
+
+                                                                <source src="/view_media/{{post_user_reply[i][0].blob_key_media}}" type="audio/mp3">
+
+
+                                                           </audio>
+
+                                                              {% elif media_types[i]=="video" %}
+                                                                      <video width="410" height="238" controls>
+                                                                              <source src="/view_media/{{post_user_reply[i][0].blob_key_media}}" type="video/mp4">
+                                                                      </video>
+
+
+                                                                {% else %}
+                                                                    <img height="100" width="100" src="/view_media/{{post_user_reply[i][0].blob_key_media}}">
+
+
                                                         {% endif %}
+
+
+                                                          {% endif %}
+
+                                                      {%  if links[i]!="" %}
+
+                                                            <iframe width="420" height="345"
+                                                            src="{{links[i]}}">
+                                                            </iframe>
+                                                        {% endif %}
+
                                                          <div class="img-box img-box-row">
 
 
@@ -412,6 +437,8 @@
           // Get some values from elements on the page:
 
             var reply_text = $("#reply_data_field_" + count).val();
+             document.getElementById("form_" + count).action="/search_ajax_reply?date_reply=" + Date();
+
             var url = $("#form_" + count).attr( "action" );
             var post_key = $("#post_key_" + count).html();
             var logged_user_email = $("#logged_user_email").html();

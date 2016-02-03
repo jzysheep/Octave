@@ -19,8 +19,12 @@ class MyPlaylist(webapp2.RequestHandler):
             user_fetch = user_query.get()
             playlist=Playlist.query(ancestor=user_fetch.key).order(-Playlist.date).fetch()
             links=[]
+            playlist_keys=[]
+
+
 
             for play in playlist:
+                playlist_keys.append(str(play.user_key))
                 if play.key_media:
                     links.append(play.key_media[0])
                 else:
@@ -41,7 +45,8 @@ class MyPlaylist(webapp2.RequestHandler):
                'user_email':user.email(),
                'links':links_front,
                 'is_self': True,
-                'button_manage': "manage"
+                'button_manage': "manage",
+                'email':user.email()
                 }
 
             template = JINJA_ENVIRONMENT.get_template('playlist.html')

@@ -3,12 +3,14 @@ from time import strftime
 from google.appengine.api import users
 import webapp2
 import json
-from datetime import datetime, tzinfo,timedelta
+from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 import time
 import heapq
 from google.appengine.ext import blobstore
 from google.appengine.ext.db import GqlQuery
+import re
+
 
 class MyMusic(webapp2.RequestHandler):
     def get(self):
@@ -42,10 +44,26 @@ class MyMusic(webapp2.RequestHandler):
 
                 posts.sort(key=lambda x: x.date, reverse=True)
 
+                media_types = []
+                links = []
+                for post in posts:
+                    media_query = Media.gql("WHERE key_media = :1", post.blob_key_media)
+                    if post.link!=None:
+                        links.append(post.link)
+                        print "LINKS SAVED: "
+                        print post.link
+
+                    entity=media_query.get()
+                    if entity!=None:
+                        media_types.append(entity.media_type)
+
+
+
                 for post in posts:
                     post_user = post.user_key.get()
                     post_replies = Reply.query(Reply.post_key == post.key).order(Reply.date).fetch()
                     user_reply = []
+
 
                     if post.key in logged_user_fetch.shared_posts:
                         is_share = True
@@ -72,6 +90,9 @@ class MyMusic(webapp2.RequestHandler):
                         user_reply.append(reply.user_key.get())
                     post_user_reply.append((post, post_user, post_replies, user_reply, is_share, share_status, is_promoted_own, promoted_own_status, is_promoted_others, promoted_others_status))
 
+
+
+
                 # You might like section:
                 all_users = User.query(User.email != logged_user_fetch.email).fetch()
                  # choose top k uses which has the most shared posts
@@ -85,7 +106,9 @@ class MyMusic(webapp2.RequestHandler):
                     'post_user_reply': post_user_reply,
                     'is_self': True,
                     'is_artist': is_artist,
-                    'top_k_users': top_k_users
+                    'top_k_users': top_k_users,
+                    'media_types': media_types,
+                    'links':links
                 }
 
                 template = JINJA_ENVIRONMENT.get_template('mymusic.html')
@@ -93,10 +116,23 @@ class MyMusic(webapp2.RequestHandler):
             else:
                 self.redirect('/signup')
 
-
     def post(self):
         post_text = self.request.get('post_text')
-        date_created = strftime("%Y-%m-%d %H:%M")
+        # date_created = strftime("%Y-%m-%d %H:%M")
+
+        date = self.request.get('date_created')
+
+        # print date
+        date_created = date[:-15]
+        print "DATE : " + date_created
+
+        grp = re.search("(?P<url>https?://[^\s]+)", post_text)
+
+        if grp:
+            link=grp.group("url")
+        else:
+            link=""
+
 
         user = users.get_current_user()
         user_query = User.gql("WHERE email =:1 ", user.email())
@@ -106,6 +142,24 @@ class MyMusic(webapp2.RequestHandler):
 
         post = Post(parent=user_fetch.key)
 
+        youtube_regex = (
+            r'(https?://)?(www\.)?'
+            '(youtube|youtu|youtube-nocookie)\.(com|be)/'
+            '(watch\?v=|embed/|v/|.+\?v=)?([^&=%\?]{11})')
+
+        if link!="":
+            youtube_regex_match = re.match(youtube_regex, link)
+            if youtube_regex_match:
+                id= youtube_regex_match.group(6)
+            else:
+                id= youtube_regex_match
+
+            link = "https://www.youtube.com/embed/" + id
+
+        print "link: " + link
+
+
+
         media_fetch=media_query.get()
         if media_fetch!=None:
             post.populate(
@@ -113,7 +167,7 @@ class MyMusic(webapp2.RequestHandler):
             text=post_text,
             user_key=user_fetch.key,
             blob_key_media=media_fetch.key_media,
-            likes=0
+            likes=0,
             )
             media_fetch.upload_check=False;
             media_fetch.put()
@@ -122,9 +176,11 @@ class MyMusic(webapp2.RequestHandler):
             date_created=date_created,
             text=post_text,
             user_key=user_fetch.key,
-            likes=0
+            likes=0,
             )
 
+
+        post.link=link
         post.put()
         time.sleep(0.1)
         self.redirect('/MyMusic')
@@ -185,7 +241,16 @@ class MediaUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         s_time = time.strftime("%Y/%m/%d")
         now_string = s_time.replace('/','-')
         upload = self.get_uploads()[0]
-        user_media = Media(key_media=upload.key(),upload_check=True,views=0, date_created=now_string)
+        blob_info = blobstore.BlobInfo.get(upload.key())
+        filename=blob_info.filename
+        if '.mp3' in filename:
+            type='audio'
+        elif '.mp4' in filename:
+            type='video'
+        else:
+            type='image'
+
+        user_media = Media(key_media=upload.key(),upload_check=True,views=0, date_created=now_string,media_type=type)
         user_media.put()
         time.sleep(0.1)
 
