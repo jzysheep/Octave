@@ -3,3 +3,5 @@ Octave is a music sharing and promotion website written in Python with Jinja tem
 Amazing audio player and Jplayer are used for playing music online.
 
 A youtube demo: https://www.youtube.com/watch?v=0xdQRK9Au_g$
+
+Presentation: https://docs.google.com/presentation/d/1ANTyrajBM5LYuTd1tzSsEQ3CXyI-7ixyo_btfbcAoNg/edit#slide=id.gf37b0496e_0_355
